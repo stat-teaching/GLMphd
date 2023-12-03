@@ -328,10 +328,11 @@ As expected from model summary and the deviance reduction, the variables are use
 performance::r2_tjur(fit1)
 ```
 
-Despite useful, the model has a low $R^2$. Furthermore the correct classification rate is higher than the chance level but relatively low:
+Despite useful, the model has a low $R^2$. Let's see the error rate of the model compared to the null model
 
 ```{r}
-1 - error_rate(fit1)
+error_rate(fit0)
+error_rate(fit1)
 ```
 
 # 6. Model selection
@@ -457,7 +458,7 @@ To test the overall interaction we can use the `car::Anova()` function that repo
 car::Anova(fit1)
 ```
 
-We see that as reported in the Lab 8, there are the main effects of `gre`, `gpa` and `rankc` but there is no evidence for the interaction. The `gpa:rankc` test if there is at least one slope difference that is statistically significant.
+There are the main effects of `gre`, `gpa` and `rankc` but there is no evidence for the interaction. The `gpa:rankc` test if there is at least one slope difference that is statistically significant.
 
 To note, the `car::Anova(fit1)` results for the interaction is just a likelihood ratio test comparing a model with the interaction vs a model without the interaction:
 

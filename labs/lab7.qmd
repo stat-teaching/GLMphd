@@ -1,0 +1,457 @@
+---
+title: "Lab 7"
+author: "Filippo Gambarota"
+format: html
+bibliography: "`r filor::fil()$bib`"
+embed-resources: true
+---
+
+```{r}
+#| label: setup
+knitr::opts_chunk$set(echo = TRUE,
+                      dev = "svg",
+                      fig.width = 7,
+                      fig.asp = 0.618,
+                      fig.align = "center",
+                      comment = "#>")
+```
+
+```{r}
+#| label: packages
+devtools::load_all()
+library(tidyverse)
+library(ggeffects)
+```
+
+```{r}
+#| label: ggplot2
+#| include: false
+mtheme <- function(size = 15){
+  theme_minimal(base_size = size, 
+                base_family = "sans") +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5),
+        strip.text = element_text(face = "bold"),
+        panel.grid.minor = element_blank())
+}
+
+theme_set(mtheme())
+
+# palettes
+options(ggplot2.continuous.colour="viridis")
+options(ggplot2.continuous.fill = "viridis")
+scale_colour_discrete <- scale_colour_viridis_d
+scale_fill_discrete <- scale_fill_viridis_d
+```
+
+# Overview
+
+We want to calculate the power for an interaction effect in a Poisson regression. We have a binary variable, between-subjects (`group`) and a continuous variable `x`. We want to simulate:
+
+- a main effect of `x`
+- a main effect of `group`
+- the interaction `x:group`
+
+The focus of the power analysis is on the interaction. Suppose that we are not sure if worth using a Poisson model we want to estimate also the type-1 error rate of using a linear model fixing the interaction to 0.
+
+# Data generation process
+
+The data generation process is simple in this case. The `y` variable is sampled from a poisson distribution:
+
+$$
+y_i \sim \text{Poisson}(\lambda)
+$$
+
+The linear combination of parameters can be applied on the link function space:
+
+$$
+g(\lambda) = log(\lambda) = \eta =  \beta_0 + \beta_1G + \beta_2X + \beta_3G \times X
+$$
+Then applying the inverse of the link function we can see the actual values:
+
+$$
+g^{-1}(\eta) = \lambda = e^{\beta_0 + \beta_1X + \beta_2G + \beta_3X \times G}
+$$
+
+Let's start by simulating the group main effect. We can simulate that the 2 group has a 50% increase in $y$ compared to group 1. Thus in ratio terms, $\lambda_2/\lambda_1 = 1.5$. Then, given that we need to simulate on the log space $\beta_1 = \log(1.5)  \sim 0.41$. Then we need to fix the $\beta_1$ that is the expected value for the group 1. Let's fix a random value as $\beta_0 = log(10)$. Thus:
+
+$$
+log(\lambda_1) = \beta_0 = log(10)
+$$
+
+$$
+log(\lambda_2) = \lambda_1 + 1.5 \lambda_1
+$$
+
+$$
+log(\frac{\lambda_2}{\lambda_1}) = \beta_1 = log(1.5)
+$$
+
+In R:
+
+```{r}
+n <- 1e3
+b0 <- log(10)
+b1 <- log(1.5)
+g <- c(1, 2)
+
+lp <- b0 + b1 * ifelse(g == 1, 0, 1)
+data.frame(
+  g, lp
+)
+```
+
+Now we can simulate some values to see the actual pattern:
+
+```{r}
+group <- rep(g, each = n/2)
+y <- rpois(n, lambda = exp(b0 + b1 * ifelse(group == 1, 0, 1)))
+boxplot(y ~ group)
+
+ms <- tapply(y, group, mean)
+ms
+ms[2]/ms[1]
+log(ms[2]/ms[1])
+```
+
+We can fit a simple model now and see if we are able to recovery the parameters:
+
+```{r}
+group <- factor(group)
+fit <- glm(y ~ group, family = poisson(link = "log"))
+summary(fit)
+exp(coef(fit))
+
+# group 1
+exp(coef(fit)[1])
+
+# group 2
+exp(coef(fit)[1] + coef(fit)[2])
+
+# or using predict
+predict(fit, newdata = data.frame(group = c("1", "2")), type = "response")
+```
+
+Let's see the effect:
+
+```{r}
+plot(ggeffect(fit))
+```
+
+Clearly we have a lot of observations, but these can be considered as the true effects.
+
+Let's simulate the `x` effect. We can try different values because it harder to guess a plausible $\beta$ with a continuous predictor. We simulate `x` as a standardized variable thus $x \sim \mathcal{N}(0, 1)$:
+
+```{r}
+x <- rnorm(n)
+hist(x)
+```
+
+Now $\beta_0$ is the expected value when $x = 0$ thus the expected value for the mean of $x$. Again, let's fix $\beta_0 = log(10)$. Then we can try different $\beta_2$ and see what is the predicted range of $y$:
+
+```{r}
+betas <- c(1.01, 1.1, 1.5, 2, 5)
+b0 <- log(10)
+lps <- lapply(betas, function(b2) b0 + log(b2) * x)
+ys <- lapply(lps, function(l) rpois(n, exp(l)))
+names(ys) <- paste0("b", betas)
+dd <- data.frame(ys, x)
+
+dd |> 
+  pivot_longer(1:length(betas), names_to = "b", values_to = "y") |> 
+  ggplot(aes(x = x, y = y)) +
+  facet_wrap(~b, scales = "free") +
+  geom_point()
+```
+
+Clearly, the $\beta_2$ effect depends on the scale of $x$. In this case, we can use $beta_2 = log(1.5)$. Again, let's simulate some data and fit the model:
+
+```{r}
+b2 <- log(1.5)
+x <- rnorm(n)
+y <- rpois(n, exp(b0 + b2 * x))
+fit <- glm(y ~ x, family = poisson(link = "log"))
+summary(fit)
+plot(ggeffect(fit))
+```
+
+Now let's combine the effect of `x` and `group`, without the interaction. In practice we are simulating that the effect of `x` is the same for each group thus the two lines `y ~ x` are parallel (in the link function space).
+
+::: {.callout-important}
+## Important
+For complex simulations, always create a dataframe with all conditions and subjects and then simulate the effects. I've used vectors without specifing the `data = ` argument and using dataframes just for simplicity.
+:::
+
+Now we need to decide how to code the `group` variable. If we use dummy coding, the $\beta_0$ will be the expected value for group 1, when $x = 0$. If we use sum to 0 coding e.g. group 1 = -0.5 and group 2 = 0.5, $\beta_0$ will be the expected value when $x = 0$ averaging over group:
+
+- **dummy-coding**
+    - $\beta_0$ = expected value of $y$ for group = 1 and x = 0
+    - $\beta_1$ = effect of $x$ (assumed to be the same between groups)
+    - $\beta_2$ = effect of group. Given that the two lines are parallel, centering or not $x$ is not affecting the parameter
+- **sum to 0 coding**
+    - $\beta_0$ = expected value of $y$ when $x = 0$ averaging between groups
+    - $\beta_1$ = effect of $x$ (assumed to be the same between groups)
+    - $\beta_2$ = effect of group. Given that the two lines are parallel, centering or not $x$ is not affecting the parameter
+    
+Let's use the sum to 0 coding:
+
+```{r}
+b0 <- log(5) # y when x = 0 and averaged across groups
+b1 <- log(1.1) # x effect
+b2 <- log(1.2) # group effect
+
+n <- 100 # total
+group <- rep(c("1", "2"), each = n/2)
+x <- rnorm(n)
+
+dat <- data.frame(
+  id = 1:n,
+  group,
+  x
+)
+
+filor::trim_df(dat)
+```
+
+Let's set the contrasts:
+
+```{r}
+dat$group <- factor(dat$group) # need to be a factor first
+contrasts(dat$group) <- -contr.sum(2)/2 # otherwise -1 and 1
+
+X <- model.matrix(~x+group, data = dat)
+head(X)
+tail(X)
+```
+
+Let's simulate!
+
+```{r}
+dat$groupc <- contrasts(dat$group)[dat$group] # expand the contrats to have the underlying numeric vector
+head(dat)
+dat$lp <- with(dat, b0 + b1 * x + b2 * groupc)
+
+dat |> 
+  ggplot(aes(x = x, y = lp, color = group)) +
+  geom_line()
+
+dat |> 
+  ggplot(aes(x = x, y = exp(lp), color = group)) +
+  geom_line()
+```
+
+Let's add the random part:
+
+```{r}
+dat$y <- rpois(nrow(dat), exp(dat$lp))
+dat |> 
+  ggplot(aes(x = x, y = y, color = group)) +
+  geom_point()
+```
+
+Let's fit the model:
+
+```{r}
+fit <- glm(y ~ group + x, data = dat, family = poisson(link = "log"))
+summary(fit)
+```
+
+Let's simulate the power for these main effects using a vector of $n$. The idea is to generate data, fit the model, extract the p-value and repeat for a lot of times.
+
+```{r}
+#| cache: true
+set.seed(2023)
+ns <- c(20, 30, 50, 100, 300, 500, 1000)
+nsim <- 1000 # higher is better, just for example, better 10000
+
+power_group <- rep(NA, length(ns))
+power_x <- rep(NA, length(ns))
+
+for(i in 1:length(ns)){ # loop over ns
+  p_group <- rep(NA, nsim)
+  p_x <- rep(NA, nsim)
+  for(j in 1:nsim){ # the actual simulation
+    x <- rnorm(ns[i], 0, 1)
+    group <- factor(rep(c("1", "2"), each = ns[i]/2))
+    contrasts(group) <- -contr.sum(2)/2
+    dat <- data.frame(x, group)
+    dat$groupc <- contrasts(dat$group)[dat$group]
+    dat$lp <- with(dat, b0 + b1 * x + b2 * groupc)
+    dat$y <- rpois(nrow(dat), exp(dat$lp))
+    fit <- glm(y ~ x + group, data = dat, family = poisson(link = "log"))
+    fits <- summary(fit)$coefficients
+    p_group[j] <- fits["group1", 4]
+    p_x[j] <- fits["x", 4]
+  }
+  # calculate power
+  power_x[i] <- mean(p_x <= 0.05)
+  power_group[i] <- mean(p_group <= 0.05)
+}
+
+power <- data.frame(ns, power_x, power_group)
+power <- pivot_longer(power, 2:3, names_to = "effect", values_to = "power")
+
+power |> 
+  ggplot(aes(x = ns, y = power, color = effect)) +
+  geom_line()
+```
+
+The approach with the loops is quite clear but i prefer using a more functional way. Let's see a quick example:
+
+```{r}
+# define a data generation function
+sim_data <- function(n, b0 = 0, b1 = 0, b2 = 0){
+  x <- rnorm(n, 0, 1)
+  group <- factor(rep(c("1", "2"), each = n/2))
+  contrasts(group) <- -contr.sum(2)/2
+  dat <- data.frame(x, group)
+  dat$groupc <- contrasts(dat$group)[dat$group]
+  dat$lp <- with(dat, b0 + b1 * x + b2 * groupc)
+  dat$y <- rpois(nrow(dat), exp(dat$lp))
+  return(dat)
+}
+
+sim_data(20, b0 = log(5), b1 = log(1), b2 = log(2))
+```
+
+Then I would create a function to fit the model that extract also the summary:
+
+```{r}
+fit_fun <- function(data){
+  fit <- glm(y ~ x + group, data = data, family = poisson(link = "log"))
+  fits <- summary(fit)$coefficients
+  fits <- data.frame(fits)
+  names(fits) <- c("b", "se", "z", "p")
+  fits$param <- rownames(fits)
+  rownames(fits) <- NULL
+  return(fits)
+}
+```
+
+Finally a simulation function that iterate a single simulation a certain number of times:
+
+```{r}
+do_sim <- function(n, b0 = 0, b1 = 0, b2 = 0, nsim = 1){
+  replicate(nsim, {
+    data <- sim_data(n, b0, b1, b2)
+    fit_fun(data)
+  }, simplify = FALSE)
+}
+
+do_sim(100, nsim = 1)
+do_sim(100, nsim = 3)
+```
+
+Finally I create a grid of conditions and apply the `do_sim` function to each combination (now you will see the powerful aspect of this method):
+
+```{r}
+sim <- tidyr::expand_grid(ns, b0, b1, b2, nsim = 1000)
+sim
+```
+
+Each row is a single simulation condition:
+
+```{r}
+#| cache: true
+set.seed(2023)
+res <- mapply(do_sim, sim$ns, sim$b0, sim$b1, sim$b2, sim$nsim, SIMPLIFY = FALSE)
+```
+
+Now we have a list of lists with all model results. I can attach this to the `sim` object to have a nested data structure with all my conditions. You need to be a little it familiar with nested dataframes but the final result is very nice.
+
+```{r}
+sim$data <- res
+sim
+```
+
+Let's compute the power, visualize effects etc.
+
+```{r}
+simd <- sim |> 
+  unnest(data) |> 
+  unnest(data)
+
+filor::trim_df(simd)
+
+simd |> 
+  ggplot(aes(x = b)) +
+  facet_wrap(~param, scales = "free") +
+  geom_histogram()
+
+simd |> 
+  group_by(ns, param) |> 
+  summarise(power = mean(p <= 0.05)) |> 
+  ggplot(aes(x = ns, y = power, color = param)) +
+  geom_line(lwd = 1)
+```
+
+The second approach is much more flexible and you can easily change the simulation setup just by changing `sim` instead of adding nested loops. Clearly, if you want to stick with the `for` instead of `mapply`:
+
+```{r}
+#| eval: false
+res <- vector(mode = "list", length = nrow(sim))
+for(i in 1:length(res)){
+  res[[i]] <- do_sim(sim$ns[i], sim$b0[i], sim$b1[i], sim$b2[i], sim$nsim[i])
+}
+```
+
+The core aspect is creating a function and then iterating across conditions.
+
+Let's complete the simulation setup by including the interaction. Now the contrast coding and the centering is also more relevant. The interaction $\beta_3$ is the difference in slopes between group 1 and 2. The lines are no longer parallel if $\beta_3 \neq 0$. Now, using sum to 0 coding, the parameters are:
+
+- $\beta_0$ is the expected $y$ when $x = 0$, averaged across groups
+- $\beta_1$ is difference between groups, when $x = 0$ (lines are no longer parallel)
+- $\beta_2$ is $x$ slope averaged across groups
+- $\beta_3$ is difference in slopes between groups
+
+```{r}
+b0 <- log(5) # y when x = 0 and averaged across groups
+b1 <- log(1.1) # x effect
+b2 <- log(1.2) # group effect
+b3 <- log(1.1) # difference in slopes
+
+dd <- expand_grid(group = c(-0.5, 0.5), x = rnorm(1000))
+
+dd$lp <- b0 + b1 * dd$group + b2 * dd$x + b3 * dd$group * dd$x
+dd$y <- exp(dd$lp)
+
+dd |> 
+  ggplot(aes(x = x, y = lp, color = factor(group))) +
+  geom_line()
+
+dd |> 
+  ggplot(aes(x = x, y = y, color = factor(group))) +
+  geom_line()
+```
+
+Now, let's see the type1 error for a fixed n by using a linear model instead of GLM and fixing $\beta_3 = 0$
+
+```{r}
+#| cache: true
+set.seed(2023)
+nsim <- 5000
+n <- 500
+p_lm <- rep(NA, nsim)
+p_glm <- rep(NA, nsim)
+
+for(i in 1:nsim){
+  x <- rnorm(n)
+  x <- scale(x) # standardizing
+  group <- rep(c(-0.5, 0.5), each = n/2)
+  y <- rpois(n, exp(b0 + b1 * group + b2 * x + 0 * x * group)) # no interaction
+  fit_lm <- lm(y ~ x * group)
+  fit_glm <- glm(y ~ x * group, family = poisson(link = "log"))
+  p_lm[i] <- summary(fit_lm)$coefficients[4, 4]
+  p_glm[i] <- summary(fit_glm)$coefficients[4, 4]
+}
+
+mean(p_lm <= 0.05)
+mean(p_glm <= 0.05)
+```
+
+The type1 error is higher for the lm, we are finding interactions even if there is fixed to 0 in our simulation.
+
+## Your turn!
+
+1. Do the power analysis for the interaction using a $\beta_3$ (the one that we defined before or another value) using the `for` or functional approach (you need to define new functions to deal with the interaction).
+2. Create another simulation where you simulate that the one of the two groups has 1/3 of participants of the other group. What happens to the power?
