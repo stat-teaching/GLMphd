@@ -1,0 +1,16 @@
+{
+  "hash": "1164cd885b1e5212266669285a0784da",
+  "result": {
+    "markdown": "---\ntitle: \"Lab 2\"\nauthor: Filippo Gambarota\nformat: html\nembed-resources: true\n---\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\ndevtools::load_all()\nlibrary(here)\nlibrary(tidyr) # for data manipulation\nlibrary(dplyr) # for data manipulation\nlibrary(ggplot2) # plotting\nlibrary(performance) # diagnostic\nlibrary(car) # general utilities\nlibrary(MuMIn) # model selection\nlibrary(patchwork)\n```\n:::\n\n\n\n\n# Overview\n\n\n::: {.cell}\n\n:::\n\n\n\nThe `volunt` dataset contains data from 1000 people on volunteering.\n\nThe dataset contains:\n\n- `id`: identifier for each person\n- `age`: age of the participants in years\n- `ses`: socioeconomic status, from 1 (low) to 4 (high)\n- `sconnection`: a scale measuring the social connection within the community. From 1 (low) to 10 (high)\n- `vol`: is the person involved in volunteering? 1 = yes, 0 = no\n\n# Steps\n\n1. Import the data\n2. Explore the dataset\n    - univariate distributions of the variables\n    - bivariate relationships\n3. fit a model testing all main effects and interpret the parameters\n4. fit a model testing the interaction between ses and social connection. Compare the model with the previous model and interpret the result.\n",
+    "supporting": [
+      "lab2_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

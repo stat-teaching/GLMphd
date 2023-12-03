@@ -1,0 +1,16 @@
+{
+  "hash": "2d7e2494898ba623176364de9eca13f3",
+  "result": {
+    "markdown": "---\ntitle: \"Labs\"\n---\n\n\nOn this page are collected the laboratories with real and simulated data.\n\n\n- [lab1](labs/lab1.qmd)\n- [lab2](labs/lab2.qmd)\n- [lab3](labs/lab3.qmd)\n- [lab4](labs/lab4.qmd)\n- [lab5](labs/lab5.qmd)\n- [lab6](labs/lab6.qmd)\n",
+    "supporting": [
+      "labs_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
