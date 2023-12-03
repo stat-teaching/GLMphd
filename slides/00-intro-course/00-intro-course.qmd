@@ -1,0 +1,148 @@
+---
+title: Generalized Linear Models
+subtitle: Course overview
+institute: "University of Padova"
+author: 
+  - name: "Filippo Gambarota"
+    email: filippo.gambarota@unipd.it
+    twitter: fgambarota
+    github: filippogambarota
+format:
+  quarto-slides-revealjs:
+    code-fold: false
+    incremental: true
+    code-link: true
+    code-line-numbers: false
+    html-math-method: mathjax
+    filters:
+      - nutshell
+      - code-fullscreen
+from: markdown+emoji
+date: last-modified
+date-format: "YYYY"
+final-slide: false
+updated: "*Last Update: `r Sys.Date()`*"
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+library(tidyverse)
+```
+
+
+# Material {.section}
+
+## Github
+
+The material is available on **Github** You can find the slides, code, datasets and other stuff.
+
+<h4 style="text-align:center">
+    <a href="https://stat-teaching.github.io/GLMphd/">stat-teaching.github.io/GLMphd</a> 
+</h4>
+
+## Getting started
+
+1. Download the repository from Github
+2. Unzip the folder
+3. Open the `GLMphd.Rproj` file
+
+# R {.section}
+
+## R style
+
+I use sometimes a coding style that is not common. I try to stay as close as possible to base R. But here some general patterns that you will see:
+
+**Accessing functions within a package**, if I don't want to load it:
+
+```{r}
+#| eval: false
+#| echo: true
+MASS::mvrnorm()
+```
+
+## R style
+
+**Especially in slides or quick exploratory analysis, extensive use of pipes |> or %>%**
+
+```{r}
+#| echo: true
+#| eval: false
+as.character(round(mean(iris$Sepal.Length)))
+
+# equivalent but more clear
+iris$Sepal.Length |> 
+  mean() |> 
+  round() |> 
+  as.character()
+```
+
+## R style
+
+Use of the `tidyverse` package for data-manipulation using `dplyr`, `tidyr`, etc. Sometimes you will se a `tibble` object. It is only a dataframe with some extra features.
+
+```{r}
+#| echo: true
+iris |> 
+  group_by(Species) |> 
+  summarise(Sepal.Length = mean(Sepal.Length))
+
+# in base R
+aggregate(Sepal.Length ~ Species, iris, mean)
+```
+
+## R style
+
+Extensive use of `*apply` like function (functional programming) to make iterations. In the examples I use `for` loops because because is more transparent.
+
+```{r}
+#| echo: true
+means <- vector(mode = "numeric", length = ncol(mtcars))
+for(i in 1:length(means)){
+  means[i] <- mean(mtcars[[i]])
+}
+means
+
+# equivalent to
+sapply(mtcars, mean)
+```
+
+## R style
+
+For plotting I use `ggplot2`. Is not super easy at the beginning but it pays off.
+
+```{r}
+#| echo: true
+iris |> 
+  ggplot(aes(x = Sepal.Length, y = Petal.Width, color = Species)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+```
+
+## R Studio projects
+
+If you have trouble understanding and using the working directory and `setwd()` I highly suggest you to use the R Studio projects.
+
+The `*.Rproj` can be created in a folder and when you open the file R Studio will open an R session setting the working directory automatically.
+
+All the paths will be **relative** to the `*.Rproj` file. You can move the folder or share it with other people without worrying about file location.
+
+```{r}
+#| echo: false
+#| fig-align: center
+knitr::include_graphics("img/rproj.png")
+```
+
+## Contents
+
+- Overview about GLM and why they are useful
+- Binomial, Poisson and Gamma GLM
+  - Fitting the model
+  - Parameters interpretation
+  - Diagnostic
+- Simulating data
+  - Understanding the data generation process
+  - Power analysis
+  - (for fun 😁)
+  - ...

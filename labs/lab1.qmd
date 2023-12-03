@@ -1,0 +1,470 @@
+---
+title: "Lab 1"
+author: "Filippo Gambarota"
+format: html
+embed-resources: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      message = FALSE,
+                      warning = FALSE,
+                      dev = "svg")
+```
+
+```{r packages, message=FALSE, warning=FALSE}
+devtools::load_all()
+library(here)
+library(tidyr) # for data manipulation
+library(dplyr) # for data manipulation
+library(ggplot2) # plotting
+library(performance) # diagnostic
+library(car) # general utilities
+library(MuMIn) # model selection
+library(patchwork)
+```
+
+```{r}
+#| label: ggplot
+#| include: false
+
+mytheme <- function(size = 15){
+  theme_minimal(size)
+}
+
+theme_set(mytheme())
+```
+
+# Overview^[The script has been adapted from the Prof. Paolo Girardi (A.Y. 2021/2022) document]
+
+We are gonna work with the `admission.csv` dataset containing $n = 400$ students for the admission to the UCLA University. A researcher is interested in how variables, such as `gre` (Graduate Record Exam scores), `gpa` (GPA), `rank` (prestige of the undergraduate institution) have an influence for the admission into graduate school. The response variable, admit/don’t admit, is a binary variable.
+
+1. Importing data and check
+2. Exploratory data analysis
+3. Model fitting with `glm()`
+4. Model diagnostic
+5. Interpreting parameters
+6. Model selection
+7. Fitting the model with interactions
+8. Plotting results
+9. Interpreting the parameters
+10. Model comparison for the interactions effect
+
+# 1. Importing data
+
+We need to set the **working directory** on the root of the course folder using `set.wd()`. Using R Projects is just necessary to open the `.RProj` file and the working directory will be automatically correctly selected.
+
+```{r}
+# reading data
+load(here("data", "admission.rda"))
+
+# first rows
+head(admission)
+
+# check dataset structure
+str(admission)
+
+# summary statistics
+summary(admission)
+```
+
+It is very important that each variable is correctly interpreted by R:
+
+- `admit` is a binary variable stored as integer (0 and 1)
+- `gre` is a numerical variable stored as integer
+- `gpa` is a numerical variables stored as double precision number
+- `rank` is a numerical variables stored as integer
+
+We could change the type of `rank` to factor because we are going to use it as a categorical (maybe ordinal) variable.
+
+```{r}
+admission$rankc <- factor(admission$rank, levels = 1:4, labels = 1:4)
+```
+
+# 2. Exploratory data analysis
+
+We can plot the univariate distribution of each variable:
+
+```{r}
+# gre and gpa
+admission |> 
+    select(gre, gpa) |> 
+    pivot_longer(1:2) |> 
+    ggplot(aes(x = value)) +
+    geom_histogram(col = "black",
+                   fill = "lightblue") +
+    facet_wrap(~name, scales = "free")
+```
+
+```{r}
+admission |> 
+    ggplot(aes(x = rank)) +
+    geom_bar()
+```
+
+```{r}
+admission |> 
+    ggplot(aes(x = admit)) +
+    geom_bar()
+```
+
+Then we can cut the `gpa` and `gre` variabiles into categories and plot the admissions for each bin (i.e., a contingency table):
+
+```{r}
+admission$gpa_c <- cut(admission$gpa, seq(4, 6, 0.2), labels = FALSE)
+admission$gre_c <- cut(admission$gre, seq(260, 960, 50), labels=FALSE)
+```
+
+```{r}
+# admission ~ gpa
+admission |> 
+    ggplot(aes(x = gpa_c, fill = factor(admit))) +
+    geom_bar(position = position_dodge()) +
+    labs(fill = "Admission") +
+    theme(legend.position = "bottom")
+
+# admission ~ gre
+admission |> 
+    ggplot(aes(x = gre_c, fill = factor(admit))) +
+    geom_bar(position = position_dodge()) +
+    labs(fill = "Admission") +
+    theme(legend.position = "bottom")
+```
+
+Given that the number of admitted is lower than the number of non admitted, we can have a look at the proportion of admission for each bin:
+
+```{r}
+admission |> 
+    group_by(gpa_c) |> 
+    summarise(admit = mean(admit),
+              non_admit = 1 - admit) |> 
+    pivot_longer(2:3) |> 
+    ggplot(aes(x = factor(gpa_c), y = value, fill = name)) +
+    geom_col() +
+    labs(fill = "Admission",
+         y = "%",
+         x = "gpa") +
+    theme(legend.position = "bottom")
+
+admission |> 
+    group_by(gre_c) |> 
+    summarise(admit = mean(admit),
+              non_admit = 1 - admit) |> 
+    pivot_longer(2:3) |> 
+    ggplot(aes(x = factor(gre_c), y = value, fill = name)) +
+    geom_col() +
+    labs(fill = "Admission",
+         y = "%",
+         x = "gpa") +
+    theme(legend.position = "bottom")
+```
+
+Finally we can have a look at the admissions as a function of the rank of the undergrad institution:
+
+```{r}
+# margin = 2 means that each colum will sum to 1
+prop.table(table(admission$admit, admission$rank), margin = 2)
+```
+
+Clearly as the rank of the institute decrease (from 1 to 4) also the proportions of admissions decrease.
+
+# 3. Model fitting with `glm()`
+
+Now we ca fit the model using `glm()`. Let's start by fitting a *null* model with no predictors. We choose a binomial `glm` with a **logit** link function.
+
+```{r}
+fit0 <- glm(admit ~ 1, data = admission, family = binomial(link = "logit"))
+summary(fit0)
+```
+
+Then we can fit the full model by putting all predictors:
+
+```{r}
+fit1 <- glm(admit ~ gre + gpa + rankc, family = binomial(link = "logit"), data = admission)
+summary(fit1)
+```
+
+# 4. Model diagnostic
+
+Firstly we can have a look to the `residual ~ fitted` plot:
+
+```{r}
+car::residualPlot(fit1)
+```
+
+Given that the `admit` is a binary variables and we are using a bernoulli model we can use the **binned residuals** to have a better idea:
+
+```{r}
+binres <- data.frame(performance::binned_residuals(fit1, n_bins = 20))
+
+binres |> 
+    ggplot(aes(x = xbar, y = ybar)) +
+    geom_point() +
+    geom_line(aes(x = xbar, y = 2*se)) +
+    geom_line(aes(x = xbar, y = -2*se)) +
+    ylim(c(-0.5,0.5)) +
+    xlab("Binned fitted(fit)") +
+    ylab("Binned residuals(fit)")
+```
+
+Then we can check each predictors as a function of residuals:
+
+```{r, fig.width=10, fig.height=10}
+residualPlots(fit1, tests = FALSE)
+```
+
+Then we can check for influential observations:
+
+```{r}
+infl <- infl_measure(fit1)
+head(infl)
+```
+
+Plotting using `car`
+
+```{r}
+car::influenceIndexPlot(fit1, vars = c("Studentized", "hat", "Cook"))
+```
+
+Plotting also the dfbeta:
+
+```{r, fig.width=10, fig.height=10}
+dfbeta_plot(fit1)
+```
+
+Check if there are observations with high standardized (studentized) residuals:
+
+```{r}
+outlierTest(fit1) # Testing outliers
+```
+
+For potentially influential observations we could fir a model subtracting that specific observation and compare coefficients. This is similar to the dfbeta metric that suggest no influential observations on model parameters.
+
+```{r}
+# Is 198 really influential?
+fit1_no198 <- update(fit1, subset=-c(198))
+compareCoefs(fit1, fit1_no198)
+```
+
+# 5. Interpreting parameters
+
+Firstly, we can extract model parameters, taking the exponential to interpret them as odds ratios:
+
+```{r}
+broom::tidy(fit1, exponentiate = TRUE, conf.int = TRUE)
+```
+
+We can interpret these parameters as: for a unit increase in the `x`, the odds of being accepted in grad school increase by `exp(beta)`. If we multiply the `exp(beta)*100` we obtain the expected increase in percentage. Given that we have multiple parameters, when we intepret a specific parameter we are controlling for other parameters.
+
+```{r}
+broom::tidy(fit1, exponentiate = TRUE, conf.int = TRUE) |>
+    slice(-1) |> 
+    mutate(estperc = estimate * 100)
+```
+
+To better interpret the parameters we need to make sure that the scale is meaningful. For example, the `gre` effect seems to be very small but statistically significant. The reason is that a unit increase in `gre` is very small. We could for example rescale the variable dividing for a constant term:
+
+```{r}
+gre <- admission |> 
+  ggplot(aes(x = gre)) +
+  geom_histogram(col = "black",
+                 fill = "dodgerblue",
+                 bins = 30)
+
+gre100 <- admission |> 
+  ggplot(aes(x = gre/100)) +
+  geom_histogram(col = "black",
+                 fill = "dodgerblue",
+                 bins = 30)
+
+gre | gre100
+```
+
+Let's try fitting the model with the new variable:
+
+```{r}
+admission$gre100 <- admission$gre/100
+fit2 <- glm(admit ~ gre100 + gpa + rankc, family = binomial(link = "logit"), data = admission)
+
+summary(fit2)
+```
+
+```{r}
+broom::tidy(fit2, exponentiate = TRUE, conf.int = TRUE) |>
+    slice(-1) |> 
+    mutate(estperc = estimate * 100)
+```
+
+Now the `gre` effect is more meaningful. Notice how the overall model fitting is not changed togheter with other parameters. We are only rescaling variables.
+
+Generally we can plot the effects for a better overview of the model:
+
+```{r}
+plot(effects::allEffects(fit1))
+```
+
+To interpret the parameters in probability terms we could use the divide by 4 rule that express the maximum slope (i.e., the maximum probability increase):
+
+```{r}
+coef(fit2)[c("gpa", "gre100")]/4
+```
+
+Similarly we can compute the marginal effects for each variable that represents the average slope:
+
+```{r}
+marginaleffects::avg_slopes(fit2, 
+                            variables = c("gpa", "gre100"))
+```
+
+Beyond the model coefficients, we could use a likelihood ratio test. Let's start by comparing the null model with the current model. We hope that our variables combinations are doing a better job compared to a null model:
+
+```{r}
+anova(fit0, fit1, test = "LRT")
+```
+
+As expected from model summary and the deviance reduction, the variables are useful to predict the probability of admission. How useful? we could use some $R^2$-like measures:
+
+```{r}
+performance::r2_tjur(fit1)
+```
+
+Despite useful, the model has a low $R^2$. Furthermore the correct classification rate is higher than the chance level but relatively low:
+
+```{r}
+1 - error_rate(fit1)
+```
+
+# 6. Model selection
+
+We could try a model comparison starting from the null model and finishing to the overall model:
+
+```{r}
+fit2 <- update(fit2, na.action = na.fail) # required for mumin
+dredge(fit2)
+```
+
+The model selection table suggest that the full model is the most appropriate, at least considering the AIC.
+
+# 7. Fitting model with interactions
+
+Here we fit the two 2-way interactions between `gpa`, `gre` and `rankc`. Let's start from only one interaction:
+
+```{r}
+# gpa * rankc + gre
+
+fit1 <- glm(admit ~ gre + gpa + rankc + gpa:rankc, family = binomial(link = "logit"), data = admission)
+# this is equivalent to 
+# fit1 <- glm(admit ~ gpa * rankc + gre, family = binomial(link = "logit"), data = admission)
+summary(fit1)
+```
+
+# 8. Plotting results
+
+With interactions it is even more important and useful to plot the effects before anything else:
+
+```{r}
+plot(effects::allEffects(fit1))
+```
+
+The plot on the left represent the main effect of `gre` and the plot on the right is the interaction between `gpa` and `rankc`. In this case we have an interaction between a numerical and a categorical variable. The model is essentially estimating the relationship between `gpa` and `admit` splitting by the level of `rankc`.
+
+# 9. Interpreting the parameters
+
+The interpretation of interactions (especially with categorical variables) from model parameters is not always easy because it depends on which **contrasts** are used. By default, R uses **dummy coding** where the reference level of the factor (`rankc`) is the first category and all the other categories are compared to the reference. This influence also other parameters:
+
+- `(Intercept)`: log odds of being admitted for `gpa = 0`, `gre = 0` and `rankc` at the reference (i.e., 1)
+- `gpa`: the increase in log odds of being admitted for a unit increase in the `gpa` for people in the reference level of `rankc` (i.e., 1)
+- `gre`: the increase in log odds of being admitted for a unit increase in the `gre` for people in the reference level of `rankc` (i.e., 1)
+- `rankc2`: is the difference in the log odds of being admitted between `rankc2` and `rankc1` (i.e. is the log odds ratio) when `gpa` and `gre` are 0
+- `rankc3`: is the difference in the log odds of being admitted between `rankc3` and `rankc1` (i.e. is the log odds ratio) when `gpa` and `gre` are 0
+- `rankc4`: is the difference in the log odds of being admitted between `rankc4` and `rankc1` (i.e. is the log odds ratio) when `gpa` and `gre` are 0
+- `gpa:rankc2`: the difference between `rankc` 2 and 1 in the rate of increase of the log odds of being admitted for a unit increase in the `gpa`
+- `gpa:rankc3`: the difference between `rankc` 3 and 1 in the rate of increase of the log odds of being admitted for a unit increase in the `gpa`
+- `gpa:rankc4`: the difference between `rankc` 4 and 1 in the rate of increase of the log odds of being admitted for a unit increase in the `gpa`
+
+For complex interactions like this, a suggestion is to plot the effects (as we did before) and to estimate the individual slopes checking if the interpretation is correct:
+
+```{r}
+# emmeans is an options to estimate effects regardless the model parameters
+emm <- data.frame(emmeans::emtrends(fit1, ~rankc, var = "gpa"))
+emm
+
+# reference level
+emm$gpa.trend[1]
+
+# gpa:rankc2
+emm$gpa.trend[2] - emm$gpa.trend[1]
+
+# ...
+```
+
+The other difficulty with interactions is interpreting the categorical variable effects. The `rankc2`, `rankc3` ... effects are interpreted as usual BUT in the presence of interactions by definition the difference between i.e. `rankc2` and `rankc1` depends on the level of other variables (in particular `gpa` in this case). Let's explain this visually:
+
+This is the main effect of the `rankc` without considering the other variables:
+
+```{r}
+plot(effects::effect("rankc", fit1))
+```
+
+```{r, out.width="100%", echo = FALSE}
+knitr::include_graphics("img/main-effect-rankc.png")
+```
+
+However, in the presence of interactions, the odds ratio could be influenced by the `gpa` level where it is evaluated:
+
+```{r, echo = FALSE}
+preds <- expand.grid(
+    rankc = c("1", "2", "3", "4"),
+    gpa = seq(0, 6, 0.01),
+    gre = mean(admission$gre)
+)
+
+preds |> 
+    add_predict(fit1) |> 
+    ggplot(aes(x = gpa, y = pr, color = rankc)) +
+    geom_line() +
+    theme_minimal(20) +
+    geom_vline(xintercept = c(0, 2, 4, 5, 5.8))
+```
+
+The model (without transformations), evaluate the effect of `rankc` when other variables are 0 and this could be meaningful or not.
+
+Without interaction by definition the point at which I evaluate the `renkc` effect is not relevant.
+
+```{r, echo = FALSE}
+fit_noint <- glm(admit ~ gre + gpa + rankc, family = binomial(link = "logit"), data = admission)
+preds <- expand.grid(
+    rankc = c("1", "2", "3", "4"),
+    gpa = seq(0, 6, 0.01),
+    gre = mean(admission$gre)
+)
+
+preds |> 
+    add_predict(fit_noint) |> 
+    ggplot(aes(x = gpa, y = pr, color = rankc)) +
+    geom_line() +
+    theme_minimal(20) +
+    geom_vline(xintercept = c(0, 2, 4, 5, 5.8))
+```
+
+# 10. Inference and model comparison for the interactions effect
+
+Even if from the plot there is evidence for a little bit of interaction (i.e, the slopes are not the same across `rankc`) we need a statistical test. The first option is to see the Wald test of model coefficients testing if the slopes are different (e.g., `gpa:rankc2`).
+
+To test the overall interaction we can use the `car::Anova()` function that reports main effects and interactions:
+
+```{r}
+car::Anova(fit1)
+```
+
+We see that as reported in the Lab 8, there are the main effects of `gre`, `gpa` and `rankc` but there is no evidence for the interaction. The `gpa:rankc` test if there is at least one slope difference that is statistically significant.
+
+To note, the `car::Anova(fit1)` results for the interaction is just a likelihood ratio test comparing a model with the interaction vs a model without the interaction:
+
+```{r}
+fit_noint <- glm(admit ~ gre + gpa + rankc, family = binomial(link = "logit"), data = admission)
+
+anova(fit_noint, fit1, test = "LRT")
+```
+
+In fact the `Chisq` and the `p values` are the same. The model is just testing if including the interaction reduces the residual deviance.

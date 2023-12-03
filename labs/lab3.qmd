@@ -1,0 +1,479 @@
+---
+title: "Lab 3"
+author: "Filippo Gambarota"
+format: html
+embed-resources: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      message = FALSE,
+                      warning = FALSE,
+                      dev = "svg")
+```
+
+```{r packages, message=FALSE, warning=FALSE}
+devtools::load_all() # if using the rproject dowloaded from the slides
+# source("utils-glm.R") # if using a standard setup
+library(here)
+library(tidyr) # for data manipulation
+library(dplyr) # for data manipulation
+library(ggplot2) # plotting
+library(car) # general utilities
+library(effects) # for extracting and plotting effects 
+library(emmeans) # for marginal means
+library(patchwork)
+```
+
+```{r options, include = FALSE}
+theme_set(theme_minimal(base_size = 15))
+```
+
+```{r loading-data}
+data("drop")
+dat <- drop
+```
+
+# Overview
+
+This dataset `dropout.csv` contains data about dropouts during high school for `nrow(dat)` adolescents. We want to understand the impact of the parenting style (`r paste(unique(dat$parenting), collapse = ", ")`) and the academic performance (`r paste(unique(dat$academic), collapse = ", ")`) on the probability of dropout (0 = no dropout, 1 = dropout).
+
+1. Importing data and overall check
+2. Exploratory data analysis of predictors and the relationships between predictors and the number of words
+3. Compute the odds ratio manually comparing the academic performances for each parenting style
+4. Model fitting with `glm()` using the dataset in the binary form
+5. Model fitting with `glm()` using the dataset in the aggregated form
+6. Plotting and interpreting effects of both models
+    - is there any difference? try to understand why
+7. Write a brief paragraph reporting the effects with your interpretation
+
+# 1. Importing data and overall check
+
+```{r}
+str(dat)
+```
+
+Check for `NA` values:
+
+```{r}
+sapply(dat, function(x) sum(is.na(x)))
+```
+
+Everything seems good, we do not have `NA` values.
+
+Let's convert categorical variables into factor setting the appropriate order:
+
+- `parenting`: neglectful, permissive, authoritative, authoritarian
+- `academic`: low, high
+
+```{r}
+dat$parenting <- factor(dat$parenting, levels = c("neglectful",
+                                                  "permissive",
+                                                  "authoritative",
+                                                  "authoritarian"))
+dat$academic <- factor(dat$academic, levels = c("low", "high"))
+
+levels(dat$parenting)
+levels(dat$academic)
+```
+
+# 2. Exploratory data analysis
+
+```{r}
+summary(dat) # not really meaningful
+```
+
+With categorical variables we need to use absolute/relative frequencies and contingency tables.
+
+Let's start by univariate EDA:
+
+```{r}
+# distribution of parenting styles
+table(dat$parenting)
+
+table(dat$parenting)/nrow(dat)
+
+# distribution of academic performance
+table(dat$academic)
+table(dat$academic)/nrow(dat)
+
+# overall dropout rate
+table(dat$drop)
+table(dat$drop)/nrow(dat)
+# mean(dat$drop) # directly
+```
+
+Let's create an overall plot:
+
+```{r, fig.width=10, fig.height=10}
+plt_par <- dat |> 
+  ggplot(aes(x = parenting)) +
+  geom_bar()
+
+plt_academic <- dat |> 
+  ggplot(aes(x = academic)) +
+  geom_bar()
+
+plt_drop <- dat |> 
+  ggplot(aes(x = factor(drop))) +
+  geom_bar()
+
+plt_par / plt_academic / plt_drop
+```
+
+How to interpret?
+
+Let's now explore the bivariate relationships:
+
+```{r}
+table(dat$parenting, dat$academic)
+table(dat$academic, dat$parenting)
+```
+
+We can create tables with relative frequencies:
+
+```{r}
+prop.table(table(dat$parenting, dat$academic), 1) # by row
+prop.table(table(dat$parenting, dat$academic), 2) # by column
+```
+
+...and some plots:
+
+```{r}
+dat |> 
+  ggplot(aes(x = academic, fill = parenting)) +
+  geom_bar(position = position_dodge(),
+           col = "black")
+```
+
+Of course, we can compute the relative frequencies in multiple ways (total, row or column wise).
+
+Then the bivariate relationships with the `drop` variable:
+
+```{r}
+table(dat$parenting, dat$drop)
+
+prop.table(table(dat$parenting, dat$drop), 1)
+
+table(dat$academic, dat$drop)
+
+prop.table(table(dat$academic, dat$drop), 1)
+```
+
+And the plots:
+
+```{r}
+barplot(prop.table(table(dat$parenting, dat$drop), 1), 
+        beside = TRUE,
+        col = c("firebrick", "lightblue", "darkgreen", "pink"))
+
+legend(7, 0.8, legend = levels(dat$parenting), 
+       fill = c("firebrick", "lightblue", "darkgreen", "pink"))
+
+
+barplot(prop.table(table(dat$parenting, dat$drop), 1), 
+        beside = TRUE,
+        col = c("firebrick", "lightblue", "darkgreen", "pink"))
+
+legend(7, 0.8, legend = levels(dat$parenting), 
+       fill = c("firebrick", "lightblue", "darkgreen", "pink"))
+
+
+barplot(prop.table(table(dat$academic, dat$drop), 1), 
+        beside = TRUE,
+        col = c("red", "blue"))
+
+legend(4, 0.5, legend = levels(dat$academic), 
+       fill =  c("red", "blue"))
+```
+
+Finally we can represent the full relationship:
+
+```{r}
+dat |> 
+  group_by(parenting, academic) |> 
+  summarise(drop = mean(drop)) |> 
+  ggplot(aes(x = parenting, y = drop, color = academic, group = academic)) +
+  geom_point() +
+  geom_line()
+```
+
+Comments? Main effects? Interactions?
+
+# 3. Compute the odds ratio manually comparing the academic performances for each parenting style
+
+Firstly we compute the probability of dropout for each category:
+
+```{r}
+agg <- aggregate(drop ~ parenting + academic, FUN = mean, data = dat)
+agg
+```
+
+Then we can compute the odds of the probabilities and the odds ratios
+
+```{r}
+odds <- function(p) p / (1 - p)
+agg$odds <- odds(agg$drop)
+
+ors <- agg$odds[agg$academic == "high"] / agg$odds[agg$academic == "low"]
+names(ors) <- unique(agg$parenting)
+ors
+```
+
+Comments?
+
+# 4. Model fitting with `glm()` using the dataset in the binary form
+
+Let's start fitting the null model:
+
+```{r}
+fit0 <- glm(drop ~ 1, data = dat, family = binomial(link = "logit"))
+summary(fit0)
+```
+
+The intercept is the overall odds of dropout:
+
+```{r}
+exp(coef(fit0))
+plogis(coef(fit0))
+mean(dat$drop)
+```
+
+Let's now fit a model with the two main effects:
+
+```{r}
+fit1 <- glm(drop ~ academic + parenting, data = dat, family = binomial(link = "logit"))
+summary(fit1)
+```
+
+Comments?
+
+Let's now fit the interaction model:
+
+```{r}
+fit2 <- glm(drop ~ academic * parenting, data = dat, family = binomial(link = "logit"))
+summary(fit2)
+```
+
+# 5. Model fitting with `glm()` using the dataset in the aggregated form
+
+In this case we can easily fit the same model using the aggregated form. The aggregated form is a dataset without 1s and 0s but counting the number of 1s for each condition.
+
+```{r}
+dat_agg <- dat |> 
+    group_by(academic, parenting) |> 
+    summarise(drop_1 = sum(drop),
+              drop_0 = sum(drop == 0)) |> 
+    data.frame()
+
+dat_agg$drop_tot <- dat_agg$drop_1 + dat_agg$drop_0
+```
+
+Now we have a column with the number of 1s and a column with the total. Then we can also compute the number of 0s:
+
+```{r}
+dat_agg
+```
+
+The two dataset (`dat` and `dat_agg`) contains the same information. Let's now fit the same models as before:
+
+```{r}
+fit0_agg <- glm(cbind(drop_1, drop_0) ~ 1, data = dat_agg, family = binomial(link = "logit"))
+summary(fit0)
+```
+
+Let's now fit a model with the two main effects:
+
+```{r}
+fit1_agg <- glm(cbind(drop_1, drop_0) ~ academic + parenting, data = dat_agg, family = binomial(link = "logit"))
+summary(fit1_agg)
+```
+
+Comments?
+
+Let's now fit the interaction model:
+
+```{r}
+fit2_agg <- glm(cbind(drop_1, drop_0) ~ academic * parenting, data = dat_agg, family = binomial(link = "logit"))
+summary(fit2_agg)
+```
+
+Do you notice any difference with the previous models?
+
+# 6. Plotting and interpreting effects of both models
+
+Let's start by plotting the full model (in both forms):
+
+```{r}
+plot(allEffects(fit2))
+plot(allEffects(fit2_agg))
+```
+
+Let's compare the coefficients:
+
+```{r}
+car::compareCoefs(fit2, fit2_agg)
+```
+
+Now let's interpret the effects. The "new" component is the interaction between two categorical variable. If the coefficients with one categorical variable is the log(Odds Ratio), the interaction is the difference between the two odds ratios. When transformed on the probability scale, the parameter is the ratio between odds ratios.
+
+This is the odds ratio for the academic effect with neglectful parenting (i.e., the reference level):
+
+```{r}
+coefs <- coef(fit2_agg)
+
+coefs["academichigh"] # log odds ratio
+exp(coefs["academichigh"]) # odds ratio
+agg
+
+low <- agg$odds[agg$parenting == "neglectful" & agg$academic == "low"]
+high <- agg$odds[agg$parenting == "neglectful" & agg$academic == "high"]
+
+high/low
+log(high/low)
+```
+
+Then the `academichigh:parentingpermissive` is the difference of the log odds ratios for low vs high for neglectful and permissive parenting styles.
+
+```{r}
+coefs["academichigh:parentingpermissive"]
+exp(coefs["academichigh:parentingpermissive"])
+low_neg <- agg$odds[agg$parenting == "neglectful" & agg$academic == "low"]
+high_neg <- agg$odds[agg$parenting == "neglectful" & agg$academic == "high"]
+low_per <- agg$odds[agg$parenting == "permissive" & agg$academic == "low"]
+high_per <- agg$odds[agg$parenting == "permissive" & agg$academic == "high"]
+
+log((high_per / low_per)) - log((high_neg / low_neg))
+(high_per / low_per) / (high_neg / low_neg)
+```
+
+Similarly to the odds ratio, the ratio between two odds ratios can be interpreted in the same way:
+
+- OR1 / OR2 > 1: the odds ratio for the numerator condition is x times higher than the odds ratio for the denominator condition
+- OR1 / OR2 < 1: the odds ratio for the numerator condition is x times lower than the odds ratio for the denominator condition
+
+Of course, the best way is using the `predict()` function:
+
+```{r}
+preds <- expand.grid(parenting = c("neglectful", "permissive"),
+                     academic = c("low", "high"))
+preds$pr <- predict(fit2_agg, newdata = preds)
+
+with(preds, (exp(pr)[4] / exp(pr)[2]) / (exp(pr)[3] / exp(pr)[1]))
+```
+
+Why the residual deviance is different between the aggregated and the binary model?
+
+```{r}
+deviance(fit2)
+deviance(fit2_agg)
+```
+This is the main difference between the two approaches. Actually we do not have to compare the deviance of the two models e.g., the aggregated form is better because it is closer to 0 but we always need to compare the model with the null deviance.
+
+```{r}
+anova(fit0, fit2, test = "LRT")
+anova(fit0_agg, fit2_agg, test = "LRT")
+```
+
+As you can see the ratio is the same, thus the two deviances are on a different scale. The two models explains the same amount of (relative) deviance.
+
+Why?
+
+The reason is that we are computing the residual deviance from observed 0 and 1 vs observed counts.
+
+```{r}
+# aggregated model deviance
+-2*(sum(log(dbinom(dat_agg$drop_1, dat_agg$drop_tot, fitted(fit2_agg))) - log(dbinom(dat_agg$drop_1, dat_agg$drop_tot, dat_agg$drop_1/dat_agg$drop_tot))))
+
+# binary model deviance
+-2*(sum(log(dbinom(dat$drop, 1, fitted(fit2))) - log(dbinom(dat$drop, 1, dat$drop))))
+```
+
+In a way it is more difficult to predict 0 and 1 compared to counts thus the residuals and the residual deviance will be always higher. Model coefficients, standard error and tests are the same.
+
+Where the two models are not the same? Depends on the type of variables. Let's add a new column to our binary dataset with the age of each student:
+
+```{r}
+dat$age <- round(runif(nrow(dat), 12, 18))
+```
+
+Now, if we want to include the `age` as predictor, we need to use the binary form because we have one value for each student. We are including a predictor at the level of the 0-1 values.
+
+```{r}
+fit3 <- glm(drop ~ academic * parenting + age , data = dat, family = binomial(link = "logit"))
+summary(fit3)
+```
+
+When we have predictors at the 0-1 levels, we need to use the binary form.
+
+A little (visual) demonstration:
+
+```{r}
+x <- seq(0, 1, 0.01)
+dat <- data.frame(
+    x = rep(x, 10)
+)
+
+dat$lp <- plogis(qlogis(0.01) + 8*dat$x)
+dat$y <- rbinom(nrow(dat), 1, dat$lp)
+head(dat)
+```
+
+Let's fit the model in the binary form:
+
+```{r}
+# model prediction
+fit <- glm(y ~ x, data = dat, family = binomial())
+
+# equivalent to predict()
+pi <- plogis(coef(fit)[1] + coef(fit)[2]*unique(dat$x))
+```
+
+Let's fit the mode in the binomial form:
+
+```{r}
+# aggregated form
+dat_agg <- aggregate(y ~ x, FUN = sum, data = dat)
+dat_agg$n <- 10 # total trials
+dat_agg$f <- dat_agg$n - dat_agg$y
+dat_agg$p <- dat_agg$y / dat_agg$n
+
+head(dat_agg)
+
+fit2 <- glm(cbind(y, f) ~ x, data = dat_agg, family = binomial())
+pi <- plogis(coef(fit2)[1] + coef(fit2)[2]*dat_agg$x)
+```
+
+The residuals (thus the residual deviance) will be always larger in the binary model (but the coefficients are the same):
+
+```{r}
+par(mfrow = c(1,2))
+
+jit <- runif(nrow(dat), -0.03, 0.03)
+plot((y + jit) ~ x, data = dat, ylab = "y", xlab = "x",
+     main = "Binary Form")
+lines(unique(dat$x), pi, lwd = 2, col = "red")
+
+plot(y/n ~ x, data = dat_agg, ylab = "y",
+     main = "Binomial Form")
+lines(dat_agg$x, pi, lwd = 2, col = "red")
+```
+
+This is the reason why binary model have also strange residuals:
+
+```{r}
+# also residuals
+par(mfrow = c(1,2))
+plot(fitted(fit), residuals(fit), main = "Binary Form")
+plot(fitted(fit2), residuals(fit2), main = "Binomial Form")
+```
+
+
+
+
+
+
+
+
+
+

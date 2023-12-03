@@ -1,0 +1,432 @@
+---
+title: Gamma GLM
+institute: "University of Padova"
+author: 
+  - name: "Filippo Gambarota"
+    email: filippo.gambarota@unipd.it
+    twitter: fgambarota
+    github: filippogambarota
+format:
+  quarto-slides-revealjs:
+    incremental: false
+    code-link: true
+    code-line-numbers: false
+    html-math-method: mathjax
+    code-fold: true
+    filters:
+      - nutshell
+      - code-fullscreen
+from: markdown+emoji
+date: last-modified
+date-format: "YYYY"
+final-slide: false
+df-print: tibble
+bibliography: "`r filor::fil()$bib`"
+csl: "`r filor::fil()$csl`"
+updated: "*Last Update: `r Sys.Date()`*"
+---
+
+```{r}
+#| label: setup
+knitr::opts_chunk$set(echo = TRUE,
+                      dev = "svg",
+                      fig.width = 6,
+                      fig.asp = 0.618,
+                      fig.align = "center",
+                      comment = "#>")
+```
+
+```{r packages, include=FALSE}
+devtools::load_all()
+library(tidyverse)
+library(kableExtra)
+library(patchwork)
+library(here)
+library(ggeffects)
+library(emmeans)
+```
+
+```{r functions, include = FALSE}
+funs <- filor::get_funs(c(here("R", "utils-glm.R"), here("R", "utils-distr.R")))
+```
+
+# Gamma Distribution {.section}
+
+## Gamma distribution
+
+The Gamma distribution has several [:parametrizations](https://en.wikipedia.org/wiki/Gamma_distribution). One of the most common is the **shape-scale** parametrization:
+
+$$
+f(x;k,\theta )={\frac {x^{k-1}e^{-x/\theta }}{\theta ^{k}\Gamma (k)}}
+$$
+Where $\theta$ is the **scale** parameter and $k$ is the **shape** parameter.
+
+## Gamma distribution
+
+```{r}
+ggamma(mean = c(10, 20, 30), sd = c(10, 10, 10), show = "ss")
+```
+
+## Gamma $\mu$ and $\sigma^2$
+
+The mean and variance are defined as:
+
+- $\mu = k \theta$ and $\sigma^2 = k \theta^2$ with the **shape-scale** parametrization
+- $\mu = \frac{\alpha}{\beta}$ and $\frac{\alpha}{\beta^2}$ with the **shape-rate** parametrization
+
+. . .
+
+Another important quantity is the **coefficient of variation** defined as $\frac{\sigma}{\mu}$ or $\frac{1}{\sqrt{k}}$ (or $\frac{1}{\sqrt{\alpha}}$).
+
+## Gamma distribution
+
+Again, we can see the mean-variance relationship:
+
+```{r}
+ggamma(shape = c(5, 5), scale = c(10, 20), show = "ss")
+```
+
+
+## Gamma parametrization
+
+To convert between different parametrizations, you can use the `gamma_params()` function:
+
+```{r}
+#| output: asis
+#| echo: false
+#| code-fold: false
+filor::print_fun(funs$gamma_params)
+```
+
+## Gamma parametrization
+
+```{r}
+#| code-fold: false
+gm <- gamma_params(mean = 30, sd = 10)
+unlist(gm)
+
+y <- rgamma(1000, shape = gm$shape, scale = gm$scale)
+```
+
+## Gamma parametrization
+
+```{r}
+#| echo: false
+hist(y, main = latex("$\\mu = %.3f$, $\\sigma = %.3f$", mean(y), sd(y)))
+```
+
+# Understanding parameters {.section}
+
+## $\mu$ and $\sigma$ parametrization
+
+- Using the `gamma_params()` function we can think in terms of $\mu$ and $\sigma$ and generate the right parameters (e.g., *shape* and *rate*).
+- Let's simulate observations from a Gamma distribution with $\mu = 500$ and $\sigma = 200$
+
+```{r}
+gm <- gamma_params(mean = 500, sd = 200)
+y <- rgamma(1e4, shape = gm$shape, scale = gm$scale)
+hist(y, breaks = 100, col = "dodgerblue")
+```
+
+## $\mu$ and $\sigma$ parametrization
+
+Then we can fit an intercept-only model with the `Gamma` family and a `log` link function. You have to specify the link because the default is `inverse`.
+
+```{r}
+fam <- Gamma(link = "log")
+dat <- data.frame(y)
+fit0 <- glm(y ~ 1, family = fam, data = dat)
+summary(fit0)
+```
+
+## $\mu$ and $\sigma$ parametrization
+
+- $\beta_0$ is the $\mu$ of the Gamma distribution. We need to apply the inverse (`exp`) to get the original scale:
+
+```{r}
+c(mean = mean(dat$y), mean_true = gm$mean, b0 = exp(coef(fit0)[1]))
+```
+
+- as always you can use the `fam()` object if you are not sure about the link functions as `fam$linkinv(coef(fit0)[1])`
+
+## $\mu$ and $\sigma$ parametrization
+
+Now let's simulate the difference between two groups. Again fixing the $\mu_0 = 500$, $\mu_1 = 600$ and a common $\sigma = 200$. Let's plot the empirical densities:
+
+```{r}
+ggamma(mean = c(500, 600), sd = c(200, 200))
+```
+
+## $\mu$ and $\sigma$ parametrization
+
+Using the `group` variable as dummy-coded, $\beta_0 = \mu_0$ and $\beta_1 = \mu_1 - \mu_0$. Note that we are in the log scale.
+
+```{r}
+#| code-fold: false
+ns <- 1e4
+m0 <- 500
+m1 <- 600
+s <- 200
+# parameters, log link
+b0 <- log(m0)
+b1 <- log(m1) - log(m0) # equivalent to log(m1 / m0)
+x <- rep(c(0, 1), each = ns/2)
+lp <- b0 + b1 * x # linear predictor
+mu <- exp(lp) # inverse exp link
+gm <- gamma_params(mean = mu, sd = s)
+y <- rgamma(ns, shape = gm$shape, scale = gm$scale)
+dat <- data.frame(y, x)
+```
+
+## $\mu$ and $\sigma$ parametrization
+
+Let's see the simulated data:
+
+```{r}
+par(mfrow = c(1,2))
+hist(dat$y, col = "dodgerblue", breaks = 100)
+boxplot(y ~ x, data = dat)
+```
+
+## $\mu$ and $\sigma$ parametrization
+
+Now we can fit the model and extract the parameters:
+
+```{r}
+fit <- glm(y ~ x, data = dat, family = fam)
+summary(fit)
+```
+
+## $\mu$ and $\sigma$ parametrization
+
+- $\beta_0$ is the mean of the first group and $\beta_1$ is the $\log(\mu_1/\mu_0)$ or the difference $\log(\mu_1) - log(\mu_0)$ 
+
+```{r}
+#| code-fold: false
+mm <- tapply(dat$y, dat$x, mean)
+coefs <- coef(fit)
+# manually
+c(mm["0"], mm["1"], diff = log(mm["1"]) - log(mm["0"]))
+# model
+c(exp(coefs[1]), exp(coefs[1] + coefs[2]), coefs[2])
+```
+
+## $\mu$ and $\sigma$ parametrization
+
+The other estimated parameter is the **dispersion** that is defined as the inverse of the **shape**. We have not a single shape but the average is roughly similar to the true value.
+
+```{r}
+#| code-fold: false
+fits <- summary(fit)
+fits$dispersion
+1/mean(unique(gm$shape))
+```
+
+## $\mu$ and `shape` parametrization
+
+- This is common in `brms` and other packages^[See an example https://rpubs.com/jwesner/gamma_glm]. The $\mu$ is the same as before and the `shape` ($\alpha$) **determine the skewness of the distribution**. For the Gamma, the skewness is calculated as $\frac{2}{\sqrt{\alpha}}$.
+- To generate data, we calculate the **scale** ($\theta$) as $\frac{\mu}{\alpha}$ (remember that $\mu = \alpha\theta$)
+
+```{r}
+mu <- 50
+shape <- 10
+y <- rgamma(1e4, shape = shape, scale = mu/shape)
+hist(y, col = "dodgerblue", breaks = 100)
+```
+
+## $\mu$ and `shape` parametrization
+
+- the expected skewness is `r dcode(2/sqrt(shape))` and is similar to the value computed on the simulated data
+
+```{r}
+#| code-fold: false
+2/sqrt(shape)
+psych::skew(y)
+```
+
+- as $\alpha$ increase, the Gamma distribution is less skewed and approaches a Gaussian distribution. When $\mu = \alpha$ the distribution already start to be pretty Gaussian
+
+## Skewness - $\alpha$ relationship
+
+We can plot the function that determine the skewness of the Gamma fixing $\mu$ and varying $\alpha$:
+
+```{r}
+curve(2/sqrt(x), 0, 50, ylab = "Skewness", xlab = latex("\\alpha (shape)"))
+```
+
+## Skewness - $\alpha$ relationship
+
+Compared to the $\mu$-$\sigma$ method, here we fix the skewness and $\mu$, thus the $\hat \sigma$ will differ when $\mu$ change but the skewness is the same. The opposite is also true.
+
+```{r}
+#| fig-width: 10
+mu <- c(50, 80)
+
+# mu-shape parametrization
+y1 <- rgamma(1e6, shape = 10, scale = mu[1]/10)
+y2 <- rgamma(1e6, shape = 10, scale = mu[2]/10)
+
+# mu-sigma parametrization
+gm <- gamma_params(mean = mu, sd = c(20, 20))
+x1 <- rgamma(1e6, shape = gm$shape[1], scale = gm$scale[1])
+x2 <- rgamma(1e6, shape = gm$shape[2], scale = gm$scale[2])
+
+par(mfrow = c(1,2))
+
+plot(density(y1), lwd = 2, main = latex("\\mu and \\alpha parametrization"), xlab = "x", xlim = c(0, 250))
+lines(density(y2), col = "firebrick", lwd = 2)
+legend("topright", 
+       legend = c(latex("\\mu = %s, \\alpha = %s, \\hat{\\sigma} = %.0f, sk = %.2f", mu[1], 10, sd(y1), psych::skew(y1)),
+                  latex("\\mu = %s, \\alpha = %s, \\hat{\\sigma} = %.0f, sk = %.2f", mu[2], 10, sd(y2), psych::skew(y1))),
+       fill = c("black", "firebrick"))
+
+hatshape <- c(gamma_shape(x1, "invskew"), gamma_shape(x2, "invskew"))
+
+plot(density(x1), lwd = 2, main = latex("\\mu and \\sigma parametrization"), xlab = "x", xlim = c(0, 250))
+lines(density(x2), col = "firebrick", lwd = 2)
+legend("topright", 
+       legend = c(latex("\\mu = %s, \\sigma = %s, \\hat{\\alpha} = %.0f, sk = %.2f", mu[1], 20, hatshape[1], psych::skew(x1)),
+                  latex("\\mu = %s, \\sigma = %s, \\hat{\\alpha} = %.0f, sk = %.2f", mu[2], 20, hatshape[2], psych::skew(x2))),
+       fill = c("black", "firebrick"))
+```
+
+## Coefficient of variation
+
+<!-- TODO rivedi questa parte -->
+
+The *coefficient of variation* $\frac{\sigma}{\mu} = \frac{1}{\sqrt{\alpha}}$ is constant under the $\mu$-$\alpha$ parametrization while can be different under the $\mu$-$\sigma$ one when $\alpha$ or $\sigma$ is fixed across conditions.
+
+```{r}
+# mu-shape
+c(cv(y1), cv(y2))
+
+# mu-sigma
+c(cv(x1), cv(x2))
+```
+
+The $\alpha$ parameter allow to control the coefficient of variation.
+
+## $\mu$ and $\sigma$ relationship
+
+See [https://civil.colorado.edu/~balajir/CVEN6833/lectures/GammaGLM-01.pdf](https://civil.colorado.edu/~balajir/CVEN6833/lectures/GammaGLM-01.pdf). The $\sigma = \frac{\mu}{\sqrt{\alpha}}$.
+
+```{r}
+mu <- 50
+curve(mu / sqrt(x), 0, 100, xlab = latex("\\alpha"), ylab = latex("\\sigma = \\mu/\\sqrt{\\alpha}"))
+```
+
+## $\mu$ and $\sigma$ relationship
+
+As noted by @Agresti2015-cz, fixing $\alpha$ and varying $\mu$, the coefficient of variation will be constant and the standard deviation $\sigma$ increase proportionally with $\mu$. Given that $\sigma = \frac{\mu}{\sqrt{\alpha}}$:
+
+```{r}
+#| collapse: true
+#| code-fold: false
+mu1 <- 20
+mu2 <- 40
+shape <- 10 # alpha
+y1 <- rgamma(1e5, shape = shape, scale = mu1/shape)
+y2 <- rgamma(1e5, shape = shape, scale = mu2/shape)
+
+c(mean(y1), mean(y2))
+c(sd(y1), sd(y2)) # sd increase
+c(cv(y1), cv(y2)) # cv is constant
+c(psych::skew(y1), psych::skew(y2)) # skewness is similar
+```
+
+
+## Example: the Simon effect
+
+> The Simon effect is the difference in accuracy or reaction time between trials in which stimulus and response are on the same side and trials in which they are on opposite sides, with responses being generally slower and less accurate when the stimulus and response are on opposite sides.
+
+```{r}
+#| echo: false
+#| code-fold: false
+#| fig-cap: "Source: @van-den-Wildenberg2010-st"
+knitr::include_graphics("img/simon-task.jpg")
+```
+
+## Example: the Simon effect
+
+Let's import the `data/simon.rda` file^[Source: https://github.com/michael-franke/aida-package]. You can use the `load()` function or the `read_rda()`.
+
+```{r}
+simon <- read_rda(here("data", "simon.rda"))
+head(simon)
+```
+
+## Example: the Simon effect
+
+For simplicity, let's consider only a single subject (`submission_id`: 7432), otherwise the model require including random effects. We also exclude strange trials with RT > 2500 ms.
+
+```{r}
+#| code-fold: false
+simon <- filter(simon, 
+                submission_id == 7432,
+                RT < 2500)
+```
+
+## Example: the Simon effect
+
+Let's plot the reaction times. Clearly the two distributions are right-skewed with a difference in location ($\mu$). The shape also differs between thus also the skewness is probably different:
+
+```{r}
+ggplot(simon, aes(x = RT, fill = condition)) +
+  geom_density(alpha = 0.7)
+```
+
+## Example: the Simon effect
+
+Let's see some summary statistics. We see the difference between the two conditions.
+
+```{r}
+#| code-fold: false
+funs <- list(mean = mean, sd = sd, skew = psych::skew, cv = cv)
+summ <- tapply(simon$RT, simon$condition, function(x) sapply(funs, function(f) f(x)))
+summ
+```
+
+## Example: the Simon effect
+
+Given that we modelling the difference in $\mu$, this is the expected difference. We are working on the log scale, thus the model is estimating the `log` difference or the `log` ratio.
+
+```{r}
+#| code-fold: false
+#| collapse: true
+summ$incongruent["mean"] - summ$congruent["mean"]
+log(summ$incongruent["mean"]) - log(summ$congruent["mean"])
+log(summ$incongruent["mean"] / summ$congruent["mean"])
+```
+
+## Example: the Simon effect
+
+Let's fit the model:
+
+```{r}
+#| code-fold: false
+fit <- glm(RT ~ condition, data = simon, family = Gamma(link = "log"))
+summary(fit)
+```
+
+## Example: the Simon effect
+
+Plotting the results:
+
+```{r}
+#| code-fold: false
+plot(ggeffect(fit))
+```
+
+## Example: the Simon effect
+
+The main parameter of interest here is the $\beta_1$ representing the difference in $\mu$. We can interpret $\exp(\beta_1) = 1.119$ as the multiplicative increase in RT when moving from congruent to incongruent condition. In the RT scale, we have a difference of `r summ$incongruent["mean"] - summ$congruent["mean"]`. Remember that the statistical test is performed on the link-function scale.
+
+```{r}
+#| code-fold: false
+#| collapse: true
+emmeans(fit, pairwise ~ condition)$contrast
+emmeans(fit, pairwise ~ condition, type = "response")$contrast
+```
+
+
+## References

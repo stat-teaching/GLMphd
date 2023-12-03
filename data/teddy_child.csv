@@ -1,0 +1,380 @@
+"ID","Children","Fam_status","Education","Occupation","Age","Smoking_status","Alcool_status","Depression_pp","Parental_stress","Alabama_involvment","MSPSS_total","LTE","Partner_cohesion","Family_cohesion"
+1,1,"Married","High school","Full-time",42,"No","No","No",75,36,6.5,5,4.33333333333333,2.91666666666667
+2,1,"Married","High school","Full-time",42,"No","No","No",51,41,5.5,5,4.16666666666667,3
+3,1,"Married","High school","Full-time",44,"No","No","No",76,42,1.41666666666667,4,3,2.5
+4,2,"Married","High school","Full-time",48,"No","No","No",88,39,1.08333333333333,4,2.16666666666667,2.66666666666667
+5,3,"Married","Degree or higher","Full-time",39,"Yes","Yes","No",67,35,7,2,4.16666666666667,2.66666666666667
+6,2,"Married","Degree or higher","Full-time",38,"Ex-smoker","No","No",61,36,3.33333333333333,0,3,2.58333333333333
+7,1,"Married","Degree or higher","Part-time",37,"No","Yes","Yes",61,41,6.83333333333333,1,4.16666666666667,3.08333333333333
+8,1,"Married","High school","Part-time",46,"No","No","No",71,34,4.75,3,2.83333333333333,2.83333333333333
+9,2,"Married","High school","Full-time",37,"Ex-smoker","No","No",70,39,4.16666666666667,2,3,2.58333333333333
+10,2,"Married","Degree or higher","Full-time",32,"No","No","No",65,39,5.66666666666667,2,3.83333333333333,3
+11,2,"Married","Degree or higher","Full-time",37,"No","No","No",48,44,7,0,4,2.58333333333333
+12,2,"Married","High school","Part-time",25,"Yes","Ex-drinker","No",65,32,5.58333333333333,4,3.5,2.91666666666667
+13,1,"Married","Degree or higher","Part-time",50,"Ex-smoker","Ex-drinker","No",66,42,5.33333333333333,5,3,3.33333333333333
+14,2,"Married","High school","Full-time",41,"No","No","No",57,43,5.66666666666667,0,3.33333333333333,2.75
+15,1,"Married","High school","Part-time",46,"No","No","No",58,35,5.66666666666667,3,3.33333333333333,2.83333333333333
+16,2,"Married","Degree or higher","Part-time",44,"No","No","No",72,46,6.83333333333333,1,4.16666666666667,2.66666666666667
+17,1,"Married","High school","Full-time",53,"No","Yes","No",50,39,4.83333333333333,1,3,2.75
+18,2,"Married","Degree or higher","Full-time",42,"No","No","No",58,37,5.58333333333333,1,5,3
+19,1,"Married","Degree or higher","Part-time",32,"No","Yes","Yes",101,38,3.83333333333333,4,3.83333333333333,3.16666666666667
+20,2,"Married","Degree or higher","Part-time",32,"Yes","No","No",76,42,6.25,3,3.5,2.41666666666667
+21,1,"Married","High school","Full-time",42,"No","No","No",49,41,5.25,2,4,3
+22,3,"Married","Degree or higher","Part-time",46,"No","No","No",51,42,7,2,4.66666666666667,3
+23,2,"Single","High school","Full-time",45,"No","No","No",71,37,4.41666666666667,4,1,3
+24,2,"Married","High school","Full-time",43,"No","No","No",122,38,2.75,2,2.16666666666667,3.08333333333333
+25,1,"Married","Degree or higher","Part-time",35,"No","No","No",57,36,6.33333333333333,1,4.66666666666667,3.08333333333333
+26,3,"Married","High school","Part-time",33,"No","No","No",58,45,6.58333333333333,1,2.5,2.75
+27,3,"Married","High school","Part-time",45,"No","No","No",63,39,5.5,3,3.5,2.41666666666667
+28,2,"Married","High school","Full-time",42,"No","No","No",55,40,6.5,1,4.5,3.16666666666667
+29,1,"Married","Degree or higher","Full-time",45,"Yes","No","Yes",53,43,3.75,3,3.16666666666667,2.91666666666667
+30,1,"Married","Degree or higher","Full-time",44,"No","No","No",61,38,4.91666666666667,3,3.83333333333333,2.66666666666667
+31,1,"Married","High school","Full-time",35,"Ex-smoker","No","Yes",58,40,5,6,3.83333333333333,3
+32,1,"Married","Degree or higher","Full-time",45,"No","No","No",57,38,4.58333333333333,2,3.5,2.83333333333333
+33,1,"Married","Middle school","Unemployed",55,"No","Yes","No",55,30,6.33333333333333,4,3.83333333333333,2.66666666666667
+34,1,"Married","Degree or higher","Full-time",45,"No","No","No",61,41,6,1,2.83333333333333,2.5
+35,2,"Married","High school","Full-time",36,"No","No","Yes",87,36,3.58333333333333,2,2.66666666666667,3.25
+36,2,"Married","High school","Part-time",43,"No","No","Yes",72,40,6.25,1,4.16666666666667,3.33333333333333
+37,1,"Married","High school","Full-time",39,"Yes","No","No",58,39,5.66666666666667,0,3.33333333333333,2.5
+38,1,"Married","High school","Part-time",43,"Yes","No","Yes",70,34,3.5,5,2.83333333333333,2.5
+39,1,"Married","High school","Part-time",41,"No","No","No",89,43,5.75,4,3.5,2.58333333333333
+40,2,"Married","Middle school","Part-time",47,"No","Yes","Yes",69,38,7,4,4,2.91666666666667
+41,1,"Married","High school","Full-time",36,"Ex-smoker","No","No",70,44,6.58333333333333,0,3.66666666666667,2.5
+42,2,"Single","High school","Part-time",50,"Yes","Yes","No",47,41,4.91666666666667,2,4.33333333333333,3
+43,1,"Married","High school","Full-time",56,"No","No","No",58,42,4.66666666666667,5,3.83333333333333,2.41666666666667
+44,3,"Single","High school","Full-time",42,"Ex-smoker","No","No",61,41,6.33333333333333,3,3.33333333333333,2.5
+45,1,"Married","High school","Part-time",52,"No","No","No",46,35,5.58333333333333,1,3.33333333333333,2.66666666666667
+46,2,"Married","Middle school","Part-time",49,"No","No","Yes",73,36,5.25,2,3.5,2.91666666666667
+47,1,"Married","High school","Full-time",44,"No","No","No",56,44,5.41666666666667,1,3.5,2.91666666666667
+48,1,"Married","High school","Part-time",31,"No","No","No",75,42,5.66666666666667,7,2.83333333333333,2.91666666666667
+49,2,"Single","Degree or higher","Full-time",48,"No","No","No",59,35,5.16666666666667,4,1.83333333333333,2.66666666666667
+50,1,"Single","High school","Full-time",40,"No","No","Yes",108,33,1.5,5,1,3.08333333333333
+51,2,"Married","High school","Full-time",43,"No","No","No",81,39,2.91666666666667,3,3.33333333333333,2.66666666666667
+52,1,"Married","Degree or higher","Full-time",46,"No","No","No",62,34,5.33333333333333,1,3,2.58333333333333
+53,1,"Married","Degree or higher","Full-time",51,"No","No","No",48,48,7,2,4.33333333333333,3
+54,3,"Married","Degree or higher","Full-time",45,"Ex-smoker","Ex-drinker","No",71,40,5.58333333333333,3,3.83333333333333,2.91666666666667
+55,1,"Married","High school","Full-time",45,"No","No","No",71,42,4.83333333333333,6,2.5,2.83333333333333
+56,1,"Married","Degree or higher","Full-time",50,"No","No","No",58,31,5.75,2,4.16666666666667,2.75
+57,1,"Single","Degree or higher","Full-time",49,"No","Yes","No",47,40,7,2,3.33333333333333,2.66666666666667
+58,1,"Single","Degree or higher","Full-time",39,"No","Yes","No",60,42,6.16666666666667,4,3,2.83333333333333
+59,2,"Married","Degree or higher","Part-time",41,"Yes","No","No",65,33,5.91666666666667,5,3.16666666666667,2.91666666666667
+60,2,"Married","Degree or higher","Part-time",47,"No","Yes","No",74,34,4.25,4,2.83333333333333,2.75
+61,1,"Married","Middle school","Full-time",41,"No","No","No",52,42,3.58333333333333,2,2.66666666666667,2.66666666666667
+62,1,"Married","Degree or higher","Part-time",31,"No","No","No",50,39,4.83333333333333,1,4.16666666666667,2.91666666666667
+63,2,"Married","High school","Part-time",42,"Ex-smoker","No","No",47,34,7,2,3.33333333333333,3
+64,2,"Married","Degree or higher","Full-time",38,"Ex-smoker","Yes","No",69,38,5,5,3,2.83333333333333
+65,2,"Single","Degree or higher","Full-time",43,"No","No","No",85,35,3.33333333333333,2,1.33333333333333,2.83333333333333
+66,3,"Married","Degree or higher","Part-time",38,"No","No","Yes",61,40,3.33333333333333,4,2.33333333333333,3
+67,1,"Married","Degree or higher","Full-time",34,"No","No","Yes",89,28,5.75,4,3.33333333333333,2.75
+68,2,"Married","Degree or higher","Full-time",38,"No","No","No",66,33,4.91666666666667,3,4,3.16666666666667
+69,1,"Married","High school","Part-time",49,"Yes","No","No",46,42,7,1,4.5,3
+70,1,"Married","Degree or higher","Full-time",38,"No","Yes","No",73,45,6,3,3.66666666666667,2.5
+71,1,"Married","High school","Full-time",52,"No","No","No",59,44,5.5,2,2.33333333333333,2.75
+72,1,"Married","High school","Part-time",31,"Ex-smoker","Ex-drinker","No",66,32,7,3,3.16666666666667,3
+73,3,"Married","High school","Part-time",48,"No","No","No",60,46,7,2,3.66666666666667,3.16666666666667
+74,1,"Married","Degree or higher","Part-time",33,"No","Yes","No",48,42,6.66666666666667,0,4.33333333333333,2.83333333333333
+75,1,"Married","Degree or higher","Full-time",33,"No","No","No",61,49,2.58333333333333,1,2.16666666666667,2.75
+76,2,"Married","Degree or higher","Full-time",42,"Ex-smoker","Yes","No",68,39,2.58333333333333,2,2.33333333333333,2.5
+77,2,"Married","High school","Part-time",44,"Yes","No","No",56,43,7,3,3.16666666666667,3
+78,1,"Married","Middle school","Full-time",49,"No","No","No",72,33,2.75,1,3.16666666666667,2.91666666666667
+79,1,"Single","High school","Full-time",47,"No","No","No",48,38,4.33333333333333,3,3.16666666666667,2.91666666666667
+80,1,"Single","High school","Full-time",43,"No","No","No",53,35,4.41666666666667,4,3.33333333333333,2.91666666666667
+81,2,"Married","High school","Part-time",37,"No","Yes","No",46,46,7,2,4.83333333333333,3
+82,2,"Married","Degree or higher","Full-time",46,"No","No","No",49,31,4.83333333333333,1,3.33333333333333,3.08333333333333
+83,2,"Married","High school","Part-time",34,"No","No","No",47,36,3,0,3.83333333333333,2.5
+84,1,"Married","High school","Full-time",33,"Ex-smoker","No","No",57,39,5.33333333333333,5,3.83333333333333,3
+85,1,"Married","High school","Part-time",41,"No","No","No",64,44,6.5,1,4.83333333333333,3
+86,1,"Married","Degree or higher","Full-time",44,"Yes","No","No",62,38,5.25,2,4.16666666666667,3.66666666666667
+87,2,"Married","High school","Part-time",43,"No","No","No",58,44,4.83333333333333,3,4.33333333333333,3.16666666666667
+88,1,"Married","Degree or higher","Full-time",39,"Yes","No","No",71,33,2.91666666666667,3,2.66666666666667,2.66666666666667
+89,3,"Married","High school","Unemployed",37,"No","No","No",67,38,5.91666666666667,2,2.5,2.5
+90,2,"Married","High school","Full-time",49,"Yes","Yes","Yes",58,40,5.41666666666667,3,3.83333333333333,3
+91,2,"Married","High school","Part-time",40,"No","Yes","No",42,40,7,0,1,2.08333333333333
+92,1,"Married","High school","Full-time",38,"Ex-smoker","No","No",60,39,6,6,3.16666666666667,2.5
+93,2,"Married","High school","Part-time",47,"No","No","No",73,34,5.5,2,4.5,3
+94,2,"Married","High school","Full-time",34,"No","No","Yes",62,46,2.66666666666667,1,3,3
+95,1,"Married","High school","Full-time",43,"No","No","No",54,37,6,1,3.83333333333333,2.75
+96,1,"Married","High school","Full-time",43,"Ex-smoker","No","No",79,40,5.33333333333333,4,2.83333333333333,2.75
+97,2,"Married","Degree or higher","Part-time",35,"Yes","Yes","No",66,41,5.08333333333333,6,3.16666666666667,2.75
+98,2,"Married","High school","Part-time",36,"No","No","No",62,45,5.25,0,3.83333333333333,2.83333333333333
+99,2,"Married","Degree or higher","Full-time",46,"No","No","No",50,40,6.33333333333333,1,4.83333333333333,3
+100,1,"Married","High school","Unemployed",41,"No","No","No",63,43,1.75,6,1.66666666666667,2.41666666666667
+101,2,"Married","Degree or higher","Full-time",42,"No","No","No",60,32,5.75,4,4,2.25
+102,1,"Married","Degree or higher","Part-time",44,"No","No","Yes",83,33,4.75,2,2.83333333333333,2.5
+103,1,"Married","Degree or higher","Full-time",45,"Ex-smoker","Yes","Yes",56,41,4.75,1,3.16666666666667,2.75
+104,1,"Married","Degree or higher","Full-time",47,"No","No","No",55,41,7,4,3.66666666666667,3
+105,2,"Married","Degree or higher","Full-time",43,"Ex-smoker","No","No",65,39,4.91666666666667,5,3.16666666666667,2.83333333333333
+106,2,"Married","High school","Unemployed",36,"No","Yes","Yes",64,40,5.33333333333333,4,3.83333333333333,2.66666666666667
+107,2,"Married","Degree or higher","Part-time",33,"No","No","No",58,40,6.41666666666667,1,3.16666666666667,2.83333333333333
+108,1,"Married","Degree or higher","Full-time",38,"No","Yes","No",44,40,4.75,1,4.16666666666667,2.25
+109,2,"Married","High school","Unemployed",37,"No","No","No",49,44,4.91666666666667,3,3.33333333333333,2.75
+110,1,"Married","Degree or higher","Full-time",31,"No","No","No",58,23,4.91666666666667,0,3.83333333333333,2.58333333333333
+111,1,"Married","Degree or higher","Full-time",39,"No","No","Yes",77,38,6.83333333333333,5,3.16666666666667,2.83333333333333
+112,2,"Married","Middle school","Full-time",37,"Ex-smoker","No","No",75,39,2.66666666666667,4,2.66666666666667,2.25
+113,1,"Married","Degree or higher","Full-time",31,"No","No","No",56,44,4.91666666666667,1,4,2.75
+114,2,"Married","Degree or higher","Full-time",32,"No","Yes","No",57,44,4.91666666666667,4,3.33333333333333,3
+115,1,"Married","High school","Full-time",40,"Ex-smoker","No","No",85,40,5.16666666666667,8,3.83333333333333,3.16666666666667
+116,1,"Married","High school","Full-time",35,"No","Ex-drinker","No",42,34,7,1,4.83333333333333,3
+117,2,"Married","Degree or higher","Full-time",40,"No","No","No",53,40,5.16666666666667,4,4,2.91666666666667
+118,1,"Married","Degree or higher","Full-time",31,"No","Yes","Yes",85,46,4.91666666666667,4,2.33333333333333,3
+119,2,"Married","High school","Part-time",38,"Ex-smoker","Yes","Yes",77,39,1.75,4,2.33333333333333,2.83333333333333
+120,1,"Married","High school","Full-time",48,"No","No","No",72,34,4.33333333333333,5,3.16666666666667,2.66666666666667
+121,3,"Single","Degree or higher","Full-time",40,"No","No","No",61,36,2.5,4,1.5,3
+122,2,"Married","Middle school","Part-time",43,"Yes","No","No",69,27,3.16666666666667,4,1.83333333333333,2.5
+123,1,"Single","Degree or higher","Full-time",45,"No","No","No",64,40,5.41666666666667,4,2.83333333333333,3.08333333333333
+124,1,"Married","Degree or higher","Part-time",45,"No","No","No",64,38,4.16666666666667,0,3.33333333333333,2.91666666666667
+125,2,"Married","High school","Full-time",38,"No","Yes","No",55,42,3.83333333333333,1,4,2.91666666666667
+126,2,"Married","Degree or higher","Full-time",44,"No","No","No",46,39,6.33333333333333,0,3.66666666666667,2.91666666666667
+127,1,"Married","Middle school","Part-time",49,"Yes","No","No",88,34,1.41666666666667,6,2,2.91666666666667
+128,1,"Married","Degree or higher","Full-time",45,"No","No","No",72,44,5.25,4,2.66666666666667,2.91666666666667
+129,1,"Married","Degree or higher","Full-time",46,"No","No","No",47,42,7,2,4.33333333333333,3
+130,3,"Married","High school","Full-time",38,"No","No","No",65,38,4.91666666666667,3,4,3.16666666666667
+131,2,"Married","Degree or higher","Full-time",45,"No","No","No",48,45,4.33333333333333,2,3.5,2.66666666666667
+132,2,"Married","High school","Unemployed",43,"No","No","No",77,42,3,4,3.66666666666667,2.83333333333333
+133,1,"Married","Degree or higher","Part-time",50,"No","No","No",48,38,5.5,5,3.66666666666667,2.75
+134,1,"Married","High school","Full-time",49,"No","Yes","No",51,42,6.66666666666667,2,3.16666666666667,2.83333333333333
+135,2,"Married","Degree or higher","Full-time",42,"Ex-smoker","No","No",59,36,5.08333333333333,1,3.33333333333333,2.83333333333333
+136,2,"Married","High school","Unemployed",47,"No","No","Yes",66,38,5,1,2.5,2.41666666666667
+137,2,"Married","Middle school","Part-time",47,"Yes","No","No",59,37,5.75,4,2.33333333333333,3.08333333333333
+138,1,"Married","Degree or higher","Full-time",42,"No","No","No",65,35,5.83333333333333,4,2.83333333333333,2.91666666666667
+139,2,"Married","High school","Part-time",45,"No","Yes","No",75,39,1.75,2,3.66666666666667,2.91666666666667
+140,2,"Married","Degree or higher","Part-time",49,"No","Yes","No",66,40,5.33333333333333,0,4.5,2.83333333333333
+141,2,"Married","High school","Full-time",47,"No","No","No",65,42,5.5,4,3.5,3
+142,1,"Married","High school","Full-time",32,"Yes","No","Yes",64,48,4.83333333333333,2,3.16666666666667,2.75
+143,1,"Married","Degree or higher","Full-time",43,"Ex-smoker","Ex-drinker","No",74,46,1.66666666666667,2,2.16666666666667,2.41666666666667
+144,2,"Married","High school","Full-time",30,"No","Ex-drinker","No",71,45,7,2,4.16666666666667,3
+145,1,"Married","High school","Unemployed",46,"No","Yes","No",58,41,2.91666666666667,2,3.5,2.41666666666667
+146,2,"Married","High school","Part-time",39,"No","No","No",79,30,4.16666666666667,3,2.16666666666667,2.41666666666667
+147,2,"Married","Middle school","Full-time",49,"No","No","No",65,41,2.66666666666667,2,3.16666666666667,2.41666666666667
+148,1,"Married","High school","Part-time",52,"No","No","No",68,34,5.75,4,3.16666666666667,3.08333333333333
+149,2,"Married","Degree or higher","Part-time",48,"No","No","Yes",73,36,4.33333333333333,1,3.83333333333333,2.91666666666667
+150,2,"Married","High school","Part-time",42,"No","No","No",80,35,5.41666666666667,2,3.5,2.75
+151,1,"Married","Degree or higher","Full-time",35,"No","No","No",48,42,6,1,4.16666666666667,2.58333333333333
+152,1,"Married","Degree or higher","Full-time",44,"Yes","Yes","No",55,45,7,6,4.33333333333333,2.58333333333333
+153,1,"Married","Degree or higher","Full-time",39,"No","No","No",61,26,5.16666666666667,2,4,2.66666666666667
+154,3,"Married","High school","Unemployed",37,"No","No","Yes",62,43,6.25,2,4.5,3.08333333333333
+155,1,"Married","High school","Full-time",37,"Ex-smoker","Yes","No",65,44,6,6,2.16666666666667,3.41666666666667
+156,1,"Married","High school","Full-time",43,"No","Yes","No",90,46,2.83333333333333,1,3,2.5
+157,1,"Married","High school","Part-time",42,"No","Yes","No",65,37,4.91666666666667,3,2.66666666666667,2.33333333333333
+158,1,"Married","Degree or higher","Part-time",51,"No","Yes","No",57,42,5.91666666666667,3,3.33333333333333,3
+159,1,"Married","Degree or higher","Full-time",37,"Ex-smoker","Yes","Yes",116,37,2.16666666666667,3,1.16666666666667,3.25
+160,1,"Married","Degree or higher","Full-time",36,"No","Yes","No",87,38,5.25,2,3.33333333333333,2.91666666666667
+161,2,"Married","High school","Full-time",38,"No","No","No",55,32,6.83333333333333,3,4.66666666666667,3
+162,3,"Married","Degree or higher","Part-time",44,"No","No","Yes",87,31,3.66666666666667,2,2,2.58333333333333
+163,1,"Married","Degree or higher","Full-time",37,"Ex-smoker","Ex-drinker","No",66,34,5.16666666666667,3,3.66666666666667,3.16666666666667
+164,1,"Married","Degree or higher","Part-time",36,"Ex-smoker","No","No",55,36,2.41666666666667,3,3,2.91666666666667
+165,1,"Single","Degree or higher","Full-time",41,"No","No","No",65,39,4.33333333333333,4,1.16666666666667,3.08333333333333
+166,2,"Married","High school","Full-time",28,"No","No","Yes",89,44,3.41666666666667,7,4.16666666666667,3.08333333333333
+167,2,"Married","High school","Part-time",42,"Ex-smoker","Yes","No",50,41,4.83333333333333,3,3.5,2.66666666666667
+168,2,"Married","High school","Unemployed",42,"No","No","Yes",54,42,4.58333333333333,4,2.66666666666667,2.75
+169,1,"Married","High school","Part-time",46,"No","No","No",88,39,1.91666666666667,5,3,3
+170,2,"Single","High school","Full-time",42,"No","Yes","No",51,35,4.83333333333333,3,1.5,2.91666666666667
+171,1,"Married","High school","Full-time",45,"Ex-smoker","Yes","No",60,32,3.16666666666667,5,2.83333333333333,2.58333333333333
+172,2,"Married","High school","Part-time",37,"No","No","No",61,33,4.75,2,2.5,2.66666666666667
+173,3,"Married","High school","Unemployed",31,"Ex-smoker","Yes","Yes",70,37,7,6,4.83333333333333,3
+174,2,"Married","Degree or higher","Full-time",42,"No","No","No",47,42,2.66666666666667,0,2.5,2.5
+175,1,"Married","Degree or higher","Full-time",39,"No","No","No",62,39,3.83333333333333,2,2.33333333333333,2.58333333333333
+176,1,"Married","Middle school","Full-time",37,"Yes","Ex-drinker","No",58,41,7,5,4.83333333333333,3
+177,1,"Married","High school","Unemployed",41,"Ex-smoker","No","No",54,30,5.16666666666667,4,2.83333333333333,2.91666666666667
+178,1,"Married","High school","Unemployed",45,"No","Yes","No",75,38,4.5,5,2.16666666666667,2.5
+179,2,"Married","High school","Full-time",46,"No","Yes","No",61,41,5.25,4,4.33333333333333,2.91666666666667
+180,2,"Married","Degree or higher","Full-time",35,"No","Ex-drinker","No",82,41,6.5,5,2.16666666666667,2.83333333333333
+181,1,"Married","High school","Full-time",46,"No","No","No",71,39,4.5,0,3.5,3
+182,1,"Married","Degree or higher","Full-time",32,"Ex-smoker","No","No",61,38,5.41666666666667,6,3.66666666666667,2.91666666666667
+183,2,"Married","High school","Full-time",47,"Ex-smoker","No","No",52,41,7,5,3.66666666666667,2.83333333333333
+184,2,"Married","Degree or higher","Unemployed",47,"No","No","No",81,42,6.66666666666667,5,4,3.08333333333333
+185,1,"Married","High school","Full-time",42,"No","Yes","No",48,45,5.58333333333333,1,3.16666666666667,2.75
+186,3,"Married","Degree or higher","Full-time",43,"No","Yes","No",56,39,3.83333333333333,3,3.33333333333333,2.41666666666667
+187,1,"Married","Degree or higher","Full-time",45,"No","Yes","No",92,37,3.91666666666667,3,2.5,2.66666666666667
+188,3,"Married","Degree or higher","Part-time",44,"No","No","No",57,39,4.33333333333333,1,4.5,2.91666666666667
+189,1,"Married","High school","Full-time",47,"No","No","No",64,37,3.41666666666667,3,3.5,2.91666666666667
+190,1,"Married","Middle school","Part-time",41,"No","No","No",64,34,3.66666666666667,1,2.83333333333333,2.33333333333333
+191,1,"Married","Middle school","Unemployed",33,"Yes","No","No",95,36,2.75,4,2.66666666666667,2.41666666666667
+192,2,"Married","High school","Unemployed",44,"No","No","Yes",56,37,6.83333333333333,3,4.33333333333333,3
+193,2,"Single","High school","Full-time",37,"Ex-smoker","Yes","No",49,37,5.91666666666667,3,2.83333333333333,2.91666666666667
+194,1,"Married","Degree or higher","Full-time",51,"No","No","No",102,36,5.16666666666667,2,4.5,2.83333333333333
+195,2,"Married","Middle school","Part-time",43,"No","No","No",57,42,4.08333333333333,0,4,2.91666666666667
+196,1,"Married","Degree or higher","Full-time",46,"No","No","No",85,36,4.83333333333333,1,2.83333333333333,2.66666666666667
+197,2,"Married","High school","Unemployed",36,"No","No","No",66,41,6.83333333333333,5,4.33333333333333,3.33333333333333
+198,3,"Married","High school","Full-time",40,"No","No","No",71,43,5.83333333333333,1,3.5,3.33333333333333
+199,1,"Married","High school","Unemployed",51,"Ex-smoker","No","No",53,37,6.16666666666667,0,3.16666666666667,3.16666666666667
+200,1,"Married","High school","Full-time",26,"No","No","No",69,42,4.66666666666667,5,4.83333333333333,3.16666666666667
+201,1,"Married","Degree or higher","Unemployed",48,"No","No","No",60,43,3.5,3,3.66666666666667,3
+202,2,"Married","High school","Full-time",40,"No","No","No",102,45,5.41666666666667,3,3.5,2.83333333333333
+203,2,"Married","Degree or higher","Full-time",40,"No","Ex-drinker","No",94,34,5.66666666666667,2,2.83333333333333,2.5
+204,1,"Married","High school","Unemployed",51,"No","No","No",48,49,7,0,1.33333333333333,2.33333333333333
+205,1,"Married","Degree or higher","Part-time",38,"No","No","Yes",113,37,1,4,1.66666666666667,2.66666666666667
+206,1,"Married","High school","Part-time",49,"No","No","No",48,37,4.66666666666667,4,3.83333333333333,2.66666666666667
+207,2,"Married","High school","Full-time",44,"No","No","No",56,29,5.83333333333333,3,3,2.83333333333333
+208,1,"Single","High school","Full-time",51,"Ex-smoker","No","No",68,37,5,2,1.83333333333333,2.16666666666667
+209,2,"Married","High school","Part-time",36,"No","No","No",93,36,6.33333333333333,4,2,2.66666666666667
+210,2,"Married","High school","Full-time",52,"No","No","No",51,42,7,2,4.83333333333333,2.91666666666667
+211,2,"Married","High school","Part-time",32,"No","No","No",70,37,4.91666666666667,3,3.16666666666667,2.66666666666667
+212,1,"Married","Degree or higher","Full-time",50,"No","Yes","No",75,39,4.41666666666667,3,3.16666666666667,3
+213,2,"Married","High school","Full-time",40,"Ex-smoker","Yes","No",53,37,4.75,5,3,2.75
+214,3,"Married","High school","Full-time",41,"No","No","No",63,31,5.58333333333333,1,3.83333333333333,3
+215,2,"Married","High school","Full-time",36,"No","No","Yes",49,37,6.08333333333333,2,4,2.83333333333333
+216,1,"Married","High school","Unemployed",47,"No","No","No",56,38,7,4,3.83333333333333,3.08333333333333
+217,1,"Married","High school","Full-time",42,"No","Yes","No",41,47,5.16666666666667,3,4.33333333333333,2.75
+218,3,"Married","High school","Part-time",46,"No","Ex-drinker","No",67,36,3.5,4,3,2.5
+219,1,"Married","High school","Full-time",25,"Yes","Ex-drinker","No",51,43,3.91666666666667,1,3.66666666666667,2.66666666666667
+220,1,"Married","High school","Unemployed",45,"No","No","No",78,30,1.5,4,3,2.75
+221,2,"Married","Degree or higher","Full-time",38,"No","No","No",64,38,5.25,5,4,2.75
+222,1,"Married","Degree or higher","Full-time",46,"No","Yes","No",82,33,2,3,2.5,2.91666666666667
+223,1,"Married","High school","Unemployed",38,"No","No","No",101,37,2.66666666666667,4,2.5,3.25
+224,1,"Married","Degree or higher","Unemployed",53,"No","No","Yes",51,39,7,3,4.66666666666667,3.25
+225,2,"Married","Degree or higher","Part-time",36,"Yes","Yes","Yes",64,45,5.33333333333333,4,2.5,2.41666666666667
+226,2,"Married","Degree or higher","Full-time",38,"No","No","No",43,37,6,0,4.16666666666667,3.16666666666667
+227,1,"Married","Degree or higher","Full-time",33,"No","No","No",59,27,5.66666666666667,1,3.83333333333333,3
+228,2,"Married","High school","Full-time",35,"No","No","No",63,26,7,5,4.16666666666667,3.25
+229,1,"Single","High school","Part-time",43,"Ex-smoker","No","No",63,40,4.75,8,3,2.33333333333333
+230,1,"Married","High school","Unemployed",42,"No","No","No",48,38,6.25,2,3.33333333333333,3.08333333333333
+231,2,"Married","High school","Full-time",49,"No","No","No",52,39,6.33333333333333,2,3,2.75
+232,1,"Married","High school","Full-time",43,"No","No","No",50,37,5.75,5,4,2.91666666666667
+233,1,"Married","High school","Full-time",42,"No","No","No",54,42,7,3,2.83333333333333,2.91666666666667
+234,2,"Married","High school","Part-time",43,"No","No","No",56,40,4.33333333333333,5,3.5,2.83333333333333
+235,2,"Married","High school","Unemployed",51,"Ex-smoker","Yes","No",58,38,3.25,4,2.66666666666667,2.75
+236,2,"Married","Degree or higher","Part-time",41,"No","No","No",66,38,3.33333333333333,0,3.33333333333333,2.41666666666667
+237,3,"Married","High school","Full-time",48,"Yes","No","No",54,40,7,4,3.66666666666667,2.83333333333333
+238,1,"Married","High school","Full-time",45,"No","No","Yes",48,47,5.66666666666667,3,4.33333333333333,3
+239,1,"Married","High school","Unemployed",48,"Ex-smoker","No","No",50,40,6.5,4,3.83333333333333,3.33333333333333
+240,2,"Married","Middle school","Full-time",31,"No","No","No",61,46,6.83333333333333,3,4.16666666666667,2.83333333333333
+241,2,"Married","Degree or higher","Full-time",35,"No","No","No",52,39,7,0,4.5,2.91666666666667
+242,3,"Married","Degree or higher","Part-time",40,"No","No","No",52,48,5,1,3.66666666666667,2.5
+243,2,"Married","High school","Full-time",35,"Ex-smoker","No","No",54,40,4.25,2,2.83333333333333,2.41666666666667
+244,1,"Married","High school","Full-time",45,"No","No","No",58,42,4.25,1,3.66666666666667,2.75
+245,2,"Married","High school","Full-time",37,"No","No","No",62,44,4.75,4,3,2.75
+246,2,"Married","Middle school","Unemployed",32,"Yes","No","No",54,45,7,3,4.33333333333333,3
+247,1,"Married","High school","Part-time",48,"No","No","Yes",68,46,6.08333333333333,3,2.83333333333333,3.25
+248,2,"Married","Degree or higher","Part-time",40,"No","No","No",72,36,5.25,0,3.5,3.25
+249,1,"Married","High school","Unemployed",43,"Ex-smoker","No","No",60,36,6.33333333333333,5,3.33333333333333,2.91666666666667
+250,1,"Married","Degree or higher","Full-time",30,"No","No","No",54,36,6.08333333333333,5,3.66666666666667,3.08333333333333
+251,1,"Married","High school","Full-time",48,"Ex-smoker","No","No",53,47,7,1,3.83333333333333,3
+252,3,"Married","Degree or higher","Full-time",41,"No","Yes","No",61,34,3.5,4,3.66666666666667,2.75
+253,1,"Married","High school","Part-time",33,"No","Yes","No",52,38,6.75,3,4.33333333333333,2.83333333333333
+254,1,"Married","High school","Full-time",47,"No","No","No",43,41,6.41666666666667,1,4,2.91666666666667
+255,1,"Married","Middle school","Full-time",51,"Yes","No","No",48,43,5.66666666666667,0,2.83333333333333,2.41666666666667
+256,1,"Married","Degree or higher","Full-time",47,"No","No","No",55,40,4.08333333333333,4,3.5,3.08333333333333
+257,2,"Married","High school","Part-time",53,"Ex-smoker","No","No",50,40,5.83333333333333,2,4.16666666666667,2.75
+258,2,"Married","Degree or higher","Full-time",42,"No","Yes","No",47,39,5.75,3,3.33333333333333,3.08333333333333
+259,1,"Married","High school","Unemployed",46,"No","No","No",58,41,6.25,3,4.66666666666667,3.16666666666667
+260,2,"Married","Degree or higher","Full-time",34,"Ex-smoker","Yes","No",65,40,7,6,3.83333333333333,2.66666666666667
+261,2,"Married","High school","Full-time",42,"No","Yes","No",70,41,4.58333333333333,1,3.66666666666667,2.58333333333333
+262,3,"Married","High school","Unemployed",37,"No","Ex-drinker","No",62,40,3.66666666666667,4,2.66666666666667,2.33333333333333
+263,2,"Married","Degree or higher","Part-time",34,"Ex-smoker","Yes","No",56,37,6.33333333333333,0,3.16666666666667,3.08333333333333
+264,1,"Married","High school","Full-time",34,"No","No","Yes",71,40,5.5,2,3.16666666666667,3.08333333333333
+265,2,"Married","Degree or higher","Part-time",47,"Ex-smoker","No","No",63,38,5,2,3,2.91666666666667
+266,2,"Married","High school","Full-time",45,"No","No","No",69,41,7,5,4.33333333333333,3
+267,2,"Married","Degree or higher","Full-time",41,"No","No","Yes",57,37,2.83333333333333,3,2.66666666666667,2.5
+268,1,"Married","High school","Full-time",44,"No","No","No",63,39,4,2,3.66666666666667,2.91666666666667
+269,1,"Single","High school","Full-time",48,"No","Yes","No",48,37,7,4,1,2.75
+270,1,"Single","Degree or higher","Full-time",45,"No","No","Yes",59,41,5.66666666666667,2,2.83333333333333,2.91666666666667
+271,2,"Married","Degree or higher","Full-time",44,"Yes","Yes","Yes",53,43,6.41666666666667,0,4.5,2.83333333333333
+272,1,"Married","Degree or higher","Full-time",47,"No","Yes","Yes",69,38,1,5,2.66666666666667,2.58333333333333
+273,1,"Married","Degree or higher","Unemployed",29,"No","No","No",56,42,6,4,4.16666666666667,3.5
+274,1,"Married","Middle school","Unemployed",40,"No","No","No",127,37,1.83333333333333,10,1.5,2.91666666666667
+275,2,"Married","Degree or higher","Full-time",30,"No","No","No",53,36,5.25,3,4.5,2.66666666666667
+276,2,"Married","Middle school","Full-time",44,"No","No","No",42,48,7,2,4.66666666666667,3
+277,2,"Married","High school","Full-time",42,"No","Yes","No",53,39,5.16666666666667,3,3.16666666666667,3
+278,1,"Married","High school","Unemployed",37,"No","No","No",93,40,4,7,2.5,3
+279,1,"Married","High school","Part-time",51,"No","No","No",53,41,4.08333333333333,0,3.5,2.91666666666667
+280,1,"Married","High school","Unemployed",52,"No","No","No",73,42,4.91666666666667,4,3.16666666666667,2.91666666666667
+281,1,"Married","Middle school","Unemployed",51,"No","No","No",59,39,5.41666666666667,1,3,2.5
+282,1,"Married","Degree or higher","Full-time",47,"No","No","No",53,39,4.66666666666667,0,3.5,2.83333333333333
+283,2,"Married","Degree or higher","Part-time",48,"No","No","No",43,37,7,1,4.66666666666667,2.91666666666667
+284,2,"Married","Degree or higher","Full-time",47,"Ex-smoker","No","No",102,37,1.41666666666667,3,2.33333333333333,2.41666666666667
+285,2,"Married","Degree or higher","Full-time",44,"Ex-smoker","No","No",42,39,7,0,4,3
+286,1,"Married","Degree or higher","Part-time",32,"No","Yes","No",77,44,5,7,4.16666666666667,3.08333333333333
+287,2,"Married","High school","Full-time",41,"Yes","Yes","No",58,46,7,3,3.83333333333333,2.66666666666667
+288,2,"Married","Degree or higher","Part-time",41,"No","No","No",50,38,4.5,2,3.66666666666667,2.83333333333333
+289,1,"Married","High school","Full-time",49,"No","No","No",57,35,4,2,2.83333333333333,2.66666666666667
+290,2,"Married","Degree or higher","Full-time",39,"No","Yes","No",76,36,6.58333333333333,2,3,2.66666666666667
+291,2,"Married","Degree or higher","Part-time",40,"No","Yes","No",60,42,6.16666666666667,4,3.5,3
+292,1,"Single","High school","Full-time",36,"Yes","No","Yes",78,37,4,4,2.5,2.83333333333333
+293,2,"Married","Degree or higher","Full-time",41,"No","No","No",56,39,6.16666666666667,2,4.33333333333333,2.83333333333333
+294,1,"Married","Degree or higher","Full-time",49,"No","No","No",57,39,5.33333333333333,3,2.83333333333333,2.91666666666667
+295,2,"Married","High school","Full-time",48,"Ex-smoker","Yes","No",56,42,4.66666666666667,2,3.33333333333333,2.5
+296,2,"Married","High school","Full-time",35,"Ex-smoker","No","No",63,42,6.16666666666667,0,3.66666666666667,3
+297,1,"Married","High school","Full-time",50,"No","No","No",44,41,6.33333333333333,3,3.66666666666667,2.75
+298,1,"Married","High school","Full-time",44,"No","No","No",53,34,7,1,1.5,3.16666666666667
+299,1,"Married","High school","Full-time",41,"No","No","No",52,41,6.83333333333333,3,4,2.91666666666667
+300,1,"Married","High school","Full-time",48,"No","No","No",77,35,1.75,4,1.33333333333333,2.58333333333333
+301,2,"Married","Degree or higher","Part-time",37,"No","No","No",45,38,5.5,3,3.66666666666667,3
+302,2,"Married","Degree or higher","Full-time",35,"No","No","No",69,36,2.66666666666667,3,2.33333333333333,2.58333333333333
+303,2,"Married","Degree or higher","Full-time",35,"No","No","No",59,40,5.41666666666667,4,4.16666666666667,2.75
+304,1,"Married","High school","Full-time",35,"No","No","No",54,48,6,1,3.66666666666667,3.08333333333333
+305,1,"Married","Degree or higher","Full-time",37,"Ex-smoker","Yes","No",71,41,6,2,3.16666666666667,2.83333333333333
+306,2,"Married","Degree or higher","Part-time",37,"No","Yes","No",58,37,6.66666666666667,2,3.5,2.83333333333333
+307,2,"Married","Degree or higher","Full-time",40,"No","No","No",51,45,7,0,4,3
+308,2,"Married","High school","Full-time",46,"No","Ex-drinker","No",56,38,6.16666666666667,1,3.16666666666667,2.66666666666667
+309,1,"Married","High school","Unemployed",30,"Ex-smoker","No","No",63,43,5.16666666666667,5,2.5,2.75
+310,3,"Married","Degree or higher","Unemployed",38,"Yes","Yes","No",54,46,7,4,4.33333333333333,3
+311,2,"Married","Middle school","Unemployed",36,"Ex-smoker","No","No",44,40,7,0,3.83333333333333,3.16666666666667
+312,2,"Married","High school","Part-time",49,"No","Yes","No",63,39,6.33333333333333,1,3.5,2.58333333333333
+313,1,"Married","High school","Part-time",43,"No","No","No",60,40,6.5,0,4.16666666666667,3.25
+314,2,"Married","Middle school","Unemployed",47,"Ex-smoker","No","No",62,41,5.16666666666667,3,3.33333333333333,2.58333333333333
+315,2,"Married","Middle school","Full-time",53,"No","No","No",46,30,3.25,2,3.16666666666667,2.58333333333333
+316,3,"Married","Degree or higher","Full-time",43,"Yes","Yes","Yes",56,36,6.5,1,2.83333333333333,2.58333333333333
+317,1,"Married","High school","Full-time",44,"No","No","No",73,44,5.83333333333333,3,2.33333333333333,2.83333333333333
+318,1,"Married","Middle school","Unemployed",47,"No","Yes","No",59,37,5.83333333333333,6,4.16666666666667,3.08333333333333
+319,2,"Married","High school","Part-time",41,"No","No","No",77,40,6.5,3,3.66666666666667,3.25
+320,2,"Married","High school","Full-time",44,"Yes","Yes","No",53,42,6.5,3,2.83333333333333,2.91666666666667
+321,1,"Married","High school","Part-time",31,"Yes","Yes","No",90,36,4.08333333333333,5,3.16666666666667,2.66666666666667
+322,1,"Married","Degree or higher","Full-time",36,"No","No","No",52,38,6.83333333333333,1,4.66666666666667,3
+323,2,"Single","High school","Full-time",45,"No","No","No",49,39,5.16666666666667,4,3.16666666666667,2.25
+324,1,"Married","Degree or higher","Part-time",38,"No","No","No",68,39,6.5,3,4.16666666666667,3.16666666666667
+325,1,"Married","Degree or higher","Part-time",41,"Ex-smoker","No","No",45,38,5.33333333333333,0,4.83333333333333,2.58333333333333
+326,2,"Married","Degree or higher","Unemployed",45,"Ex-smoker","Yes","No",62,34,5.83333333333333,6,4.16666666666667,2.83333333333333
+327,3,"Married","High school","Full-time",44,"Ex-smoker","Yes","Yes",86,37,7,2,3.16666666666667,2.58333333333333
+328,2,"Married","Degree or higher","Full-time",42,"Ex-smoker","No","No",75,36,1.91666666666667,5,2.83333333333333,2.5
+329,1,"Married","High school","Full-time",42,"No","Yes","No",50,42,5.75,2,3.16666666666667,2.91666666666667
+330,1,"Married","Degree or higher","Part-time",44,"No","No","No",59,43,5.33333333333333,4,4.83333333333333,2.91666666666667
+331,1,"Married","High school","Full-time",26,"No","Ex-drinker","No",54,48,6.33333333333333,3,4.33333333333333,3
+332,3,"Married","Degree or higher","Part-time",38,"No","No","No",67,39,4.66666666666667,2,3.5,3
+333,1,"Married","Degree or higher","Part-time",46,"No","No","No",61,43,2.41666666666667,5,3,2.5
+334,2,"Married","High school","Full-time",35,"No","Ex-drinker","No",57,39,4.16666666666667,0,3.83333333333333,2.58333333333333
+335,1,"Married","High school","Part-time",42,"No","No","No",73,35,5.5,0,3.5,3.08333333333333
+336,2,"Married","High school","Full-time",36,"Ex-smoker","Yes","No",91,38,5.16666666666667,6,3.5,2.91666666666667
+337,1,"Married","High school","Part-time",31,"No","No","No",57,39,5.5,5,4,2.83333333333333
+338,2,"Married","High school","Full-time",45,"No","No","No",48,33,4.75,1,3.5,2.91666666666667
+339,2,"Married","Degree or higher","Unemployed",38,"No","No","No",76,40,3.91666666666667,8,3.33333333333333,2.66666666666667
+340,1,"Married","High school","Full-time",38,"Yes","No","No",89,33,4.16666666666667,4,2.16666666666667,2.75
+341,1,"Married","Middle school","Full-time",41,"Ex-smoker","No","No",61,38,6.66666666666667,3,3.16666666666667,2.33333333333333
+342,1,"Married","Degree or higher","Part-time",42,"Ex-smoker","No","No",66,40,2.33333333333333,4,2.66666666666667,2.91666666666667
+343,1,"Married","Degree or higher","Full-time",38,"Ex-smoker","Yes","No",58,32,6.5,3,3.16666666666667,2.66666666666667
+344,1,"Married","Degree or higher","Full-time",51,"No","Yes","No",67,40,6.16666666666667,2,3.83333333333333,3.08333333333333
+345,1,"Married","Degree or higher","Full-time",38,"No","No","No",53,37,4.91666666666667,1,3.66666666666667,2.75
+346,2,"Married","Degree or higher","Part-time",38,"No","No","No",81,44,4.58333333333333,4,2.5,2.83333333333333
+347,3,"Married","High school","Part-time",46,"No","Yes","No",61,39,2.75,6,3,2.66666666666667
+348,1,"Married","Middle school","Unemployed",41,"Yes","No","No",60,38,6.33333333333333,5,2.66666666666667,2.83333333333333
+349,2,"Married","High school","Full-time",38,"No","No","No",66,34,4.66666666666667,0,3.5,2.91666666666667
+350,2,"Married","High school","Part-time",24,"Yes","No","Yes",75,33,2.33333333333333,6,4.16666666666667,3
+351,2,"Married","Degree or higher","Full-time",42,"Ex-smoker","Yes","No",53,42,7,1,3.83333333333333,3
+352,2,"Married","High school","Part-time",41,"Yes","No","No",68,35,7,4,3.33333333333333,3.16666666666667
+353,1,"Married","Degree or higher","Full-time",35,"No","No","No",55,40,7,0,4.16666666666667,2.91666666666667
+354,1,"Married","High school","Part-time",37,"No","No","No",59,39,5.08333333333333,2,3.5,2.75
+355,6,"Married","Degree or higher","Full-time",45,"No","No","No",52,40,7,1,4.16666666666667,3.25
+356,1,"Married","High school","Unemployed",44,"Ex-smoker","No","No",49,38,4.75,3,5,3
+357,1,"Married","High school","Full-time",36,"No","No","Yes",56,42,7,0,4.5,3.33333333333333
+358,2,"Married","High school","Full-time",42,"No","Yes","No",74,36,4.41666666666667,4,2.33333333333333,2.58333333333333
+359,1,"Married","Degree or higher","Full-time",34,"No","Yes","No",47,41,5.58333333333333,1,4.33333333333333,3
+360,1,"Married","High school","Full-time",46,"No","No","No",56,41,6.83333333333333,1,3.16666666666667,2.83333333333333
+361,1,"Married","Degree or higher","Full-time",51,"No","No","No",60,31,4.08333333333333,2,3.83333333333333,2.91666666666667
+362,1,"Married","Middle school","Full-time",51,"Yes","No","No",60,41,6.16666666666667,1,3.5,2.66666666666667
+363,1,"Married","Degree or higher","Full-time",34,"No","No","No",80,41,4.5,4,3.83333333333333,2.83333333333333
+364,1,"Married","Degree or higher","Full-time",44,"No","No","No",53,39,6.66666666666667,3,3.66666666666667,2.75
+365,1,"Married","Degree or higher","Full-time",45,"No","No","No",89,35,2.83333333333333,3,1.66666666666667,2.91666666666667
+366,1,"Married","High school","Full-time",40,"No","No","No",58,40,3.58333333333333,0,3.33333333333333,2.91666666666667
+367,1,"Married","High school","Part-time",48,"No","No","No",81,41,4.25,4,2.5,2.66666666666667
+368,1,"Married","Degree or higher","Full-time",49,"No","Yes","No",47,40,6.5,1,5,3.08333333333333
+369,1,"Married","High school","Full-time",43,"Ex-smoker","Yes","No",55,39,5.25,2,3.33333333333333,2.75
+370,2,"Married","High school","Part-time",35,"No","Yes","Yes",54,40,6.33333333333333,2,4.16666666666667,2.91666666666667
+371,2,"Married","High school","Full-time",44,"Yes","No","No",46,43,6.83333333333333,1,4.16666666666667,2.58333333333333
+372,1,"Married","High school","Full-time",40,"Ex-smoker","Yes","No",46,39,6.25,4,3.83333333333333,2.66666666666667
+373,2,"Married","Degree or higher","Full-time",41,"No","No","No",54,33,6.33333333333333,6,3,2.41666666666667
+374,2,"Married","High school","Full-time",37,"No","No","No",46,43,6.16666666666667,4,3,3.25
+375,3,"Married","Degree or higher","Unemployed",38,"No","No","No",51,41,5.91666666666667,3,4.33333333333333,2.75
+376,1,"Married","Degree or higher","Part-time",39,"No","No","No",67,43,3.91666666666667,2,4.16666666666667,2.66666666666667
+377,2,"Married","High school","Part-time",38,"Ex-smoker","No","No",71,44,7,1,4.33333333333333,2.58333333333333
+378,1,"Married","High school","Full-time",47,"Yes","No","No",63,38,5.08333333333333,3,3.33333333333333,2.66666666666667
+379,4,"Married","Degree or higher","Part-time",41,"No","No","No",70,40,4.83333333333333,3,3.5,2.83333333333333

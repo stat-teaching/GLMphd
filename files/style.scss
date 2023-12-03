@@ -1,0 +1,36 @@
+/*-- scss:defaults --*/
+$base-color: #191919;
+$emp-color: #FA3F9F;
+
+$p-font-size: 0.75em !default;
+$h1-font-size: 1.5em !default;
+$h2-font-size: 1.2em !default;
+$h3-font-size: 1.1em !default;
+$h4-font-size: 1em !default;
+
+/*-- scss:rules --*/
+
+code.sourceCode {
+  font-size: $p-font-size;
+}
+
+ul {
+  font-size: $p-font-size;
+}
+
+ul code:not(.sourceCode){
+  font-size:70%;
+  background: #e5e5e5;
+  color: black;
+  border-radius: 1ch;
+  padding-block: 0.2ch;
+  padding-inline: 1ch;
+}
+
+.section h1 {
+  font-size: $h1-font-size!important;
+}
+
+summary {
+  font-size: $p-font-size;
+}

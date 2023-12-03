@@ -1,0 +1,102 @@
+---
+title: "Lab 6"
+author: "Filippo Gambarota"
+format: html
+bibliography: "`r filor::fil()$bib`"
+embed-resources: true
+---
+
+```{r}
+#| label: setup
+#| message: false
+#| warning: false
+
+devtools::load_all()
+library(tidyverse)
+library(ggeffects)
+```
+
+# Overview
+
+# EDA
+
+## Loading data
+
+```{r}
+data("psych")
+dat <- psych
+```
+
+Given that we did not introduced random-effects models, we select a single subject to analyze.
+
+```{r}
+cc <- seq(0, 1, 0.1)
+
+dat$contrast_c <- cut(dat$contrast, cc, include.lowest = TRUE)
+
+dat |> 
+  filter(id %in% sample(unique(dat$id), 5)) |> 
+  group_by(id, cond, contrast_c) |> 
+  summarise(y = mean(y)) |> 
+  ggplot(aes(x = contrast_c, y = y, color = cond, group = cond)) +
+  geom_point() +
+  geom_line() +
+  theme(axis.text.x = element_text(angle = 90)) +
+  facet_wrap(~id)
+```
+
+```{r}
+dat <- filter(dat, id == 6)
+```
+
+We have several interesting stuff to estimate. Let's start by fitting a simple model:
+
+```{r}
+fit1 <- glm(y ~ contrast, data = dat, family = binomial(link = "logit"))
+summary(fit1)
+```
+
+The parameters `(Intercept)` and `contrast` are respectively the probability of saying yes for stimuli with 0 contrast. Seems odd but in Psychophysics this is a very interesting information. We can call it the false alarm rate. We usually expect this rate to be low, ideally 0.
+
+```{r}
+plogis(coef(fit1)[1])
+```
+
+The `contrast` is the slope i.e. the increase in the log odds of saying yes for a unit increase in `contrast`. In this case this parameter is hard to intepret, let's change the scale of the contrast:
+
+```{r}
+dat$contrast10 <- dat$contrast * 10
+fit1 <- glm(y ~ contrast10, data = dat, family = binomial(link = "logit"))
+summary(fit1)
+```
+
+Now the `contrast10` is the increase in the log odds of saying yes for an increase of 10% contrast. Using the divide-by-4 rule we obtain an maximal increase of `r coef(fit1)[2]/4` of probability of saying yes.
+
+Another interesting parameter is the threshold. In psychophysics the threshold is the required $x$ level (in this case `contrast`) to obtain a certain proportions of $y$ response.
+
+For a logistic distribution [see @Knoblauch2012-to] the 50% threshold can be estimated as $-\frac{\beta_0}{\beta_1}$ thus:
+
+```{r}
+-(coef(fit1)[1]/coef(fit1)[2])
+```
+
+Then the slope is simply the inverse of the regression slope and represent the increase in performance/visibility for a unit increase in $x$:
+
+```{r}
+1/coef(fit1)[2]
+```
+
+In fact, we can use these parameters to plot a logistic distribution:
+
+```{r}
+curve(plogis(x, -(coef(fit1)[1]/coef(fit1)[2]), 1/coef(fit1)[2]),
+      0, 10)
+```
+
+That is very similar to the effects estimated by our model:
+
+```{r}
+plot(ggeffect(fit1))
+```
+
+# References

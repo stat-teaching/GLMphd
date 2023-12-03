@@ -1,0 +1,63 @@
+---
+title: "Lab 2"
+author: Filippo Gambarota
+format: html
+embed-resources: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      message = FALSE,
+                      warning = FALSE,
+                      dev = "svg")
+```
+
+```{r packages, message=FALSE, warning=FALSE}
+devtools::load_all()
+library(here)
+library(tidyr) # for data manipulation
+library(dplyr) # for data manipulation
+library(ggplot2) # plotting
+library(performance) # diagnostic
+library(car) # general utilities
+library(MuMIn) # model selection
+library(patchwork)
+```
+
+```{r}
+#| label: ggplot
+#| include: false
+
+mytheme <- function(size = 15){
+  theme_minimal(size)
+}
+
+theme_set(mytheme())
+```
+
+# Overview
+
+```{r}
+#| echo: false  
+data("volunt")
+```
+
+
+The `volunt` dataset contains data from `r nrow(volunt)` people on volunteering.
+
+The dataset contains:
+
+- `id`: identifier for each person
+- `age`: age of the participants in years
+- `ses`: socioeconomic status, from 1 (low) to 4 (high)
+- `sconnection`: a scale measuring the social connection within the community. From 1 (low) to 10 (high)
+- `vol`: is the person involved in volunteering? 1 = yes, 0 = no
+
+# Steps
+
+1. Import the data
+2. Explore the dataset
+    - univariate distributions of the variables
+    - bivariate relationships
+3. fit a model testing all main effects and interpret the parameters
+4. fit a model testing the interaction between ses and social connection. Compare the model with the previous model and interpret the result.

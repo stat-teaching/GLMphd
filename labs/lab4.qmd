@@ -1,0 +1,301 @@
+---
+title: "Lab 4"
+author: "Filippo Gambarota"
+format: html
+embed-resources: true
+---
+
+```{r packages, message=FALSE, warning=FALSE}
+devtools::load_all() # if using the rproject dowloaded from the slides
+# source("utils-glm.R") # if using a standard setup
+library(here)
+library(tidyr) # for data manipulation
+library(dplyr) # for data manipulation
+library(ggplot2) # plotting
+library(car) # general utilities
+library(effects) # for extracting and plotting effects 
+library(emmeans) # for marginal means
+```
+
+```{r options, include = FALSE}
+theme_set(theme_minimal(base_size = 15))
+```
+
+```{r loading-data}
+data("tantrums")
+dat <- tantrums
+```
+
+# Overview
+
+The dataset `tantrums.csv` is about the number of tantrums of `nrow(child)` toddlers during two days at the nursery. The columns are:
+
+- `id`: identifier for the child
+- `temperament`: the temperament of the child as "easy" or "difficult"
+- `attachment`: the attachment of the child as "secure" or "insecure"
+- `parent_se`: an average self-esteem value of the parents (self report)
+- `parent_skills`: a score representing the teacher judgment about parenting skills
+- `tantrums`: the number of tantrums
+
+We want to predict the number of tantrums as a function of these predictors.
+
+1. Importing data and check
+    - in the presence of `NA`, remove the children
+    - convert to factors the categorical variable with "difficult" and "insecure" as reference values
+2. Exploratory data analysis
+3. Model fitting with `glm()`
+4. Diagnostic
+5. Interpreting parameters
+6. Model selection
+7. What about interactions?
+
+# 1. Importing data and check
+
+Check the structure:
+
+```{r}
+str(dat)
+```
+
+Check for `NA`:
+
+```{r}
+sapply(dat, function(x) sum(is.na(x)))
+```
+
+So we have some `NA` values. We managed them according to the instructions:
+
+```{r}
+dat <- dat[complete.cases(dat), ]
+dat$id <- 1:nrow(dat) # restore the id
+rownames(dat) <- NULL
+```
+
+Let's convert the categorical variables into factor with the appropriate reference level:
+
+```{r}
+dat$temperament <- factor(dat$temperament, levels = c("difficult", "easy"))
+dat$temperament[1:5]
+
+dat$attachment <- factor(dat$attachment, levels = c("insecure", "secure"))
+dat$attachment[1:5]
+```
+
+# 2. Exploratory data analysis
+
+Let's compute some summary statistics and plots.
+
+```{r}
+summary(dat)
+```
+
+```{r}
+table(dat$temperament)
+table(dat$attachment)
+table(dat$attachment, dat$temperament)
+```
+
+```{r}
+par(mfrow = c(1,3))
+hist(dat$parent_se)
+hist(dat$parent_skills)
+hist(dat$tantrum)
+```
+
+Let's compute some bivariate relationships:
+
+```{r}
+plot(dat$parent_se, dat$tantrum, pch = 19)
+plot(dat$parent_skills, dat$tantrum, pch = 19)
+```
+
+```{r}
+boxplot(tantrum ~ temperament, data = dat)
+boxplot(tantrum ~ attachment, data = dat)
+```
+
+# 3. Model fitting with `glm()`
+
+We can start by fitting our null model with the `poisson()` family:
+
+```{r}
+fit0 <- glm(tantrum ~ 1, family = poisson(link = "log"), data = dat)
+```
+
+What is the intercept here?
+
+Then we can fit a model with the attachment effect:
+
+```{r}
+fit1 <- glm(tantrum ~ parent_se, family = poisson(link = "log"), data = dat)
+summary(fit1)
+```
+
+What about the overdispersion? What could be the reason?
+
+Assuming that the `attachment` is the only variable that we have, we could estimate the degree of overdispersion:
+
+```{r}
+sum(residuals(fit1, type = "pearson")^2)/fit1$df.residual
+performance::check_overdispersion(fit1)
+```
+
+Let's have a look also at the residual plot:
+
+```{r}
+residualPlots(fit1)
+```
+
+There is clear evidence of overdispersion. But we have several other variables so before using another model let's fit everything:
+
+```{r}
+fit_s <- glm(tantrum ~ attachment + temperament + parent_se + parent_skills, family = poisson(link = "log"), data = dat)
+summary(fit_s)
+```
+
+Let's check again overdispersion and pearson residuals:
+
+```{r}
+#| fig-height: 10
+residualPlots(fit_s)
+```
+
+The majority of the distribution seems ok, but there are some values with very high residuals and the overdispersion is still present:
+
+```{r}
+sum(residuals(fit_s, type = "pearson")^2)/fit_s$df.residual
+performance::check_overdispersion(fit_s)
+```
+
+# 4. Diagnostic
+
+Another reason for overdispersion could be the presence of outliers and influential points. Let's have a look at the Cook distances:
+
+```{r}
+car::influenceIndexPlot(fit_s, vars = c("cook", "hat", "Studentized"))
+```
+
+There are two values (117 and 118) with a very high cook distance and very high studentized residual. We can try to fit a model without these values and check what happens to the model:
+
+```{r}
+dat_no_out <- dat[-c(117, 118), ]
+fit_no_out <- glm(tantrum ~ attachment + temperament + parent_se + parent_skills, family = poisson(link = "log"), data = dat_no_out)
+summary(fit_no_out)
+```
+
+The model seems to be clearly improved, especially in terms of overdispersion:
+
+```{r}
+sum(residuals(fit_no_out, type = "pearson")^2)/fit_no_out$df.residual
+performance::check_overdispersion(fit_no_out)
+```
+
+We can also compare the two models in terms of coefficients:
+
+```{r}
+car::compareCoefs(fit_s, fit_no_out)
+```
+
+In fact, there are some coefficients with different values. We can check also the dfbeta plots:
+
+```{r}
+dfbeta_plot(fit_s)
+```
+
+The previous observations seems to do not affect the estimated parameters but they impact the overall model fit, deviance and residuals.
+
+Let's have a look at residuals now:
+
+```{r}
+car::residualPlot(fit_no_out)
+```
+
+There is still some strange pattern but the majority of the distribution seems to be between -1 and 1.
+
+# 5. Interpreting parameters
+
+Before anything else, just plot the effects:
+
+```{r, fig.width=10, fig.height=10}
+plot(allEffects(fit_no_out))
+```
+
+
+Now we can interpret model parameters:
+
+```{r}
+summary(fit_no_out)
+```
+The `(Intercept)` is the expected number of tantrums for "insecure", "difficult" children where parent_skills are rated as 0 and parent self esteem is 0, thus `r exp(coef(fit_no_out)[1])`. Similarly to the binomial lab, we could center the two numerical variables to have a more meaningful interpretation or we can use the `predict` function to obtain the values that we want.
+
+```{r}
+predict(fit_no_out, newdata = data.frame(attachment = "insecure", 
+                                         temperament = "difficult",
+                                         parent_se = mean(dat$parent_se), 
+                                         parent_skills = mean(dat$parent_skills)),
+        type = "response") # same as exp(prediction)
+```
+
+The `attachmentsecure` is the expected difference in log number of tantrums between `secure - insecure` attachment, controlling for other variables:
+
+```{r}
+emmeans(fit_no_out, pairwise~attachment)
+```
+
+In terms of the response scale, we can intepret it as the multiplicative increase of the number of tantrums from secure to insecure attachment:
+
+```{r}
+exp(coef(fit_no_out)["attachmentsecure"])
+```
+
+Moving from insecure from secure attachment, there is a decrease in the expected number of tantrums of `r 100 - exp(coef(fit_no_out)["attachmentsecure"]) * 100` %.
+
+The `temperamenteasy` can be interpreted in the same way:
+
+```{r}
+emmeans(fit_no_out, pairwise~temperament)
+```
+
+```{r}
+exp(coef(fit_no_out)["temperamenteasy"])
+```
+
+So there is a reduction of the `r 100 - exp(coef(fit_no_out)["temperamenteasy"]) * 100` % by moving from difficult to easy temperament.
+
+`parent_se` and `parent_skills` are interpreted similarly. The coefficient represent the increase/decrease in the log number of tantrums for a unit increase in the predictors.
+
+```{r}
+exp(coef(fit_no_out)[4:5])
+```
+
+So the number of tantrums seems to be unaffected by the parents self-esteem but as the parent skills increases there is a reduction in the number of tantrums.
+
+# 6. Model selection
+
+Let's compare the model with and without the `parent_se` terms that appear to be not very useful:
+
+```{r}
+fit_no_parent_se <- update(fit_no_out, . ~ . -parent_se)
+summary(fit_no_parent_se)
+anova(fit_no_parent_se, fit_no_out, test = "LRT")
+```
+
+```{r}
+drop1(fit_no_out, test = "LRT")
+```
+
+Or using the `MuMIn::dredge()` function:
+
+```{r}
+fit_no_out <- update(fit_no_out, na.action = na.fail)
+MuMIn::dredge(fit_no_out, rank = "AIC")
+```
+
+# 7. What about interactions?
+
+We can also have a look at interactions, try by yourself to explore interactions between numerical (`parent_skills` and `parent_se`) and categorical (`attachment` and `temperament`) variables. I'm only interested in 1 continuous variable interacting with 1 categorical variable.
+
+- fit a separate model for each interaction
+- interpret the model parameters and the analysis of deviance table (`car::` something :)) or using a model comparison (Likelihood Ratio Test) for testing the interaction
+- plot the model effects
+- comment the results

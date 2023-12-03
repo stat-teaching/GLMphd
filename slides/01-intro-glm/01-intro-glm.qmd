@@ -1,0 +1,760 @@
+---
+title: Generalized Linear Models
+subtitle: Introduction
+institute: "University of Padova"
+author: 
+  - name: "Filippo Gambarota"
+    email: filippo.gambarota@unipd.it
+    twitter: fgambarota
+    github: filippogambarota
+format:
+  quarto-slides-revealjs:
+    code-fold: true
+    incremental: true
+    code-link: true
+    code-line-numbers: false
+    html-math-method: mathjax
+    filters:
+      - nutshell
+      - code-fullscreen
+    slide-number: true
+from: markdown+emoji
+date: last-modified
+date-format: "YYYY"
+final-slide: false
+bibliography: "`r filor::fil()$bib`"
+csl: "`r filor::fil()$csl`"
+nocite: |
+  @Gelman2020-tg, @Agresti2018-oh, @Agresti2015-cz, @Dunn2018-ww, @Fox2015-ps, @Faraway2016-py
+updated: "*Last Update: `r Sys.Date()`*"
+---
+
+```{r}
+#| label: setup
+knitr::opts_chunk$set(echo = TRUE,
+                      dev = "svg",
+                      fig.width = 6,
+                      fig.asp = 0.618,
+                      fig.align = "center",
+                      comment = "#>")
+```
+
+```{r packages, include=FALSE}
+devtools::load_all()
+library(tidyverse)
+library(kableExtra)
+library(patchwork)
+library(here)
+```
+
+```{r functions, include = FALSE}
+funs_files <- list.files(here("R"), pattern = ".R")
+funs <- filor::get_funs(here("R", funs_files))
+```
+
+```{r}
+#| label: ggplot
+#| include: false
+
+mytheme <- function(size = 15){
+  theme_minimal(size)
+}
+
+theme_set(mytheme())
+```
+
+```{r}
+#| label: gt
+#| include: false
+qtab <- function(data, digits = 3){
+  require(gt)
+  data |> 
+    gt::gt() |> 
+    gt::cols_align(align = "center") |> 
+    gt::tab_style(
+      style = cell_text(weight = "bold"),
+      locations = cells_column_labels()
+    ) |> 
+    gt::fmt_number(decimals = digits)
+}
+```
+
+
+# Beyond the Gaussian distribution {.section}
+
+## Quick recap about Gaussian distribution
+
+- The Gaussian distribution is part of the **Exponential family**
+- It is defined with mean ($\mu$) and the standard deviation ($\sigma$)
+- It is symmetric (mean, mode and median are the same)
+- The support is $[- \infty, + \infty]$
+
+. . .
+
+The Probability Density Function (PDF) is:
+
+$$
+f(x, \mu, \sigma) = \frac{1}{\sigma\sqrt{2\pi}} e^{-\frac{1}{2}(\frac{x - \mu}{\sigma})^2}
+$$
+
+## Quick recap about Gaussian distribution
+
+```{r, echo = FALSE}
+ggnorm(0, 1)
+```
+
+## Quick recap about Gaussian distribution
+
+```{r, echo = FALSE}
+ggnorm(c(0, 0, 1), c(1, 2, 0.5))
+```
+
+\begin{center}
+But not always gaussian-like variables!
+\end{center}
+
+## But...
+
+In Psychology, variables do not always satisfy the properties of the Gaussian distribution. For example:
+
+- Reaction times
+- Percentages or proportions (e.g., task accuracy)
+- Counts
+- Likert scales
+- ...
+
+## Reaction times
+
+Non-negative and probably skewed data:
+
+```{r, echo = FALSE}
+dat <- data.frame(
+    x = rgamma(1e5, 9, scale = 0.5)*100
+) 
+
+dat |> 
+    ggplot(aes(x = x)) +
+    geom_histogram(fill = "lightblue",
+                   color = "black") +
+    xlab("Reaction Times (ms)") +
+    ylab("Count")
+```
+
+## Binary outcomes
+
+A series of binary (i.e., *bernoulli*) trials with two possible outcomes:
+
+```{r, echo = FALSE}
+dat <- data.frame(y = c(70, 30), x = c("Passed", "Failed"))
+
+dat |> 
+    ggplot(aes(x = x, y = y)) +
+    geom_col(color = "black",
+             fill = "lightblue") +
+    ylab("%") +
+    ylim(c(0, 100)) +
+    mytheme() +
+    theme(axis.title.x = element_blank()) +
+    ggtitle("Statistics Final Exam (n = 100)")
+```
+
+## Counts
+
+Number of symptoms for a group of patients during the last month:
+
+```{r, echo = FALSE}
+dat <- data.frame(x = rpois(1e5, 15))
+
+dat |> 
+    ggplot(aes(x = x)) +
+    geom_bar(fill = "lightblue",
+             color = "black") +
+    mytheme() +
+    scale_x_continuous(breaks = seq(0, 50, 5)) +
+    xlab("Number of new patients during one month") +
+    ylab("Count")
+```
+
+# Should we use a linear model for these variables? {.question}
+
+## Should we use a linear model for these variables?
+
+Example: probability of passing the exam as a function of hours of study:
+
+::: columns
+:::: column
+```{r, echo = FALSE}
+# y = number of exercises solved in 1 semester
+# x = percentage of attended lectures
+
+n <- 50
+x <- round(runif(n, 0, 100))
+b0 <- 0.01
+b1 <- 0.08
+y <- rbinom(length(x), 1, plogis(qlogis(b0) + b1*x))
+
+dat <- data.frame(id = 1:n, studyh = x, passed = y)
+
+dat |> 
+    filor::trim_df() |> 
+    qtab()
+```
+
+::::
+:::: column
+```{r}
+#| code-fold: false
+dat |> 
+  summarise(n = n(),
+            npass = sum(passed),
+            nfail = n - npass,
+            ppass = npass / n)
+```
+
+::::
+:::
+
+## Should we use a linear model for these variables?
+
+Let's plot the data:
+
+```{r, echo = FALSE}
+exam_plot <- dat |>
+  ggplot(aes(x = studyh, y = passed)) +
+  geom_hline(yintercept = c(0, 1), linetype = "dashed", col = "firebrick") +
+  geom_point(size = 3,
+             alpha = 0.5,
+             position = position_jitter(height = 0.03))
+exam_plot
+```
+
+## Should we use a linear model for these variables?
+
+Let's fit a linear model `passing ~ study_hours` using `lm`:
+
+```{r, echo = FALSE}
+exam_plot +
+    geom_smooth(method = "lm", se = F)
+```
+
+. . .
+
+**Do you see something strange?**
+
+## Should we use a linear model for these variables?
+
+A little **spoiler**, the relationship should be probably like this:
+
+```{r, echo = FALSE}
+exam_plot +
+    stat_smooth(method = "glm", 
+                se = FALSE,
+                method.args = list(family = binomial))
+```
+
+## Should we use a linear model for these variables?
+
+Another example, the number of solved exercises in a semester as a function of the number of attended lectures ($N = 100$):
+
+```{r, echo = FALSE}
+# y = number of exercises solved in 1 semester
+# x = percentage of attended lectures
+
+n <- 100
+x <- round(runif(n, 0, 63))
+y <- rpois(n, exp(0 + 0.05*x))
+
+dat <- data.frame(id = 1:n, nattended = x, nsolved = y)
+
+dat |> 
+    filor::trim_df() |> 
+    qtab()
+```
+
+## Should we use a linear model for these variables?
+
+```{r echo = FALSE}
+dat |> 
+    ggplot(aes(x = nsolved)) +
+    geom_bar()
+```
+
+## Should we use a linear model for these variables?
+
+```{r, echo = FALSE}
+exam_plot <- dat |> 
+    ggplot(aes(x = nattended, y = nsolved)) +
+    geom_hline(yintercept = 0, linetype = "dashed", col = "firebrick") +
+    geom_point(size = 3) +
+    mytheme() +
+    xlab("Number of attended lectures") +
+    ylab("Solved exercises")
+exam_plot
+```
+
+## Should we use a linear model for these variables?
+
+Again, fitting the linear model seems partially appropriate but there are some problems:
+
+```{r, echo = FALSE}
+fitp <- glm(nsolved ~ nattended, data = dat, family = poisson())
+dat$p <- predict(fitp, type = "response")
+dat$lower <- dat$p - sqrt(dat$p)
+dat$upper <- dat$p + sqrt(dat$p)
+
+exam_plot +
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+## Should we use a linear model for these variables?
+
+Again, fitting the linear model seems partially appropriate but there are some problems:
+
+```{r, echo = FALSE}
+exam_plot +
+  geom_line(data = dat,
+            aes(x = nattended, y = lower),
+            lty = "dashed") +
+  geom_line(data = dat,
+            aes(x = nattended, y = upper),
+            lty = "dashed")
+```
+
+## Should we use a linear model for these variables?
+
+Also the residuals are quite problematic:
+
+```{r, echo = FALSE}
+fit <- lm(nsolved ~ nattended, data = dat)
+
+dfit <- data.frame(
+    fitted = fitted(fit),
+    residuals = residuals(fit)
+)
+
+qqn <- dfit |> 
+    ggplot(aes(sample = residuals)) + 
+    stat_qq() + 
+    stat_qq_line() +
+    xlab("Theoretical Quantiles") +
+    ylab("Residuals") +
+    mytheme()
+
+res_fit <- dfit |> 
+    ggplot(aes(x = fitted, y = residuals)) +
+    geom_point() +
+    mytheme() +
+    ylab("Residuals") +
+    xlab("Fitted") +
+    geom_smooth(se = FALSE, color = "red")
+qqn + res_fit
+```
+
+## Should we use a linear model for these variables?
+
+Another little spoiler, the model should consider both the support of the `y` variable and the non-linear pattern. Probably something like this:
+
+```{r, echo = FALSE}
+exam_plot +
+    stat_smooth(method = "glm", 
+                se = FALSE,
+                method.args = list(family = poisson))
+```
+
+## So what?
+
+Both linear models **somehow capture the expected relationship** but there are **serious fitting problems**:
+
+- impossible predictions
+- poor fitting for non-linear patterns
+- linear regression assumptions not respected
+
+. . .
+
+As a general rule in ~~life~~ statistics:
+
+> All models are wrong, some are useful
+
+## We need a new class of models...
+
+- Taking into account the **specific features of our response variable**
+- Working on a **linear scale** when fitting the model and for inference
+- We need a model that is **closer to the true data generation process**
+
+# Generalized Linear Models  {.section}
+
+## Main references
+
+For a detailed introduction about GLMs
+
+- Chapters: 1 (intro), 4 (GLM fitting), 5 (GLM for binary data)
+
+```{r, echo = FALSE, out.width="30%"}
+knitr::include_graphics("img/agresti2015-foundations-lm-glm.jpg")
+```
+
+## Main references
+
+For a basic and well written introduction about GLM, especially the Binomial GLM
+
+- Chapters: 3 (intro GLMs), 4-5 (Binomial Logistic Regression)
+
+```{r, echo = FALSE, out.width="50%"}
+knitr::include_graphics("img/agresti2019-intro-to-categorical.jpg")
+```
+
+## Main references
+
+Great resource for interpreting Binomial GLM parameters:
+
+- Chapters: 13-14 (Binomial Logistic GLM), 15 (Poisson and others GLMs)
+```{r, echo = FALSE, out.width="30%"}
+knitr::include_graphics("img/gelman2020-reg-and-other-stories.jpg")
+```
+
+## Main references
+
+Detailed GLMs book. Very useful especially for the diagnostic part:
+
+- Chapters: 8 (intro), 9 (Binomial GLM), 10 (Poisson GLM and overdispersion)
+
+```{r, echo = FALSE, out.width="30%"}
+knitr::include_graphics("img/dunn2018-glm.jpg")
+```
+
+## Main references
+
+The holy book :)
+
+- Chapters: 14 and 15
+
+```{r, echo = FALSE, out.width="30%"}
+knitr::include_graphics("img/fox2015-applied-glm.jpg")
+```
+
+## Main references
+
+Another good reference...
+
+- Chapters: 8
+
+```{r, echo = FALSE, out.width="30%"}
+knitr::include_graphics("img/faraway2016-extending-glm.jpg")
+```
+
+## General idea
+
+- using distributions **beyond the Gaussian**
+- modeling **non linear functions** on the response scale
+- taking into account **mean-variance relationships**
+
+## Recipe for a GLM
+
+- **Random Component**
+- **Systematic Component**
+- **Link Function**
+
+## Random Component
+
+The **random component** of a GLM identify the response variable $y$ coming from a certain probability distribution.
+
+```{r, echo = FALSE, out.width="50%"}
+par(mfrow = c(1,3))
+
+curve(dnorm(x), -4, 4, main = "Normal", ylab = "density(x)", cex.lab = 1.5, cex.main = 1.5)
+plot(0:10, dbinom(0:10, 10, 0.5), type = "h", main = "Binomial", ylab = "density(x)",
+     cex.lab = 1.5, cex.main = 1.5, xlab = "x")
+points(0:10, dbinom(0:10, 10, 0.5), pch = 19)
+plot(0:20, dpois(0:20, 8), type = "h", main = "Poisson", ylab = "density(x)",
+     cex.lab = 1.5, cex.main = 1.5,
+     xlab = "x")
+```
+
+## Systematic Component
+
+The **systematic component** or *linear predictor* ($\eta$) of a GLM is $\beta_0 + \beta_1x_{1i} + ... + \beta_px_{pi}$.
+
+\begin{align*}
+\eta = \beta_0 + \beta_1x_1 + ... + \beta_px_p
+\end{align*}
+
+This part is invariant to the type of model and is the combination of explanatory variables to predict the expected value $\mu$ (i.e. the mean) of the distribution.
+
+## Link Function
+
+The **link function** $g(\mu)$ is an **invertible** function that connects the mean $\mu$ of the random component with the *linear combination* of predictors $g(\mu) = \beta_0 + \beta_1x_{1i} + ... + \beta_px_{pi}$. The inverse of the link function $g^{-1}$ map the linear predictor ($\eta$) into the original scale.
+
+$$
+g(\mu) = \eta = \beta_0 + \beta_1x_{1i} + ... + \beta_px_{pi}
+$$
+
+$$
+\mu = g^{-1}(\eta) = g^{-1}(\beta_0 + \beta_1x_{1i} + ... + \beta_px_{pi}) 
+$$
+
+Thus, the relationship between $\mu$ and $\eta$ is linear only when the **link function ** is applied i.e. $g(\mu) = \eta$. 
+
+## Link function
+
+The simplest **link function** is the **identity link** where $g(\mu) = \mu$ and correspond to the standard linear model. In fact, the linear regression is just a GLM with a **Gaussian random component** and the **identity** link function.
+
+```{r}
+#| echo: false
+#| tbl-cap: Main distributions and link functions
+fam <- c("`gaussian`", "`gamma`", "`binomial`", "`binomial`", "`poisson`")
+link <- c("identity", "log", "logit", "probit", "log")
+range <- c("$$(-\\infty,+\\infty)$$", "$$(0,+\\infty)$$",
+           "$$\\frac{0, 1, ..., n_{i}}{n_{i}}$$",
+           "$$\\frac{0, 1, ..., n_{i}}{n_{i}}$$",
+           "$$0, 1, 2, ...$$")
+
+linktab <- data.frame(Family = fam, Link = link, Range = range)
+linktab |> 
+  qtab()
+```
+
+# Relevant distributions {.section}
+
+## Bernoulli distribution
+
+A single Bernoulli trial is defined as:
+
+$$
+f(x, p) = p^x (1 - p)^{1 - x}
+$$
+
+Where $p$ is the probability of success and $k$ the two possible results $0$ and $1$. The mean is $p$ and the variance is $p(1 - p)$
+
+## Binomial distribution
+
+The probability of having $k$ success (e.g., 0, 1, 2, etc.), out of $n$ trials with a probability of success $p$ (and failing $q = 1 - p$) is:
+
+$$
+f(n, k, p)= \binom{n}{k} p^k(1 - p)^{n - k}
+$$
+
+The $np$ is the mean of the binomial distribution is $np$ is the variance $npq = np(1-p)$. The binomial distribution is just the repetition of $n$ independent Bernoulli trials.
+
+## Bernoulli and Binomial
+
+A classical example for a Bernoulli trial is the coin flip. In R:
+
+```{r}
+#| code-fold: false
+n <- 1
+p <- 0.7
+rbinom(1, n, p) # a single bernoulli trial
+
+n <- 10
+rbinom(10, 1, p) # n bernoulli trials
+
+rbinom(1, n, p) # binomial version
+```
+
+## Binomial
+
+```{r}
+n <- 30
+p <- 0.7
+dat <- data.frame(k = 0:n)
+dat$y <- dbinom(dat$k, n, p)
+
+dat |> 
+    ggplot(aes(x = k, y = y)) +
+    geom_point() +
+    geom_segment(aes(x = k, xend = k, y = 0, yend = y)) +
+    mytheme() +
+    ylab("dbinom(x, n, p)") +
+    ggtitle(latex2exp::TeX("$n = 30$, $p = 0.7$"))
+
+```
+
+## Binomial in R
+
+```{r}
+#| code-fold: false
+#| collapse: true
+# generate k (success)
+n <- 50 # number of trials
+p <- 0.7 # probability of success
+rbinom(1, n, p)
+
+# let's do several experiments (e.g., participants)
+rbinom(10, n, p)
+
+# calculate the probability density given k successes
+n <- 50
+k <- 25
+p <- 0.5
+dbinom(k, n, p)
+
+# calculate the probability of doing 0, 1, 2, up to k successes
+n <- 50
+k <- 25
+p <- 0.5
+pbinom(k, n, p)
+```
+
+## Binomial GLM
+
+The Bernoulli distributions is used as **random component** when we have a binary dependent variable or the number of successes over the total number of trials:
+
+- Accuracy on a cognitive task
+- Patients recovered or not after a treatment
+- People passing or not the exam
+
+. . .
+
+The Bernoulli or the Binomial distributions can be used as **random component** when we have a binary dependent variable or the number of successes over the total number of trials.
+
+. . .
+
+When fitting a GLM with the binomial distribution we are including linear predictors on the expected value $\mu$ i.e. the probability of success.
+
+## Binomial GLM
+
+Most of the GLM models deal with a mean-variance relationship:
+
+```{r}
+#| fig-width: 10
+
+p <- seq(0, 1, 0.01)
+par(mfrow = c(1,2))
+curve(plogis(x), 
+      -4, 4, 
+      ylab = "Probability", 
+      xlab = "x", 
+      lwd = 2,
+      main = "Logistic Distribution")
+plot(p, 
+     p * (1 - p), 
+     xlim = c(0, 1),
+     xlab = latex("\\mu = p"), 
+     ylab = latex("V = p(1 - p)"),
+     type = "l",
+     lwd = 2,
+     main = "Mean-Variance Relationship")
+```
+
+## Poisson distribution
+
+The number of events $k$ during a fixed time interval (e.g., number of new users on a website in 1 week) is:
+
+\begin{align*}
+f(k,\lambda) = Pr(X = k) = \frac{\lambda^k e^{-\lambda}}{k!}
+\end{align*}
+
+Where $k$ is the number of occurrences ($k = 0, 1, 2, ...$), $e$ is Euler's number ($e = 2.71828...$) and $!$ is the factorial function. The mean and the variance of the Poisson distribution is $\lambda$.
+
+## Poisson distribution
+
+```{r, echo = FALSE}
+lambda <- c(5, 10, 15)
+ggpois(lambda, type = "pl")
+```
+
+As $\lambda$ increases, the distribution is well approximated by a Gaussian distribution, but the Poisson is discrete.
+
+## Poisson distribution in R
+
+```{r}
+#| code-fold: false
+#| collapse: false
+n <- 1000
+x <- rpois(n, lambda = 30)
+
+mean(x)
+var(x)
+```
+
+We can also use all the other functions such as the `dpois()`, `qpois()` and `ppois()`
+
+## Poisson distribution in R
+
+The mean-variance relationship can be easily seen with a continuous predictor:
+
+```{r}
+x <- rnorm(1000)
+y <- rpois(1000, exp(log(10) + log(1.8)*x))
+
+plot(x, y, pch = 19)
+```
+
+## Gamma distribution
+
+The Gamma distribution has several [:parametrizations](https://en.wikipedia.org/wiki/Gamma_distribution). One of the most common is the **shape-scale** parametrization:
+
+$$
+f(x;k,\theta )={\frac {x^{k-1}e^{-x/\theta }}{\theta ^{k}\Gamma (k)}}
+$$
+Where $\theta$ is the **scale** parameter and $k$ is the **shape** parameter.
+
+## Gamma distribution
+
+```{r}
+ggamma(mean = c(10, 20, 30), sd = c(10, 10, 10), show = "ss")
+```
+
+## Gamma $\mu$ and $\sigma^2$
+
+The mean and variance are defined as:
+
+- $\mu = k \theta$ and $\sigma^2 = k \theta^2$ with the **shape-scale** parametrization
+- $\mu = \frac{\alpha}{\beta}$ and $\frac{\alpha}{\beta^2}$ with the **shape-rate** parametrization
+
+. . .
+
+Another important quantity is the **coefficient of variation** defined as $\frac{\sigma}{\mu}$ or $\frac{1}{\sqrt{k}}$ (or $\frac{1}{\sqrt{\alpha}}$).
+
+## Gamma distribution
+
+Again, we can see the mean-variance relationship:
+
+```{r}
+ggamma(shape = c(5, 5), scale = c(10, 20), show = "ss")
+```
+
+
+## Gamma parametrization
+
+To convert between different parametrizations, you can use the `gamma_params()` function:
+
+```{r}
+#| output: asis
+#| echo: false
+
+filor::print_fun(funs$gamma_params)
+```
+
+## Gamma parametrization
+
+```{r}
+#| code-fold: false
+gm <- gamma_params(mean = 30, sd = 10)
+unlist(gm)
+
+y <- rgamma(1000, shape = gm$shape, scale = gm$scale)
+```
+
+## Gamma parametrization
+
+```{r}
+#| echo: false
+hist(y, main = latex("$\\mu = %.3f$, $\\sigma = %.3f$", mean(y), sd(y)))
+```
+
+## GLM in R
+
+Is not always easy to work with link functions. In R we can use the `distribution(link = )` function to have several useful information. For example:
+
+```{r}
+#| eval: false
+#| code-fold: false
+fam <- binomial(link = "logit")
+fam$linkfun() # link function, from probability to eta
+fam$linkinv() # inverse of the link function, from eta to probability
+```
+
+We are going to see the specific arguments, but this tricks works for any family and links, even if you do not remember the specific function or formula.
+
+## References {.refs}

@@ -1,0 +1,14 @@
+---
+title: "Labs"
+---
+
+On this page are collected the laboratories with real and simulated data.
+
+```{r}
+#| echo: false
+#| output: asis
+labs <- list.files("labs", pattern = "qmd", full.names = TRUE)
+bullets <- sprintf("- [%s](%s)", tools::file_path_sans_ext(basename(labs)), labs)
+cat(bullets, sep = "\n")
+```
+

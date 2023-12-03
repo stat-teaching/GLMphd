@@ -1,0 +1,550 @@
+---
+title: Simulating GLM
+institute: "University of Padova"
+author: 
+  - name: "Filippo Gambarota"
+    email: filippo.gambarota@unipd.it
+    github: filippogambarota
+format:
+  quarto-slides-revealjs:
+    incremental: false
+    code-link: true
+    code-line-numbers: false
+    html-math-method: mathjax
+    code-fold: false
+    filters:
+      - nutshell
+      - code-fullscreen
+from: markdown+emoji
+date: last-modified
+date-format: "YYYY"
+final-slide: false
+df-print: tibble
+bibliography: "`r filor::fil()$bib`"
+csl: "`r filor::fil()$csl`"
+updated: "*Last Update: `r Sys.Date()`*"
+toc: true
+toc-title: Contents
+toc-depth: 1
+engine: knitr
+---
+
+```{r}
+#| label: setup
+#| include: false
+knitr::opts_chunk$set(echo = TRUE,
+                      dev = "svg",
+                      fig.width = 7,
+                      fig.asp = 0.618,
+                      fig.align = "center",
+                      comment = "#>")
+```
+
+```{r}
+#| label: packages
+#| include: false
+library(gt)
+library(ggplot2)
+library(viridis)
+devtools::load_all()
+```
+
+```{r}
+#| label: ggplot2
+#| include: false
+mtheme <- function(size = 15){
+  theme_minimal(base_size = size, 
+                base_family = "sans") +
+  theme(legend.position = "bottom",
+        plot.title = element_text(hjust = 0.5),
+        strip.text = element_text(face = "bold"),
+        panel.grid.minor = element_blank())
+}
+
+theme_set(mtheme())
+
+# palettes
+options(ggplot2.continuous.colour="viridis")
+options(ggplot2.continuous.fill = "viridis")
+scale_colour_discrete <- scale_colour_viridis_d
+scale_fill_discrete <- scale_fill_viridis_d
+```
+
+```{r}
+#| label: gt
+#| include: false
+qtab <- function(data, digits = 3){
+  data |> 
+    gt() |> 
+    gt::cols_align(align = "center") |> 
+    tab_style(
+      style = cell_text(weight = "bold"),
+      locations = cells_column_labels()
+    ) |> 
+    fmt_number(decimals = digits)
+}
+```
+
+## Monte Carlo Simulations
+
+> Monte Carlo methods, or Monte Carlo experiments, are a broad class of computational algorithms that rely on repeated random sampling to obtain numerical results. The underlying concept is to use randomness to solve problems that might be deterministic in principle
+
+## General Workflow
+
+Despite the specific applications, Monte Carlo simulations follows a similar pattern:
+
+1. Define the **data generation process** (DGP)
+2. Use **random numbers sampling** to generate data according to **assumptions**
+3. Calculate a **statistics**, fit a **model** or do some **computations** on the generated data
+4. **Repeat** 2-3 several times (e.g., 10000)
+5. Get a **summary of the results**
+
+## Random numbers in R
+
+In R there are several functions to generate random numbers and they are linked to specific probability distributions. You can type `?family()` to see available distributions for `glm`.
+
+```{r}
+?family
+```
+
+## Random numbers in R
+
+In fact, there are other useful distributions not listed in `?family()`, because they are not part of `glm`. For example the `beta` or the `unif` (uniform) distributions. Use `?Distributions` for a complete list:
+
+
+```{r}
+?Distributions
+```
+
+## Random numbers in R
+
+However, it is always possible to include other distributions with packages. For example the `MASS::mvrnorm()` implement the multivariate normal distribution or the `extraDistr::rhcauchy()` for a series of truncated distributions.
+
+## Random numbers in R
+
+The general pattern is always the same. There are 4 functions called `r`, `p`, `q` and `d` combined with a distribution e.g. `norm` creating several utilities. For example, `rnorm()` generate number from a normal distribution.
+
+```{r}
+x <- rnorm(1e3)
+hist(x)
+```
+
+# Why Monte Carlo Simulations? {.section}
+
+## Why Monte Carlo Simulations?
+
+Monte Carlo simulations are used for several purposes:
+
+- Solve computations impossible or hard to do analytically
+- Estimate the statistical power, type-1 error, type-M error etc.
+
+## Example: standard error
+
+A classical example is estimating the standard error (SE) of a statistics. For example, we know that the SE of a sample mean is:
+
+$$
+\sigma_\overline x = \frac{s_x}{\sqrt{n_x}}
+$$
+
+Where $s_x$ is the standard deviation of $x$ and $n_x$ is the sample size.
+
+```{r}
+x <- rnorm(100, mean = 10, sd = 5)
+mean(x) # mean
+sd(x) / sqrt(length(x)) # se
+5 / sqrt(length(x)) # analytically, assuming s = 5
+```
+
+## Example: standard error
+
+However we are not good in deriving the SE analytically. We know that the SE is the standard deviation of the sampling distribution of a statistics.
+
+. . .
+
+The sampling distribution is the distribution obtained by calculating the statistics (in this case the mean) on all possible (or a very big number) samples of size $n$.
+
+. . .
+
+We can solve the problems creating a very simple Monte Carlo Simulation
+
+## Example: standard error
+
+We simulate 10000 samples of size $n$ by a normal distribution with $\mu = 10$ and $\sigma = 5$. We calculate the mean $\overline x$ for each iteration and then we calculate the standard deviation of the vectors of means.
+
+```{r}
+nsim <- 1e4
+mx <- rep(0, 1e4)
+
+for(i in 1:nsim){
+  x <- rnorm(100, 10, 5)
+  mx[i] <- mean(x)
+}
+```
+
+## Example: standard error
+
+```{r}
+hist(mx)
+sd(mx) # the standard error
+```
+
+# Simulating GLM {.section}
+
+## Workflow
+
+The general workflow is the following:
+
+1. Define the experimental design:
+    - how many variables?
+    - how many participants/trials?
+    - which type of variables (categorical, numerical)?
+2. Define the probability distribution of the response variable:
+    - Gaussian
+    - Poisson
+    - Binomial
+    - ...
+3. Create the model matrix and define all parameters of the simulation: $\beta_0$, $\beta_1$, $\beta_2$, etc.
+4. Compute the linear predictors $\eta$ on the link function scale
+5. Apply the inverse of the link function $g^{-1}(\eta)$ obtaining values on the original scale
+6. Simulate the response variable by sampling from the appropriate distribution
+7. Fit the appropriate model and check the result
+8. In case of estimating statistical properties (e.g., power) repeat the simulation (1-7) several times (e.g., 10000) and summarize the results
+
+## Example with a linear model
+
+Let's simulate a simple linear model (i.e., GLM with a Gaussian random component and identity link function).
+
+$$
+\hat y_i = \beta_0 + \beta_1x_i + \epsilon_i
+$$
+
+In this example we have:
+
+- 1 predictor $x$ that is numeric
+- 1 response variable $y$ that is numeric
+- 3 parameters: $\beta_0$, $\beta_1$ and $\sigma_{\epsilon}$
+- Gaussian random component and identity link function
+
+## Example with a linear model
+
+```{r}
+n <- 100
+x <- rnorm(n)
+
+dat <- data.frame(x)
+
+X <- model.matrix(~x, data = dat)
+head(X)
+```
+
+## Example with a linear model
+
+Then let's define the model parameters and compute the predicted values.
+
+```{r}
+b0 <- 0
+b1 <- 0.6
+sigma2 <- 1
+
+dat$lp <- b0 + b1*x
+
+plot(dat$x, dat$lp)
+```
+
+## Example with a linear model
+
+Now, we are fitting a model with a Gaussian random component and an identity link function. Thus using the $g$ function has no effect.
+
+```{r}
+fam <- gaussian(link = "identity")
+dat$lp <- fam$linkinv(dat$lp)
+dat$y <- rnorm(nrow(dat), dat$lp, sqrt(sigma2))
+plot(dat$x, dat$y)
+```
+
+## Example with a linear model
+
+Now we can fit the appropriate model using the `glm` function:
+
+```{r}
+fit <- glm(y ~ x, family = gaussian(link = "identity"), data = dat)
+summary(fit)
+```
+
+## Example with a linear model
+
+A faster way, especially with many parameters is using matrix multiplication between the $X$ matrix and the vector of coefficients:
+
+\begin{equation}
+\boldsymbol{y} = 
+\begin{bmatrix}
+1 & x_{1} \\
+1 & x_{2} \\
+1 & x_{3} \\
+1 & x_{4} \\
+\vdots & x_n
+\end{bmatrix}
+\begin{bmatrix}
+\beta_0 \\
+\beta_1
+\end{bmatrix} 
++
+\begin{bmatrix}
+\epsilon_1 \\
+\epsilon_2 \\
+\epsilon_3 \\
+\vdots \\
+\epsilon_n
+\end{bmatrix}
+\end{equation}
+
+## Example with a linear model
+
+```{r}
+B <- c(b0, b1)
+y <- X %*% B + rnorm(nrow(dat), 0, sqrt(sigma2))
+plot(dat$x, y)
+```
+
+## Example with a linear model
+
+Now let's add another effect, for example a binary variable `group`:
+
+```{r}
+group <- c("a", "b")
+x <- rnorm(n*2)
+
+dat <- data.frame(
+  x = x,
+  group = rep(group, each = n)
+)
+
+X <- model.matrix(~ group + x, data = dat)
+head(X)
+```
+
+## Example with a linear model
+
+Now the model matrix has another column ``r dimnames(X)[[2]][2]`` that is the dummy-coded version of the `group` variable. Now let's set the parameters:
+
+```{r}
+b0 <- 0 # y value when group = "a" and x = 0 
+b1 <- 1 # difference between groups
+b2 <- 0.6 # slope of the group
+sigma2 <- 1 # residual variance
+```
+
+Then we can compute the formula adding the new parameters:
+
+```{r}
+dat$y <- b0 + b1 * ifelse(dat$group == "a", 0, 1) + b2 * dat$x + rnorm(nrow(dat), 0, sqrt(sigma2))
+```
+
+## Example with a linear model
+
+```{r}
+dat |> 
+  ggplot(aes(x = x, y = y, color = group)) +
+  geom_point() +
+  geom_smooth(method = "lm",
+              formula = y ~ x,
+              se = FALSE)
+```
+
+
+## Example with a linear model
+
+The same using matrix formulation:
+
+```{r}
+B <- c(b0, b1, b2)
+dat$y <- X %*% B + rnorm(nrow(dat), 0, sqrt(sigma2))
+```
+
+Then we can fit the model:
+
+```{r}
+fit <- lm(y ~ group + x, data = dat)
+summary(fit)
+```
+
+# Generalized Linear Models {.section}
+
+## Generalized Linear Models
+
+The workflow presented before can be applied to GLMs. The only extra steps is performing the **link-function** transformation.
+
+We simulate data fixing coefficients and computing $\eta$, then we apply the inverse of the link function (4 and 5 from the workflow slide).
+
+## GLM example
+
+Let's simulate the effect of a continuous predictor on the probability of success, thus using a Binomial model.
+
+```{r}
+ns <- 100 # sample size
+x <- runif(ns) # x predictor
+b0 <- qlogis(0.001) # probability of correct response when x is 0
+b1 <- 10 # increase in the logit of a correct response by unit increase in x
+
+dat <- data.frame(id = 1:ns, x = x)
+head(dat)
+```
+
+## GLM example
+
+Let's compute the $\eta$ by doing the linear combination of predictors and coefficients:
+
+```{r}
+dat$lp <- b0 + b1 * dat$x
+ggplot(dat, aes(x = x, y = lp)) +
+  geom_line() +
+  ylab(latex("\\eta")) +
+  xlab("x")
+```
+
+## GLM example
+
+Then we can compute $g^{-1}(\eta)$ applying the inverse of the link function. Let's use the **logit**:
+
+```{r}
+fam <- binomial(link = "logit")
+dat$p <- fam$linkinv(dat$lp)
+ggplot(dat, aes(x = x, y = p)) +
+  geom_line() +
+  ylim(c(0, 1)) +
+  ylab(latex("p")) +
+  xlab("x")
+```
+
+## GLM example
+
+So far we have the expected probability of success for each participant and $x$, but we need to include the random component. We can use $p$ or $g^{-1}(\eta)$ more generally to sample from the $\mu$ parameter of the probability distribution.
+
+```{r}
+dat$y <- rbinom(n = nrow(dat), size = 1, prob = dat$p)
+head(dat)
+```
+
+## GLM example
+
+Now we have simulated a vector of responses with the appropriate random component. We can plot the results.
+
+```{r}
+dat |> 
+  ggplot(aes(x = x, y = y)) +
+  geom_point(position = position_jitter(height = 0.05)) +
+  stat_smooth(method = "glm", 
+              method.args = list(family = fam),
+              se = FALSE)
+```
+
+## GLM example
+
+Finally we can fit the model and see if the parameters are estimated correctly. Of course, we know the true data generation process thus we are fitting the best model.
+
+```{r}
+fit <- glm(y ~ x, data = dat, family = fam)
+summary(fit)
+```
+
+# Power analysis {.section}
+
+## Power analysis
+
+Once the data generation process and the model has been defined, the power analysis is straightforward.
+
+The hardest part is fixing plausible values according to your knowledge and/or previous literature.
+
+For example, there are methods to convert from odds ratio to Cohen's $d$ or other metrics.
+
+The `effectsize` package is a great resource to understand and compute effect sizes.
+
+```{r}
+or <- 1.5 # odds ratio
+effectsize::oddsratio_to_d(or)
+```
+
+## Power analysis
+
+We can see the relationship between $d$ and (log) Odds Ratio:
+
+```{r}
+#| echo: false
+d <- seq(-5, 5, 0.01)
+or <- effectsize::d_to_oddsratio(d)
+lor <- log(or)
+
+par(mfrow = c(1,2))
+plot(lor, d, type = "l", xlab = latex("\\log(OR)"), ylab = latex("d"))
+plot(or, d, type = "l", xlab = latex("OR"), ylab = latex("d"))
+```
+
+## Power analysis
+
+For example we can a logistic regression with a binary predictor, fixing the effect size:
+
+```{r}
+n <- 30 # number of subjects
+d <- 0.5 # effect size in cohen's d
+or <- effectsize::d_to_oddsratio(d) # this is beta1
+x <- rep(c("a", "b"), each = n)
+xc <- ifelse(x == "a", 0, 1)
+
+dat <- data.frame(x = x, xc = xc)
+b0 <- qlogis(0.3) # probability of a
+b1 <- log(or)
+
+dat$lp <- b0 + b1 * dat$xc
+dat$y <- rbinom(nrow(dat), 1, plogis(dat$lp))
+
+head(dat)
+```
+
+## Power analysis
+
+Clearly, we need to repeat the sampling process several times, store the results (e.g., the p-value of $\beta_1$) and then compute the power.
+
+```{r}
+nsim <- 1000
+p <- rep(0, nsim)
+
+for(i in 1:nsim){
+  dat$y <- rbinom(nrow(dat), 1, plogis(dat$lp))
+  fit <- glm(y ~ x, data = dat, family = fam)
+  p[i] <- summary(fit)$coefficients["xb", "Pr(>|z|)"]
+}
+
+mean(p <= 0.05)
+```
+
+## Power analysis
+
+With just one condition the power analysis is not really meaningful. We can compute the same for different sample sizes. Here my code is using a series of `for` loops but there could be a nicer implementation.
+
+```{r}
+#| cache: true
+ns <- c(30, 50, 100, 150)
+
+power <- rep(0, length(ns))
+
+for(i in 1:length(ns)){
+  p <- rep(0, nsim)
+  for(j in 1:nsim){
+    dat <- data.frame(id = 1:ns[i], x = rep(c("a", "b"), each = ns[i]))
+    dat$xc <- ifelse(dat$x == "a", 0, 1)
+    dat$lp <- b0 + b1 * dat$xc
+    dat$y <- rbinom(nrow(dat), 1, plogis(dat$lp))
+    fit <- glm(y ~ x, data = dat, family = fam)
+    p[j] <- summary(fit)$coefficients["xb", "Pr(>|z|)"]
+  }
+  power[[i]] <- mean(p <= 0.05)
+}
+```
+
+## Power analysis
+
+Then we can compute the results:
+
+```{r}
+plot(ns, power, type = "b", ylim = c(0, 1), pch = 19)
+```

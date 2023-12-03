@@ -1,0 +1,251 @@
+/*-- scss:defaults --*/
+$base-color: #191919;
+$emp-color: #FA3F9F;
+
+$p-font-size: 0.75em !default;
+$h1-font-size: 1.6em !default;
+$h2-font-size: 1.2em !default;
+$h3-font-size: 1em !default;
+$h4-font-size: 1em !default;
+$refs-font-size: 0.6em!default;
+$toc-font-size: 0.7em!default;
+$cap-font-size: 0.6em!default;
+$quest-font-size: 1.2em !default;
+
+/*-- scss:rules --*/
+
+/* GENERAL */
+
+/* captions */
+
+.caption {
+  font-size: $cap-font-size!important;
+}
+
+details {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+summary {
+  font-size: 60%;
+}
+
+ul {
+  font-size: $p-font-size;
+}
+
+ol {
+  font-size: $p-font-size;
+}
+
+
+.citation .refbook {
+  color: blue!important;
+}
+
+aside {
+  font-size: 50%!important;
+}
+
+.reveal h1 {
+  font-size: $h1-font-size;
+}
+
+.reveal h2 {
+  font-size: $h2-font-size!important;
+}
+
+.reveal p {
+  font-size: $p-font-size;
+}
+
+.emp {
+  color: $emp-color;
+  font-weight: bold;
+}
+
+.reveal .slide-menu-button {
+  display: none!important;
+}
+
+.reveal .progress {
+  display: none!important;
+}
+
+p code:not(.sourceCode){
+  font-size:70%;
+  background: #e5e5e5;
+  color: black;
+  border-radius: 1ch;
+  padding-block: 0.2ch;
+  padding-inline: 1ch;
+}
+
+code {
+  font-size: 80%;
+}
+
+/* PANELSET */
+
+.panel-tabset a[aria-selected="true"] {
+  color: $base-color;
+  font-weight: bold;
+}
+
+.panel-tabset a[aria-selected="false"] {
+  color: #AEAEAE;
+}
+
+.panel-tabset [role=tablist] {
+    border: none;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.panel-tabset [aria-selected="true"] ul {
+    border-bottom: 1px black;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.panel-tabset [aria-selected="false"] ul {
+    border-bottom: 1px black;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.panel-tabset a {
+    border: none!important;
+    outline: none!important;
+}
+
+/* SLIDE WITHOUT TITLE */
+
+.notitle h2 {
+  display:none !important;
+}
+
+/* SECTION */
+
+.section h1::before{
+  content: "> ";
+}
+
+.section {
+  background-color: $base-color!important;
+}
+
+.section h1 {
+  font-size: $h1-font-size!important;
+}
+
+/* REFERENCES */
+
+.refs h2 {
+  font-size: $h2-font-size!important;
+}
+
+.refs {
+  font-size: 100%!important;
+}
+
+.csl-entry {
+  font-size: $refs-font-size!important;
+}
+
+/* FINAL SLIDE */
+
+.center h4 {
+  text-align: center;
+}
+
+.center a {
+  color: white!important;
+}
+
+.final-slide {
+  background-color: $base-color!important;
+}
+
+.final-slide h4 {
+  text-align: center!important;
+}
+
+.reveal .sourceCode {
+  border: 1px solid #F0F3F4!important;
+  padding-left: 0.5%;
+  padding-right: 10%;
+  padding-top: 0.2%;
+  padding-bottom: 0.2%;
+  background: #F0F3F4!important;
+  line-height: normal;
+  border-radius: 0.4ch!important;
+}
+
+.cell-output {
+  padding-top: 1%;
+}
+
+/* TITLE SLIDE */
+
+.author {
+  color: #7A7A7A;
+}
+
+/* SLIDE NUMBERING */
+
+/* https://github.com/quarto-dev/quarto-cli/discussions/5566#discussioncomment-5925054 */
+
+/* removing from title slide */
+.reveal .slide-number > a[href*='title-slide'] {
+  display: none;
+}
+
+/* removing from section slides */
+.reveal .slide-number > a[href*='#/section'] {
+  display: none;
+}
+
+/* removing from final slide */
+.reveal .slide-number > a[href*='final-slide'] {
+  display: none;
+}
+
+/* removing from toc slide */
+.reveal .slide-number > a[href*='#/TOC'] {
+  display: none;
+}
+
+/* TOC */
+
+#TOC ul {
+  font-size: $toc-font-size;
+}
+
+/* FIGURES */
+
+.reveal img {
+  margin: 0;
+}
+
+/* QUESTION SLIDE */
+
+.question h1 {
+  text-align: center!important;
+  font-size: $quest-font-size!important;
+}
+
+.question {
+  background-color: #A9A9A9!important;
+}
+
+.last-update {
+  font-size: 50%!important;
+}
