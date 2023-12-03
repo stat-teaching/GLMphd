@@ -1,63 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://github.com/stat-teaching/GLMphd/slides/01-intro-glm/01-intro-glm.html</loc>
-    <lastmod>2023-12-03T10:46:11.373Z</lastmod>
+    <loc>https://stat-teaching.github.io/GLMphd/labs/lab1.html</loc>
+    <lastmod>2023-12-03T14:52:45.888Z</lastmod>
   </url>
   <url>
-    <loc>https://github.com/stat-teaching/GLMphd/slides/03-poisson-glm/03-poisson-glm.html</loc>
-    <lastmod>2023-12-03T10:46:07.321Z</lastmod>
+    <loc>https://stat-teaching.github.io/GLMphd/labs/lab3.html</loc>
+    <lastmod>2023-12-03T14:52:48.700Z</lastmod>
   </url>
   <url>
-    <loc>https://github.com/stat-teaching/GLMphd/slides/05-extra-glm/binomial-glm-power.html</loc>
-    <lastmod>2023-12-03T10:46:03.621Z</lastmod>
+    <loc>https://stat-teaching.github.io/GLMphd/labs/lab2.html</loc>
+    <lastmod>2023-12-03T14:52:50.703Z</lastmod>
   </url>
   <url>
-    <loc>https://github.com/stat-teaching/GLMphd/slides.html</loc>
-    <lastmod>2023-12-03T10:45:54.477Z</lastmod>
+    <loc>https://stat-teaching.github.io/GLMphd/labs/lab6.html</loc>
+    <lastmod>2023-12-03T14:52:54.292Z</lastmod>
   </url>
   <url>
-    <loc>https://github.com/stat-teaching/GLMphd/labs/lab1.html</loc>
-    <lastmod>2023-12-03T10:45:52.517Z</lastmod>
+    <loc>https://stat-teaching.github.io/GLMphd/labs/lab7.html</loc>
+    <lastmod>2023-12-03T14:52:58.538Z</lastmod>
   </url>
   <url>
-    <loc>https://github.com/stat-teaching/GLMphd/labs/lab6.html</loc>
-    <lastmod>2023-12-03T10:45:49.201Z</lastmod>
+    <loc>https://stat-teaching.github.io/GLMphd/labs/lab5.html</loc>
+    <lastmod>2023-12-03T14:53:01.142Z</lastmod>
   </url>
   <url>
-    <loc>https://github.com/stat-teaching/GLMphd/labs/lab2.html</loc>
-    <lastmod>2023-12-03T10:45:44.869Z</lastmod>
+    <loc>https://stat-teaching.github.io/GLMphd/labs/lab4.html</loc>
+    <lastmod>2023-12-03T14:53:03.620Z</lastmod>
   </url>
   <url>
-    <loc>https://github.com/stat-teaching/GLMphd/labs.html</loc>
-    <lastmod>2023-12-03T10:45:43.153Z</lastmod>
+    <loc>https://stat-teaching.github.io/GLMphd/slides.html</loc>
+    <lastmod>2023-12-03T14:53:03.967Z</lastmod>
   </url>
   <url>
-    <loc>https://github.com/stat-teaching/GLMphd/index.html</loc>
-    <lastmod>2023-12-03T10:45:43.737Z</lastmod>
+    <loc>https://stat-teaching.github.io/GLMphd/labs.html</loc>
+    <lastmod>2023-12-03T14:53:04.333Z</lastmod>
   </url>
   <url>
-    <loc>https://github.com/stat-teaching/GLMphd/labs/lab4.html</loc>
-    <lastmod>2023-12-03T10:45:46.361Z</lastmod>
+    <loc>https://stat-teaching.github.io/GLMphd/index.html</loc>
+    <lastmod>2023-12-03T14:53:04.695Z</lastmod>
   </url>
   <url>
-    <loc>https://github.com/stat-teaching/GLMphd/labs/lab5.html</loc>
-    <lastmod>2023-12-03T10:45:50.657Z</lastmod>
+    <loc>https://stat-teaching.github.io/GLMphd/slides/04-gamma-glm/04-gamma-glm.html</loc>
+    <lastmod>2023-12-03T14:53:09.732Z</lastmod>
   </url>
   <url>
-    <loc>https://github.com/stat-teaching/GLMphd/labs/lab3.html</loc>
-    <lastmod>2023-12-03T10:45:54.133Z</lastmod>
+    <loc>https://stat-teaching.github.io/GLMphd/slides/01-intro-glm/01-intro-glm.html</loc>
+    <lastmod>2023-12-03T14:53:13.916Z</lastmod>
   </url>
   <url>
-    <loc>https://github.com/stat-teaching/GLMphd/slides/02-binomial-glm/02-binomial-glm.html</loc>
-    <lastmod>2023-12-03T10:46:01.853Z</lastmod>
+    <loc>https://stat-teaching.github.io/GLMphd/slides/02-binomial-glm/02-binomial-glm.html</loc>
+    <lastmod>2023-12-03T14:53:26.999Z</lastmod>
   </url>
   <url>
-    <loc>https://github.com/stat-teaching/GLMphd/slides/00-intro-course/00-intro-course.html</loc>
-    <lastmod>2023-12-03T10:46:04.293Z</lastmod>
+    <loc>https://stat-teaching.github.io/GLMphd/slides/03-poisson-glm/03-poisson-glm.html</loc>
+    <lastmod>2023-12-03T14:53:33.526Z</lastmod>
   </url>
   <url>
-    <loc>https://github.com/stat-teaching/GLMphd/slides/04-gamma-glm/04-gamma-glm.html</loc>
-    <lastmod>2023-12-03T10:46:09.105Z</lastmod>
+    <loc>https://stat-teaching.github.io/GLMphd/slides/00-intro-course/00-intro-course.html</loc>
+    <lastmod>2023-12-03T14:53:35.020Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stat-teaching.github.io/GLMphd/slides/05-extra-glm/binomial-glm-power.html</loc>
+    <lastmod>2023-12-03T14:53:38.982Z</lastmod>
   </url>
 </urlset>

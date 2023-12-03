@@ -11,20 +11,20 @@
 <script src="../../site_libs/quarto-contrib/jquery-3.6.3/jquery-3.6.3.min.js"></script>
 <script src="../../site_libs/quarto-contrib/code-fullscreen-1.0.0/code-fullscreen.js" defer="true"></script>
 <link href="../../site_libs/quarto-contrib/code-fullscreen-1.0.0/code-fullscreen.css" rel="stylesheet">
-<script src="../../site_libs/quarto-contrib/nutshell-1.0.0/nutshell.min.js"></script><link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <meta charset="utf-8">
+<script src="../../site_libs/quarto-contrib/nutshell-1.0.0/nutshell.min.js"></script><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<meta charset="utf-8">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" rel="stylesheet">
-  <meta name="generator" content="quarto-1.3.450">
-
-  <meta name="author" content="Filippo Gambarota">
-  <meta name="dcterms.date" content="2023-01-01">
-  <title>Generalized Linear Models - Simulating GLM</title>
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
-  <link rel="stylesheet" href="../../site_libs/revealjs/dist/reset.css">
-  <link rel="stylesheet" href="../../site_libs/revealjs/dist/reveal.css">
-  <style>
+<meta name="generator" content="quarto-1.3.361">
+<meta name="author" content="Filippo Gambarota">
+<meta name="dcterms.date" content="2023-01-01">
+<title>Generalized Linear Models - Simulating GLM</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+<link rel="stylesheet" href="../../site_libs/revealjs/dist/reset.css">
+<link rel="stylesheet" href="../../site_libs/revealjs/dist/reveal.css">
+<style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
     div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -102,12 +102,12 @@
     code span.vs { color: #20794d; } /* VerbatimString */
     code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
-  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto.css">
-  <link href="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
-  <link href="../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
-  <link href="../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
-  <link href="../../site_libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
-  <style type="text/css">
+<link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto.css">
+<link href="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+<link href="../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+<link href="../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+<link href="../../site_libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+<style type="text/css">
 
   .callout {
     margin-top: 1em;
@@ -304,7 +304,7 @@
   }
 
   </style>
-  <style type="text/css">
+<style type="text/css">
     .reveal div.sourceCode {
       margin: 0;
       overflow: auto;
@@ -396,105 +396,80 @@
   <div class="reveal">
     <div class="slides">
 
-<section id="title-slide" class="center">
-  <h1 class="title">Simulating GLM</h1>
+<section id="title-slide" class="center"><h1 class="title">Simulating GLM</h1>
   <p class="author">Filippo Gambarota</p>
   <p class="institute">University of Padova</p>
   <p class="date">2023</p>
   <p class="last-update"><em>Last Update: 2023-11-29</em></p>
-</section><section id="TOC">
-<nav role="doc-toc"> 
-<h2 id="toc-title">Contents</h2>
+</section><section id="TOC"><nav role="doc-toc"><h2 id="toc-title">Contents</h2>
 <ul>
 <li><a href="#/why-monte-carlo-simulations" id="/toc-why-monte-carlo-simulations">Why Monte Carlo Simulations?</a></li>
 <li><a href="#/simulating-glm" id="/toc-simulating-glm">Simulating GLM</a></li>
 <li><a href="#/generalized-linear-models" id="/toc-generalized-linear-models">Generalized Linear Models</a></li>
 <li><a href="#/power-analysis" id="/toc-power-analysis">Power analysis</a></li>
-</ul>
-</nav>
-</section>
-<section id="monte-carlo-simulations" class="slide level2">
-<h2>Monte Carlo Simulations</h2>
+</ul></nav></section><section id="monte-carlo-simulations" class="slide level2"><h2>Monte Carlo Simulations</h2>
 <blockquote>
 <p>Monte Carlo methods, or Monte Carlo experiments, are a broad class of computational algorithms that rely on repeated random sampling to obtain numerical results. The underlying concept is to use randomness to solve problems that might be deterministic in principle</p>
 </blockquote>
-</section>
-<section id="general-workflow" class="slide level2">
-<h2>General Workflow</h2>
+</section><section id="general-workflow" class="slide level2"><h2>General Workflow</h2>
 <p>Despite the specific applications, Monte Carlo simulations follows a similar pattern:</p>
 <ol type="1">
 <li>Define the <strong>data generation process</strong> (DGP)</li>
-<li>Use <strong>random numbers sampling</strong> to generate data according to <strong>assumptions</strong></li>
+<li>Use <strong>random numbers sampling</strong> to generate data according to <strong>assumptions</strong>
+</li>
 <li>Calculate a <strong>statistics</strong>, fit a <strong>model</strong> or do some <strong>computations</strong> on the generated data</li>
-<li><strong>Repeat</strong> 2-3 several times (e.g., 10000)</li>
-<li>Get a <strong>summary of the results</strong></li>
-</ol>
-</section>
-<section id="random-numbers-in-r" class="slide level2">
-<h2>Random numbers in R</h2>
+<li>
+<strong>Repeat</strong> 2-3 several times (e.g., 10000)</li>
+<li>Get a <strong>summary of the results</strong>
+</li>
+</ol></section><section id="random-numbers-in-r" class="slide level2"><h2>Random numbers in R</h2>
 <p>In R there are several functions to generate random numbers and they are linked to specific probability distributions. You can type <code>?family()</code> to see available distributions for <code>glm</code>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>?family</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="op">?</span><span class="va">family</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section>
-<section id="random-numbers-in-r-1" class="slide level2">
-<h2>Random numbers in R</h2>
-<p>In fact, there are other useful distributions not listed in <code>?family()</code>, because they are not part of <code>glm</code>. For example the <code>beta</code> or the <code>unif</code> (uniform) distributions. Use <code>?Distributions</code> for a complete list:</p>
+</section><section id="random-numbers-in-r-1" class="slide level2"><h2>Random numbers in R</h2>
+<p>In fact, there are other useful distributions not listed in <code>?family()</code>, because they are not part of <code>glm</code>. For example the <code>beta</code> or the <code>unif</code> (uniform) distributions. Use <code><a href="https://rdrr.io/r/stats/Distributions.html">?Distributions</a></code> for a complete list:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>?Distributions</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="op">?</span><span class="va">Distributions</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section>
-<section id="random-numbers-in-r-2" class="slide level2">
-<h2>Random numbers in R</h2>
-<p>However, it is always possible to include other distributions with packages. For example the <code>MASS::mvrnorm()</code> implement the multivariate normal distribution or the <code>extraDistr::rhcauchy()</code> for a series of truncated distributions.</p>
-</section>
-<section id="random-numbers-in-r-3" class="slide level2">
-<h2>Random numbers in R</h2>
-<p>The general pattern is always the same. There are 4 functions called <code>r</code>, <code>p</code>, <code>q</code> and <code>d</code> combined with a distribution e.g.&nbsp;<code>norm</code> creating several utilities. For example, <code>rnorm()</code> generate number from a normal distribution.</p>
+</section><section id="random-numbers-in-r-2" class="slide level2"><h2>Random numbers in R</h2>
+<p>However, it is always possible to include other distributions with packages. For example the <code><a href="https://rdrr.io/pkg/MASS/man/mvrnorm.html">MASS::mvrnorm()</a></code> implement the multivariate normal distribution or the <code>extraDistr::rhcauchy()</code> for a series of truncated distributions.</p>
+</section><section id="random-numbers-in-r-3" class="slide level2"><h2>Random numbers in R</h2>
+<p>The general pattern is always the same. There are 4 functions called <code>r</code>, <code>p</code>, <code>q</code> and <code>d</code> combined with a distribution e.g.&nbsp;<code>norm</code> creating several utilities. For example, <code><a href="https://rdrr.io/r/stats/Normal.html">rnorm()</a></code> generate number from a normal distribution.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="fl">1e3</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">1e3</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="binomial-glm-power_files/figure-revealjs/unnamed-chunk-7-1.svg" width="672" class="r-stretch quarto-figure-center"></section>
-<section>
-<section id="why-monte-carlo-simulations" class="title-slide slide level1 section center">
-<h1>Why Monte Carlo Simulations?</h1>
+<img data-src="binomial-glm-power_files/figure-revealjs/unnamed-chunk-7-1.svg" width="672" class="r-stretch quarto-figure-center"></section><section><section id="why-monte-carlo-simulations" class="title-slide slide level1 section center"><h1>Why Monte Carlo Simulations?</h1>
 
-</section>
-<section id="why-monte-carlo-simulations-1" class="slide level2">
-<h2>Why Monte Carlo Simulations?</h2>
+</section><section id="why-monte-carlo-simulations-1" class="slide level2"><h2>Why Monte Carlo Simulations?</h2>
 <p>Monte Carlo simulations are used for several purposes:</p>
 <ul>
 <li>Solve computations impossible or hard to do analytically</li>
 <li>Estimate the statistical power, type-1 error, type-M error etc.</li>
-</ul>
-</section>
-<section id="example-standard-error" class="slide level2">
-<h2>Example: standard error</h2>
+</ul></section><section id="example-standard-error" class="slide level2"><h2>Example: standard error</h2>
 <p>A classical example is estimating the standard error (SE) of a statistics. For example, we know that the SE of a sample mean is:</p>
 <p><span class="math display">\[
 \sigma_\overline x = \frac{s_x}{\sqrt{n_x}}
 \]</span></p>
 <p>Where <span class="math inline">\(s_x\)</span> is the standard deviation of <span class="math inline">\(x\)</span> and <span class="math inline">\(n_x\)</span> is the sample size.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="at">mean =</span> <span class="dv">10</span>, <span class="at">sd =</span> <span class="dv">5</span>)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(x) <span class="co"># mean</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">100</span>, mean <span class="op">=</span> <span class="fl">10</span>, sd <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="co"># mean</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt; [1] 10.97163</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(x) <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="fu">length</span>(x)) <span class="co"># se</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span> <span class="co"># se</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt; [1] 0.5886686</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="dv">5</span> <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="fu">length</span>(x)) <span class="co"># analytically, assuming s = 5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fl">5</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span> <span class="co"># analytically, assuming s = 5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt; [1] 0.5</code></pre>
 </div>
 </div>
-</section>
-<section id="example-standard-error-1" class="slide level2">
-<h2>Example: standard error</h2>
+</section><section id="example-standard-error-1" class="slide level2"><h2>Example: standard error</h2>
 <p>However we are not good in deriving the SE analytically. We know that the SE is the standard deviation of the sampling distribution of a statistics.</p>
 <div class="fragment">
 <p>The sampling distribution is the distribution obtained by calculating the statistics (in this case the mean) on all possible (or a very big number) samples of size <span class="math inline">\(n\)</span>.</p>
@@ -502,38 +477,29 @@
 <div class="fragment">
 <p>We can solve the problems creating a very simple Monte Carlo Simulation</p>
 </div>
-</section>
-<section id="example-standard-error-2" class="slide level2">
-<h2>Example: standard error</h2>
+</section><section id="example-standard-error-2" class="slide level2"><h2>Example: standard error</h2>
 <p>We simulate 10000 samples of size <span class="math inline">\(n\)</span> by a normal distribution with <span class="math inline">\(\mu = 10\)</span> and <span class="math inline">\(\sigma = 5\)</span>. We calculate the mean <span class="math inline">\(\overline x\)</span> for each iteration and then we calculate the standard deviation of the vectors of means.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>nsim <span class="ot">&lt;-</span> <span class="fl">1e4</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>mx <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="fl">1e4</span>)</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nsim){</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="dv">10</span>, <span class="dv">5</span>)</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  mx[i] <span class="ot">&lt;-</span> <span class="fu">mean</span>(x)</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">nsim</span> <span class="op">&lt;-</span> <span class="fl">1e4</span></span>
+<span><span class="va">mx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1e4</span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">nsim</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">10</span>, <span class="fl">5</span><span class="op">)</span></span>
+<span>  <span class="va">mx</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section>
-<section id="example-standard-error-3" class="slide level2">
-<h2>Example: standard error</h2>
+</section><section id="example-standard-error-3" class="slide level2"><h2>Example: standard error</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(mx)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span><span class="op">(</span><span class="va">mx</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(mx) <span class="co"># the standard error</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">mx</span><span class="op">)</span> <span class="co"># the standard error</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt; [1] 0.5006916</code></pre>
 </div>
 </div>
-<img data-src="binomial-glm-power_files/figure-revealjs/unnamed-chunk-10-1.svg" width="672" class="r-stretch quarto-figure-center"></section></section>
-<section>
-<section id="simulating-glm" class="title-slide slide level1 section center">
-<h1>Simulating GLM</h1>
+<img data-src="binomial-glm-power_files/figure-revealjs/unnamed-chunk-10-1.svg" width="672" class="r-stretch quarto-figure-center"></section></section><section><section id="simulating-glm" class="title-slide slide level1 section center"><h1>Simulating GLM</h1>
 
-</section>
-<section id="workflow" class="slide level2">
-<h2>Workflow</h2>
+</section><section id="workflow" class="slide level2"><h2>Workflow</h2>
 <p>The general workflow is the following:</p>
 <ol type="1">
 <li>Define the experimental design:
@@ -541,24 +507,23 @@
 <li>how many variables?</li>
 <li>how many participants/trials?</li>
 <li>which type of variables (categorical, numerical)?</li>
-</ul></li>
+</ul>
+</li>
 <li>Define the probability distribution of the response variable:
 <ul>
 <li>Gaussian</li>
 <li>Poisson</li>
 <li>Binomial</li>
 <li>…</li>
-</ul></li>
+</ul>
+</li>
 <li>Create the model matrix and define all parameters of the simulation: <span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta_1\)</span>, <span class="math inline">\(\beta_2\)</span>, etc.</li>
 <li>Compute the linear predictors <span class="math inline">\(\eta\)</span> on the link function scale</li>
 <li>Apply the inverse of the link function <span class="math inline">\(g^{-1}(\eta)\)</span> obtaining values on the original scale</li>
 <li>Simulate the response variable by sampling from the appropriate distribution</li>
 <li>Fit the appropriate model and check the result</li>
 <li>In case of estimating statistical properties (e.g., power) repeat the simulation (1-7) several times (e.g., 10000) and summarize the results</li>
-</ol>
-</section>
-<section id="example-with-a-linear-model" class="slide level2">
-<h2>Example with a linear model</h2>
+</ol></section><section id="example-with-a-linear-model" class="slide level2"><h2>Example with a linear model</h2>
 <p>Let’s simulate a simple linear model (i.e., GLM with a Gaussian random component and identity link function).</p>
 <p><span class="math display">\[
 \hat y_i = \beta_0 + \beta_1x_i + \epsilon_i
@@ -567,20 +532,18 @@
 <ul>
 <li>1 predictor <span class="math inline">\(x\)</span> that is numeric</li>
 <li>1 response variable <span class="math inline">\(y\)</span> that is numeric</li>
-<li>3 parameters: <span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta_1\)</span> and <span class="math inline">\(\sigma_{\epsilon}\)</span></li>
+<li>3 parameters: <span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta_1\)</span> and <span class="math inline">\(\sigma_{\epsilon}\)</span>
+</li>
 <li>Gaussian random component and identity link function</li>
-</ul>
-</section>
-<section id="example-with-a-linear-model-1" class="slide level2">
-<h2>Example with a linear model</h2>
+</ul></section><section id="example-with-a-linear-model-1" class="slide level2"><h2>Example with a linear model</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(x)</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span>x, <span class="at">data =</span> dat)</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">100</span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">X</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/model.matrix.html">model.matrix</a></span><span class="op">(</span><span class="op">~</span><span class="va">x</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt;   (Intercept)          x
 #&gt; 1           1 -1.4536667
@@ -591,38 +554,32 @@
 #&gt; 6           1 -0.7415666</code></pre>
 </div>
 </div>
-</section>
-<section id="example-with-a-linear-model-2" class="slide level2">
-<h2>Example with a linear model</h2>
+</section><section id="example-with-a-linear-model-2" class="slide level2"><h2>Example with a linear model</h2>
 <p>Then let’s define the model parameters and compute the predicted values.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>b0 <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>b1 <span class="ot">&lt;-</span> <span class="fl">0.6</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>sigma2 <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>lp <span class="ot">&lt;-</span> b0 <span class="sc">+</span> b1<span class="sc">*</span>x</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dat<span class="sc">$</span>x, dat<span class="sc">$</span>lp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">b0</span> <span class="op">&lt;-</span> <span class="fl">0</span></span>
+<span><span class="va">b1</span> <span class="op">&lt;-</span> <span class="fl">0.6</span></span>
+<span><span class="va">sigma2</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
+<span></span>
+<span><span class="va">dat</span><span class="op">$</span><span class="va">lp</span> <span class="op">&lt;-</span> <span class="va">b0</span> <span class="op">+</span> <span class="va">b1</span><span class="op">*</span><span class="va">x</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">x</span>, <span class="va">dat</span><span class="op">$</span><span class="va">lp</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="binomial-glm-power_files/figure-revealjs/unnamed-chunk-12-1.svg" width="672" class="r-stretch quarto-figure-center"></section>
-<section id="example-with-a-linear-model-3" class="slide level2">
-<h2>Example with a linear model</h2>
+<img data-src="binomial-glm-power_files/figure-revealjs/unnamed-chunk-12-1.svg" width="672" class="r-stretch quarto-figure-center"></section><section id="example-with-a-linear-model-3" class="slide level2"><h2>Example with a linear model</h2>
 <p>Now, we are fitting a model with a Gaussian random component and an identity link function. Thus using the <span class="math inline">\(g\)</span> function has no effect.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>fam <span class="ot">&lt;-</span> <span class="fu">gaussian</span>(<span class="at">link =</span> <span class="st">"identity"</span>)</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>lp <span class="ot">&lt;-</span> fam<span class="sc">$</span><span class="fu">linkinv</span>(dat<span class="sc">$</span>lp)</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="fu">nrow</span>(dat), dat<span class="sc">$</span>lp, <span class="fu">sqrt</span>(sigma2))</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dat<span class="sc">$</span>x, dat<span class="sc">$</span>y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fam</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">gaussian</a></span><span class="op">(</span>link <span class="op">=</span> <span class="st">"identity"</span><span class="op">)</span></span>
+<span><span class="va">dat</span><span class="op">$</span><span class="va">lp</span> <span class="op">&lt;-</span> <span class="va">fam</span><span class="op">$</span><span class="fu">linkinv</span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">lp</span><span class="op">)</span></span>
+<span><span class="va">dat</span><span class="op">$</span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span>, <span class="va">dat</span><span class="op">$</span><span class="va">lp</span>, <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="va">sigma2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">x</span>, <span class="va">dat</span><span class="op">$</span><span class="va">y</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="binomial-glm-power_files/figure-revealjs/unnamed-chunk-13-1.svg" width="672" class="r-stretch quarto-figure-center"></section>
-<section id="example-with-a-linear-model-4" class="slide level2">
-<h2>Example with a linear model</h2>
+<img data-src="binomial-glm-power_files/figure-revealjs/unnamed-chunk-13-1.svg" width="672" class="r-stretch quarto-figure-center"></section><section id="example-with-a-linear-model-4" class="slide level2"><h2>Example with a linear model</h2>
 <p>Now we can fit the appropriate model using the <code>glm</code> function:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">glm</span>(y <span class="sc">~</span> x, <span class="at">family =</span> <span class="fu">gaussian</span>(<span class="at">link =</span> <span class="st">"identity"</span>), <span class="at">data =</span> dat)</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">gaussian</a></span><span class="op">(</span>link <span class="op">=</span> <span class="st">"identity"</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt; Call:
@@ -648,9 +605,7 @@
 #&gt; Number of Fisher Scoring iterations: 2</code></pre>
 </div>
 </div>
-</section>
-<section id="example-with-a-linear-model-5" class="slide level2">
-<h2>Example with a linear model</h2>
+</section><section id="example-with-a-linear-model-5" class="slide level2"><h2>Example with a linear model</h2>
 <p>A faster way, especially with many parameters is using matrix multiplication between the <span class="math inline">\(X\)</span> matrix and the vector of coefficients:</p>
 <p><span class="math display">\[\begin{equation}
 \boldsymbol{y} =
@@ -674,30 +629,26 @@
 \epsilon_n
 \end{bmatrix}
 \end{equation}\]</span></p>
-</section>
-<section id="example-with-a-linear-model-6" class="slide level2">
-<h2>Example with a linear model</h2>
+</section><section id="example-with-a-linear-model-6" class="slide level2"><h2>Example with a linear model</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="fu">c</span>(b0, b1)</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> X <span class="sc">%*%</span> B <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="fu">nrow</span>(dat), <span class="dv">0</span>, <span class="fu">sqrt</span>(sigma2))</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dat<span class="sc">$</span>x, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">B</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">b0</span>, <span class="va">b1</span><span class="op">)</span></span>
+<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="va">X</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html">%*%</a></span> <span class="va">B</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span>, <span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="va">sigma2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="binomial-glm-power_files/figure-revealjs/unnamed-chunk-15-1.svg" width="672" class="r-stretch quarto-figure-center"></section>
-<section id="example-with-a-linear-model-7" class="slide level2">
-<h2>Example with a linear model</h2>
+<img data-src="binomial-glm-power_files/figure-revealjs/unnamed-chunk-15-1.svg" width="672" class="r-stretch quarto-figure-center"></section><section id="example-with-a-linear-model-7" class="slide level2"><h2>Example with a linear model</h2>
 <p>Now let’s add another effect, for example a binary variable <code>group</code>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>group <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"b"</span>)</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n<span class="sc">*</span><span class="dv">2</span>)</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> x,</span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">group =</span> <span class="fu">rep</span>(group, <span class="at">each =</span> n)</span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> group <span class="sc">+</span> x, <span class="at">data =</span> dat)</span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">group</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"b"</span><span class="op">)</span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n</span><span class="op">*</span><span class="fl">2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<span>  x <span class="op">=</span> <span class="va">x</span>,</span>
+<span>  group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="va">group</span>, each <span class="op">=</span> <span class="va">n</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">X</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/model.matrix.html">model.matrix</a></span><span class="op">(</span><span class="op">~</span> <span class="va">group</span> <span class="op">+</span> <span class="va">x</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt;   (Intercept) groupb          x
 #&gt; 1           1      0  1.3036322
@@ -708,44 +659,38 @@
 #&gt; 6           1      0  0.8852635</code></pre>
 </div>
 </div>
-</section>
-<section id="example-with-a-linear-model-8" class="slide level2">
-<h2>Example with a linear model</h2>
+</section><section id="example-with-a-linear-model-8" class="slide level2"><h2>Example with a linear model</h2>
 <p>Now the model matrix has another column <code>groupb</code> that is the dummy-coded version of the <code>group</code> variable. Now let’s set the parameters:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>b0 <span class="ot">&lt;-</span> <span class="dv">0</span> <span class="co"># y value when group = "a" and x = 0 </span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>b1 <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="co"># difference between groups</span></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>b2 <span class="ot">&lt;-</span> <span class="fl">0.6</span> <span class="co"># slope of the group</span></span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>sigma2 <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="co"># residual variance</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">b0</span> <span class="op">&lt;-</span> <span class="fl">0</span> <span class="co"># y value when group = "a" and x = 0 </span></span>
+<span><span class="va">b1</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="co"># difference between groups</span></span>
+<span><span class="va">b2</span> <span class="op">&lt;-</span> <span class="fl">0.6</span> <span class="co"># slope of the group</span></span>
+<span><span class="va">sigma2</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="co"># residual variance</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Then we can compute the formula adding the new parameters:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>y <span class="ot">&lt;-</span> b0 <span class="sc">+</span> b1 <span class="sc">*</span> <span class="fu">ifelse</span>(dat<span class="sc">$</span>group <span class="sc">==</span> <span class="st">"a"</span>, <span class="dv">0</span>, <span class="dv">1</span>) <span class="sc">+</span> b2 <span class="sc">*</span> dat<span class="sc">$</span>x <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="fu">nrow</span>(dat), <span class="dv">0</span>, <span class="fu">sqrt</span>(sigma2))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">dat</span><span class="op">$</span><span class="va">y</span> <span class="op">&lt;-</span> <span class="va">b0</span> <span class="op">+</span> <span class="va">b1</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">group</span> <span class="op">==</span> <span class="st">"a"</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">+</span> <span class="va">b2</span> <span class="op">*</span> <span class="va">dat</span><span class="op">$</span><span class="va">x</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span>, <span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="va">sigma2</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section>
-<section id="example-with-a-linear-model-9" class="slide level2">
-<h2>Example with a linear model</h2>
+</section><section id="example-with-a-linear-model-9" class="slide level2"><h2>Example with a linear model</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>dat <span class="sc">|&gt;</span> </span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">color =</span> group)) <span class="sc">+</span></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>,</span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">formula =</span> y <span class="sc">~</span> x,</span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">se =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">dat</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span>, color <span class="op">=</span> <span class="va">group</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_smooth</span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span>,</span>
+<span>              formula <span class="op">=</span> <span class="va">y</span> <span class="op">~</span> <span class="va">x</span>,</span>
+<span>              se <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="binomial-glm-power_files/figure-revealjs/unnamed-chunk-19-1.svg" width="672" class="r-stretch quarto-figure-center"></section>
-<section id="example-with-a-linear-model-10" class="slide level2">
-<h2>Example with a linear model</h2>
+<img data-src="binomial-glm-power_files/figure-revealjs/unnamed-chunk-19-1.svg" width="672" class="r-stretch quarto-figure-center"></section><section id="example-with-a-linear-model-10" class="slide level2"><h2>Example with a linear model</h2>
 <p>The same using matrix formulation:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="fu">c</span>(b0, b1, b2)</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>y <span class="ot">&lt;-</span> X <span class="sc">%*%</span> B <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="fu">nrow</span>(dat), <span class="dv">0</span>, <span class="fu">sqrt</span>(sigma2))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">B</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">b0</span>, <span class="va">b1</span>, <span class="va">b2</span><span class="op">)</span></span>
+<span><span class="va">dat</span><span class="op">$</span><span class="va">y</span> <span class="op">&lt;-</span> <span class="va">X</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html">%*%</a></span> <span class="va">B</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span>, <span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="va">sigma2</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Then we can fit the model:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> group <span class="sc">+</span> x, <span class="at">data =</span> dat)</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">group</span> <span class="op">+</span> <span class="va">x</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt; Call:
@@ -768,28 +713,21 @@
 #&gt; F-statistic: 66.63 on 2 and 197 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
-</section></section>
-<section>
-<section id="generalized-linear-models" class="title-slide slide level1 section center">
-<h1>Generalized Linear Models</h1>
+</section></section><section><section id="generalized-linear-models" class="title-slide slide level1 section center"><h1>Generalized Linear Models</h1>
 
-</section>
-<section id="generalized-linear-models-1" class="slide level2">
-<h2>Generalized Linear Models</h2>
+</section><section id="generalized-linear-models-1" class="slide level2"><h2>Generalized Linear Models</h2>
 <p>The workflow presented before can be applied to GLMs. The only extra steps is performing the <strong>link-function</strong> transformation.</p>
 <p>We simulate data fixing coefficients and computing <span class="math inline">\(\eta\)</span>, then we apply the inverse of the link function (4 and 5 from the workflow slide).</p>
-</section>
-<section id="glm-example" class="slide level2">
-<h2>GLM example</h2>
+</section><section id="glm-example" class="slide level2"><h2>GLM example</h2>
 <p>Let’s simulate the effect of a continuous predictor on the probability of success, thus using a Binomial model.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="dv">100</span> <span class="co"># sample size</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">runif</span>(ns) <span class="co"># x predictor</span></span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>b0 <span class="ot">&lt;-</span> <span class="fu">qlogis</span>(<span class="fl">0.001</span>) <span class="co"># probability of correct response when x is 0</span></span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>b1 <span class="ot">&lt;-</span> <span class="dv">10</span> <span class="co"># increase in the logit of a correct response by unit increase in x</span></span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">id =</span> <span class="dv">1</span><span class="sc">:</span>ns, <span class="at">x =</span> x)</span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ns</span> <span class="op">&lt;-</span> <span class="fl">100</span> <span class="co"># sample size</span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="va">ns</span><span class="op">)</span> <span class="co"># x predictor</span></span>
+<span><span class="va">b0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Logistic.html">qlogis</a></span><span class="op">(</span><span class="fl">0.001</span><span class="op">)</span> <span class="co"># probability of correct response when x is 0</span></span>
+<span><span class="va">b1</span> <span class="op">&lt;-</span> <span class="fl">10</span> <span class="co"># increase in the logit of a correct response by unit increase in x</span></span>
+<span></span>
+<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="va">ns</span>, x <span class="op">=</span> <span class="va">x</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt; # A tibble: 6 × 2
 #&gt;      id     x
@@ -802,39 +740,33 @@
 #&gt; 6     6 0.965</code></pre>
 </div>
 </div>
-</section>
-<section id="glm-example-1" class="slide level2">
-<h2>GLM example</h2>
+</section><section id="glm-example-1" class="slide level2"><h2>GLM example</h2>
 <p>Let’s compute the <span class="math inline">\(\eta\)</span> by doing the linear combination of predictors and coefficients:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>lp <span class="ot">&lt;-</span> b0 <span class="sc">+</span> b1 <span class="sc">*</span> dat<span class="sc">$</span>x</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dat, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> lp)) <span class="sc">+</span></span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="fu">latex</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">eta"</span>)) <span class="sc">+</span></span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"x"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">dat</span><span class="op">$</span><span class="va">lp</span> <span class="op">&lt;-</span> <span class="va">b0</span> <span class="op">+</span> <span class="va">b1</span> <span class="op">*</span> <span class="va">dat</span><span class="op">$</span><span class="va">x</span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">dat</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">lp</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ylab</span><span class="op">(</span><span class="fu">latex</span><span class="op">(</span><span class="st">"\\eta"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">xlab</span><span class="op">(</span><span class="st">"x"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="binomial-glm-power_files/figure-revealjs/unnamed-chunk-23-1.svg" width="672" class="r-stretch quarto-figure-center"></section>
-<section id="glm-example-2" class="slide level2">
-<h2>GLM example</h2>
+<img data-src="binomial-glm-power_files/figure-revealjs/unnamed-chunk-23-1.svg" width="672" class="r-stretch quarto-figure-center"></section><section id="glm-example-2" class="slide level2"><h2>GLM example</h2>
 <p>Then we can compute <span class="math inline">\(g^{-1}(\eta)\)</span> applying the inverse of the link function. Let’s use the <strong>logit</strong>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>fam <span class="ot">&lt;-</span> <span class="fu">binomial</span>(<span class="at">link =</span> <span class="st">"logit"</span>)</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>p <span class="ot">&lt;-</span> fam<span class="sc">$</span><span class="fu">linkinv</span>(dat<span class="sc">$</span>lp)</span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dat, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> p)) <span class="sc">+</span></span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="fu">latex</span>(<span class="st">"p"</span>)) <span class="sc">+</span></span>
-<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"x"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fam</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">binomial</a></span><span class="op">(</span>link <span class="op">=</span> <span class="st">"logit"</span><span class="op">)</span></span>
+<span><span class="va">dat</span><span class="op">$</span><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">fam</span><span class="op">$</span><span class="fu">linkinv</span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">lp</span><span class="op">)</span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">dat</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">p</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ylim</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ylab</span><span class="op">(</span><span class="fu">latex</span><span class="op">(</span><span class="st">"p"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">xlab</span><span class="op">(</span><span class="st">"x"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="binomial-glm-power_files/figure-revealjs/unnamed-chunk-24-1.svg" width="672" class="r-stretch quarto-figure-center"></section>
-<section id="glm-example-3" class="slide level2">
-<h2>GLM example</h2>
+<img data-src="binomial-glm-power_files/figure-revealjs/unnamed-chunk-24-1.svg" width="672" class="r-stretch quarto-figure-center"></section><section id="glm-example-3" class="slide level2"><h2>GLM example</h2>
 <p>So far we have the expected probability of success for each participant and <span class="math inline">\(x\)</span>, but we need to include the random component. We can use <span class="math inline">\(p\)</span> or <span class="math inline">\(g^{-1}(\eta)\)</span> more generally to sample from the <span class="math inline">\(\mu\)</span> parameter of the probability distribution.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>y <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="at">n =</span> <span class="fu">nrow</span>(dat), <span class="at">size =</span> <span class="dv">1</span>, <span class="at">prob =</span> dat<span class="sc">$</span>p)</span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">dat</span><span class="op">$</span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html">rbinom</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">1</span>, prob <span class="op">=</span> <span class="va">dat</span><span class="op">$</span><span class="va">p</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt; # A tibble: 6 × 5
 #&gt;      id     x     lp      p     y
@@ -847,26 +779,22 @@
 #&gt; 6     6 0.965  2.75  0.940      1</code></pre>
 </div>
 </div>
-</section>
-<section id="glm-example-4" class="slide level2">
-<h2>GLM example</h2>
+</section><section id="glm-example-4" class="slide level2"><h2>GLM example</h2>
 <p>Now we have simulated a vector of responses with the appropriate random component. We can plot the results.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>dat <span class="sc">|&gt;</span> </span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">position =</span> <span class="fu">position_jitter</span>(<span class="at">height =</span> <span class="fl">0.05</span>)) <span class="sc">+</span></span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_smooth</span>(<span class="at">method =</span> <span class="st">"glm"</span>, </span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">method.args =</span> <span class="fu">list</span>(<span class="at">family =</span> fam),</span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">se =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">dat</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_point</span><span class="op">(</span>position <span class="op">=</span> <span class="fu">position_jitter</span><span class="op">(</span>height <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">stat_smooth</span><span class="op">(</span>method <span class="op">=</span> <span class="st">"glm"</span>, </span>
+<span>              method.args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>family <span class="op">=</span> <span class="va">fam</span><span class="op">)</span>,</span>
+<span>              se <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="binomial-glm-power_files/figure-revealjs/unnamed-chunk-26-1.svg" width="672" class="r-stretch quarto-figure-center"></section>
-<section id="glm-example-5" class="slide level2">
-<h2>GLM example</h2>
+<img data-src="binomial-glm-power_files/figure-revealjs/unnamed-chunk-26-1.svg" width="672" class="r-stretch quarto-figure-center"></section><section id="glm-example-5" class="slide level2"><h2>GLM example</h2>
 <p>Finally we can fit the model and see if the parameters are estimated correctly. Of course, we know the true data generation process thus we are fitting the best model.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">glm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> dat, <span class="at">family =</span> fam)</span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span>, data <span class="op">=</span> <span class="va">dat</span>, family <span class="op">=</span> <span class="va">fam</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt; Call:
@@ -892,49 +820,40 @@
 #&gt; Number of Fisher Scoring iterations: 6</code></pre>
 </div>
 </div>
-</section></section>
-<section>
-<section id="power-analysis" class="title-slide slide level1 section center">
-<h1>Power analysis</h1>
+</section></section><section><section id="power-analysis" class="title-slide slide level1 section center"><h1>Power analysis</h1>
 
-</section>
-<section id="power-analysis-1" class="slide level2">
-<h2>Power analysis</h2>
+</section><section id="power-analysis-1" class="slide level2"><h2>Power analysis</h2>
 <p>Once the data generation process and the model has been defined, the power analysis is straightforward.</p>
 <p>The hardest part is fixing plausible values according to your knowledge and/or previous literature.</p>
 <p>For example, there are methods to convert from odds ratio to Cohen’s <span class="math inline">\(d\)</span> or other metrics.</p>
 <p>The <code>effectsize</code> package is a great resource to understand and compute effect sizes.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>or <span class="ot">&lt;-</span> <span class="fl">1.5</span> <span class="co"># odds ratio</span></span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>effectsize<span class="sc">::</span><span class="fu">oddsratio_to_d</span>(or)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">or</span> <span class="op">&lt;-</span> <span class="fl">1.5</span> <span class="co"># odds ratio</span></span>
+<span><span class="fu">effectsize</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/effectsize/reference/d_to_r.html">oddsratio_to_d</a></span><span class="op">(</span><span class="va">or</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt; [1] 0.2235446</code></pre>
 </div>
 </div>
-</section>
-<section id="power-analysis-2" class="slide level2">
-<h2>Power analysis</h2>
+</section><section id="power-analysis-2" class="slide level2"><h2>Power analysis</h2>
 <p>We can see the relationship between <span class="math inline">\(d\)</span> and (log) Odds Ratio:</p>
 
-<img data-src="binomial-glm-power_files/figure-revealjs/unnamed-chunk-29-1.svg" width="672" class="r-stretch quarto-figure-center"></section>
-<section id="power-analysis-3" class="slide level2">
-<h2>Power analysis</h2>
+<img data-src="binomial-glm-power_files/figure-revealjs/unnamed-chunk-29-1.svg" width="672" class="r-stretch quarto-figure-center"></section><section id="power-analysis-3" class="slide level2"><h2>Power analysis</h2>
 <p>For example we can a logistic regression with a binary predictor, fixing the effect size:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">30</span> <span class="co"># number of subjects</span></span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fl">0.5</span> <span class="co"># effect size in cohen's d</span></span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>or <span class="ot">&lt;-</span> effectsize<span class="sc">::</span><span class="fu">d_to_oddsratio</span>(d) <span class="co"># this is beta1</span></span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"b"</span>), <span class="at">each =</span> n)</span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>xc <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(x <span class="sc">==</span> <span class="st">"a"</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span>
-<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> x, <span class="at">xc =</span> xc)</span>
-<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>b0 <span class="ot">&lt;-</span> <span class="fu">qlogis</span>(<span class="fl">0.3</span>) <span class="co"># probability of a</span></span>
-<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>b1 <span class="ot">&lt;-</span> <span class="fu">log</span>(or)</span>
-<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>lp <span class="ot">&lt;-</span> b0 <span class="sc">+</span> b1 <span class="sc">*</span> dat<span class="sc">$</span>xc</span>
-<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>y <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="fu">nrow</span>(dat), <span class="dv">1</span>, <span class="fu">plogis</span>(dat<span class="sc">$</span>lp))</span>
-<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">30</span> <span class="co"># number of subjects</span></span>
+<span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fl">0.5</span> <span class="co"># effect size in cohen's d</span></span>
+<span><span class="va">or</span> <span class="op">&lt;-</span> <span class="fu">effectsize</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/effectsize/reference/d_to_r.html">d_to_oddsratio</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span> <span class="co"># this is beta1</span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"b"</span><span class="op">)</span>, each <span class="op">=</span> <span class="va">n</span><span class="op">)</span></span>
+<span><span class="va">xc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">x</span> <span class="op">==</span> <span class="st">"a"</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, xc <span class="op">=</span> <span class="va">xc</span><span class="op">)</span></span>
+<span><span class="va">b0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Logistic.html">qlogis</a></span><span class="op">(</span><span class="fl">0.3</span><span class="op">)</span> <span class="co"># probability of a</span></span>
+<span><span class="va">b1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">or</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">dat</span><span class="op">$</span><span class="va">lp</span> <span class="op">&lt;-</span> <span class="va">b0</span> <span class="op">+</span> <span class="va">b1</span> <span class="op">*</span> <span class="va">dat</span><span class="op">$</span><span class="va">xc</span></span>
+<span><span class="va">dat</span><span class="op">$</span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html">rbinom</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span>, <span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Logistic.html">plogis</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">lp</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt; # A tibble: 6 × 4
 #&gt;   x        xc     lp     y
@@ -947,85 +866,58 @@
 #&gt; 6 a         0 -0.847     0</code></pre>
 </div>
 </div>
-</section>
-<section id="power-analysis-4" class="slide level2">
-<h2>Power analysis</h2>
+</section><section id="power-analysis-4" class="slide level2"><h2>Power analysis</h2>
 <p>Clearly, we need to repeat the sampling process several times, store the results (e.g., the p-value of <span class="math inline">\(\beta_1\)</span>) and then compute the power.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>nsim <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, nsim)</span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nsim){</span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>  dat<span class="sc">$</span>y <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="fu">nrow</span>(dat), <span class="dv">1</span>, <span class="fu">plogis</span>(dat<span class="sc">$</span>lp))</span>
-<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>  fit <span class="ot">&lt;-</span> <span class="fu">glm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> dat, <span class="at">family =</span> fam)</span>
-<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>  p[i] <span class="ot">&lt;-</span> <span class="fu">summary</span>(fit)<span class="sc">$</span>coefficients[<span class="st">"xb"</span>, <span class="st">"Pr(&gt;|z|)"</span>]</span>
-<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(p <span class="sc">&lt;=</span> <span class="fl">0.05</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">nsim</span> <span class="op">&lt;-</span> <span class="fl">1000</span></span>
+<span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">nsim</span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">nsim</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="va">dat</span><span class="op">$</span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html">rbinom</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span>, <span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Logistic.html">plogis</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">lp</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span>, data <span class="op">=</span> <span class="va">dat</span>, family <span class="op">=</span> <span class="va">fam</span><span class="op">)</span></span>
+<span>  <span class="va">p</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span><span class="op">$</span><span class="va">coefficients</span><span class="op">[</span><span class="st">"xb"</span>, <span class="st">"Pr(&gt;|z|)"</span><span class="op">]</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">p</span> <span class="op">&lt;=</span> <span class="fl">0.05</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt; [1] 0.378</code></pre>
 </div>
 </div>
-</section>
-<section id="power-analysis-5" class="slide level2">
-<h2>Power analysis</h2>
+</section><section id="power-analysis-5" class="slide level2"><h2>Power analysis</h2>
 <p>With just one condition the power analysis is not really meaningful. We can compute the same for different sample sizes. Here my code is using a series of <code>for</code> loops but there could be a nicer implementation.</p>
 <div class="cell" data-layout-align="center" data-hash="binomial-glm-power_cache/revealjs/unnamed-chunk-32_c2932ca5577f478875e0ef9c502a293f">
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">30</span>, <span class="dv">50</span>, <span class="dv">100</span>, <span class="dv">150</span>)</span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>power <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="fu">length</span>(ns))</span>
-<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(ns)){</span>
-<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, nsim)</span>
-<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nsim){</span>
-<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">id =</span> <span class="dv">1</span><span class="sc">:</span>ns[i], <span class="at">x =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"b"</span>), <span class="at">each =</span> ns[i]))</span>
-<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>    dat<span class="sc">$</span>xc <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(dat<span class="sc">$</span>x <span class="sc">==</span> <span class="st">"a"</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span>
-<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>    dat<span class="sc">$</span>lp <span class="ot">&lt;-</span> b0 <span class="sc">+</span> b1 <span class="sc">*</span> dat<span class="sc">$</span>xc</span>
-<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a>    dat<span class="sc">$</span>y <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="fu">nrow</span>(dat), <span class="dv">1</span>, <span class="fu">plogis</span>(dat<span class="sc">$</span>lp))</span>
-<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a>    fit <span class="ot">&lt;-</span> <span class="fu">glm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> dat, <span class="at">family =</span> fam)</span>
-<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a>    p[j] <span class="ot">&lt;-</span> <span class="fu">summary</span>(fit)<span class="sc">$</span>coefficients[<span class="st">"xb"</span>, <span class="st">"Pr(&gt;|z|)"</span>]</span>
-<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a>  power[[i]] <span class="ot">&lt;-</span> <span class="fu">mean</span>(p <span class="sc">&lt;=</span> <span class="fl">0.05</span>)</span>
-<span id="cb44-16"><a href="#cb44-16" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">30</span>, <span class="fl">50</span>, <span class="fl">100</span>, <span class="fl">150</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">power</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">ns</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">ns</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">nsim</span><span class="op">)</span></span>
+<span>  <span class="kw">for</span><span class="op">(</span><span class="va">j</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">nsim</span><span class="op">)</span><span class="op">{</span></span>
+<span>    <span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="va">ns</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"b"</span><span class="op">)</span>, each <span class="op">=</span> <span class="va">ns</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="va">dat</span><span class="op">$</span><span class="va">xc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">x</span> <span class="op">==</span> <span class="st">"a"</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span>    <span class="va">dat</span><span class="op">$</span><span class="va">lp</span> <span class="op">&lt;-</span> <span class="va">b0</span> <span class="op">+</span> <span class="va">b1</span> <span class="op">*</span> <span class="va">dat</span><span class="op">$</span><span class="va">xc</span></span>
+<span>    <span class="va">dat</span><span class="op">$</span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html">rbinom</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span>, <span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Logistic.html">plogis</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">lp</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span>, data <span class="op">=</span> <span class="va">dat</span>, family <span class="op">=</span> <span class="va">fam</span><span class="op">)</span></span>
+<span>    <span class="va">p</span><span class="op">[</span><span class="va">j</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span><span class="op">$</span><span class="va">coefficients</span><span class="op">[</span><span class="st">"xb"</span>, <span class="st">"Pr(&gt;|z|)"</span><span class="op">]</span></span>
+<span>  <span class="op">}</span></span>
+<span>  <span class="va">power</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">p</span> <span class="op">&lt;=</span> <span class="fl">0.05</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section>
-<section id="power-analysis-6" class="slide level2">
-<h2>Power analysis</h2>
+</section><section id="power-analysis-6" class="slide level2"><h2>Power analysis</h2>
 <p>Then we can compute the results:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(ns, power, <span class="at">type =</span> <span class="st">"b"</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">pch =</span> <span class="dv">19</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">ns</span>, <span class="va">power</span>, type <span class="op">=</span> <span class="st">"b"</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, pch <span class="op">=</span> <span class="fl">19</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 
 <img data-src="binomial-glm-power_files/figure-revealjs/unnamed-chunk-33-1.svg" width="672" class="r-stretch quarto-figure-center"><div class="footer footer-default">
 
 </div>
-</section></section>
-
-<!-- FINAL SLIDE -->
-
-<!-- END FINAL SLIDE -->
-
-    </div>
+</section></section><!-- FINAL SLIDE --><!-- END FINAL SLIDE -->
+</div>
   </div>
 
-  <script>window.backupDefine = window.define; window.define = undefined;</script>
-  <script src="../../site_libs/revealjs/dist/reveal.js"></script>
-  <!-- reveal.js plugins -->
-  <script src="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
-  <script src="../../site_libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
-  <script src="../../site_libs/revealjs/plugin/reveal-menu/menu.js"></script>
-  <script src="../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
-  <script src="../../site_libs/revealjs/plugin/quarto-support/support.js"></script>
-  
-
-  <script src="../../site_libs/revealjs/plugin/notes/notes.js"></script>
-  <script src="../../site_libs/revealjs/plugin/search/search.js"></script>
-  <script src="../../site_libs/revealjs/plugin/zoom/zoom.js"></script>
-  <script src="../../site_libs/revealjs/plugin/math/math.js"></script>
-  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
-
-  <script>
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="../../site_libs/revealjs/dist/reveal.js"></script><!-- reveal.js plugins --><script src="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script><script src="../../site_libs/revealjs/plugin/pdf-export/pdfexport.js"></script><script src="../../site_libs/revealjs/plugin/reveal-menu/menu.js"></script><script src="../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script><script src="../../site_libs/revealjs/plugin/quarto-support/support.js"></script><script src="../../site_libs/revealjs/plugin/notes/notes.js"></script><script src="../../site_libs/revealjs/plugin/search/search.js"></script><script src="../../site_libs/revealjs/plugin/zoom/zoom.js"></script><script src="../../site_libs/revealjs/plugin/math/math.js"></script><script>window.define = window.backupDefine; window.backupDefine = undefined;</script><script>
 
       // Full list of configuration options available at:
       // https://revealjs.com/config/
@@ -1216,9 +1108,7 @@
           RevealZoom
         ]
       });
-    </script>
-    
-    <script>
+    </script><script>
       // htmlwidgets need to know to resize themselves when slides are shown/hidden.
       // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
       // slide changes (different for each slide format).
@@ -1253,9 +1143,7 @@
         }
 
       })();
-    </script>
-
-    <script id="quarto-html-after-body" type="application/javascript">
+    </script><script id="quarto-html-after-body" type="application/javascript">
     window.document.addEventListener("DOMContentLoaded", function (event) {
       const toggleBodyColorMode = (bsSheetEl) => {
         const mode = bsSheetEl.getAttribute("data-mode");
@@ -1401,6 +1289,6 @@
       }
     });
     </script>
-    
+
 
 </body></html>
