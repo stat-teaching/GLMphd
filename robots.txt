@@ -1,1 +1,1 @@
-Sitemap: https://stat-teaching.github.io/GLMphd/sitemap.xml
+Sitemap: https://github.com/stat-teaching/GLMphd/sitemap.xml
