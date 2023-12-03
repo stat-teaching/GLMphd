@@ -52,3 +52,5 @@ rsconnect/
 
 /.quarto/
 /_site/
+
+local/
