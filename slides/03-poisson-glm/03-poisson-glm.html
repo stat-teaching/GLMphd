@@ -1,0 +1,3537 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/quarto-contrib/jquery-3.6.3/jquery-3.6.3.min.js"></script>
+<script src="../../site_libs/quarto-contrib/code-fullscreen-1.0.0/code-fullscreen.js" defer="true"></script>
+<link href="../../site_libs/quarto-contrib/code-fullscreen-1.0.0/code-fullscreen.css" rel="stylesheet">
+<script src="../../site_libs/quarto-contrib/nutshell-1.0.0/nutshell.min.js"></script><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<meta charset="utf-8">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" rel="stylesheet">
+<meta name="generator" content="quarto-1.3.361">
+<meta name="author" content="Filippo Gambarota">
+<meta name="dcterms.date" content="2023-01-01">
+<title>Generalized Linear Models - Poisson GLM</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+<link rel="stylesheet" href="../../site_libs/revealjs/dist/reset.css">
+<link rel="stylesheet" href="../../site_libs/revealjs/dist/reveal.css">
+<style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+    /* CSS for citations */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+    }
+    .hanging-indent div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }  </style>
+<link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto.css">
+<link href="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+<link href="../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+<link href="../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+<link href="../../site_libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+<style type="text/css">
+
+  .callout {
+    margin-top: 1em;
+    margin-bottom: 1em;  
+    border-radius: .25rem;
+  }
+
+  .callout.callout-style-simple { 
+    padding: 0em 0.5em;
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+    display: flex;
+  }
+
+  .callout.callout-style-default {
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+  }
+
+  .callout .callout-body-container {
+    flex-grow: 1;
+  }
+
+  .callout.callout-style-simple .callout-body {
+    font-size: 1rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-style-default .callout-body {
+    font-size: 0.9rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-titled.callout-style-simple .callout-body {
+    margin-top: 0.2em;
+  }
+
+  .callout:not(.callout-titled) .callout-body {
+      display: flex;
+  }
+
+  .callout:not(.no-icon).callout-titled.callout-style-simple .callout-content {
+    padding-left: 1.6em;
+  }
+
+  .callout.callout-titled .callout-header {
+    padding-top: 0.2em;
+    margin-bottom: -0.2em;
+  }
+
+  .callout.callout-titled .callout-title  p {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+    
+  .callout.callout-titled.callout-style-simple .callout-content  p {
+    margin-top: 0;
+  }
+
+  .callout.callout-titled.callout-style-default .callout-content  p {
+    margin-top: 0.7em;
+  }
+
+  .callout.callout-style-simple div.callout-title {
+    border-bottom: none;
+    font-size: .9rem;
+    font-weight: 600;
+    opacity: 75%;
+  }
+
+  .callout.callout-style-default  div.callout-title {
+    border-bottom: none;
+    font-weight: 600;
+    opacity: 85%;
+    font-size: 0.9rem;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-default div.callout-content {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-simple .callout-icon::before {
+    height: 1rem;
+    width: 1rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 1rem 1rem;
+  }
+
+  .callout.callout-style-default .callout-icon::before {
+    height: 0.9rem;
+    width: 0.9rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 0.9rem 0.9rem;
+  }
+
+  .callout-title {
+    display: flex
+  }
+    
+  .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  .callout.no-icon::before {
+    display: none !important;
+  }
+
+  .callout.callout-titled .callout-body > .callout-content > :last-child {
+    margin-bottom: 0.5rem;
+  }
+
+  .callout.callout-titled .callout-icon::before {
+    margin-top: .5rem;
+    padding-right: .5rem;
+  }
+
+  .callout:not(.callout-titled) .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  /* Callout Types */
+
+  div.callout-note {
+    border-left-color: #4582ec !important;
+  }
+
+  div.callout-note .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEU0lEQVRYCcVXTWhcVRQ+586kSUMMxkyaElstCto2SIhitS5Ek8xUKV2poatCcVHtUlFQk8mbaaziwpWgglJwVaquitBOfhQXFlqlzSJpFSpIYyXNjBNiTCck7x2/8/LeNDOZxDuEkgOXe++553zfefee+/OYLOXFk3+1LLrRdiO81yNqZ6K9cG0P3MeFaMIQjXssE8Z1JzLO9ls20MBZX7oG8w9GxB0goaPrW5aNMp1yOZIa7Wv6o2ykpLtmAPs/vrG14Z+6d4jpbSKuhdcSyq9wGMPXjonwmESXrriLzFGOdDBLB8Y6MNYBu0dRokSygMA/mrun8MGFN3behm6VVAwg4WR3i6FvYK1T7MHo9BK7ydH+1uurECoouk5MPRyVSBrBHMYwVobG2aOXM07sWrn5qgB60rc6mcwIDJtQrnrEr44kmy+UO9r0u9O5/YbkS9juQckLed3DyW2XV/qWBBB3ptvI8EUY3I9p/67OW+g967TNr3Sotn3IuVlfMLVnsBwH4fsnebJvyGm5GeIUA3jljERmrv49SizPYuq+z7c2H/jlGC+Ghhupn/hcapqmcudB9jwJ/3jvnvu6vu5lVzF1fXyZuZZ7U8nRmVzytvT+H3kilYvH09mLWrQdwFSsFEsxFVs5fK7A0g8gMZjbif4ACpKbjv7gNGaD8bUrlk8x+KRflttr22JEMRUbTUwwDQScyzPgedQHZT0xnx7ujw2jfVfExwYHwOsDTjLdJ2ebmeQIlJ7neo41s/DrsL3kl+W2lWvAga0tR3zueGr6GL78M3ifH0rGXrBC2aAR8uYcIA5gwV8zIE8onoh8u0Fca/ciF7j1uOzEnqcIm59sEXoGc0+z6+H45V1CvAvHcD7THztu669cnp+L0okAeIc6zjbM/24LgGM1gZk7jnRu1aQWoU9sfUOuhrmtaPIO3YY1KLLWZaEO5TKUbMY5zx8W9UJ6elpLwKXbsaZ4EFl7B4bMtDv0iRipKoDQT2sNQI9b1utXFdYisi+wzZ/ri/1m7QfDgEuvgUUEIJPq3DhX/5DWNqIXDOweC2wvIR90Oq3lDpdMIgD2r0dXvGdsEW5H6x6HLRJYU7C69VefO1x8Gde1ZFSJLfWS1jbCnhtOPxmpfv2LXOA2Xk2tvnwKKPFuZ/oRmwBwqRQDcKNeVQkYcOjtWVBuM/JuYw5b6isojIkYxyYAFn5K7ZBF10fea52y8QltAg6jnMqNHFBmGkQ1j+U43HMi2xMar1Nv0zGsf1s8nUsmUtPOOrbFIR8bHFDMB5zL13Gmr/kGlCkUzedTzzmzsaJXhYawnA3UmARpiYj5ooJZiUoxFRtK3X6pgNPv+IZVPcnwbOl6f+aBaO1CNvPW9n9LmCp01nuSaTRF2YxHqZ8DYQT6WsXT+RD6eUztwYLZ8rM+rcPxamv1VQzFUkzFXvkiVrySGQgJNvXHJAxiU3/NwiC03rSf05VBaPtu/Z7/B8Yn/w7eguloAAAAAElFTkSuQmCC');
+  }
+
+  div.callout-note.callout-style-default .callout-title {
+    background-color: #dae6fb
+  }
+
+  div.callout-important {
+    border-left-color: #d9534f !important;
+  }
+
+  div.callout-important .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEKklEQVRYCcVXTWhcVRS+575MJym48A+hSRFr00ySRQhURRfd2HYjk2SSTokuBCkU2o0LoSKKraKIBTcuFCoidGFD08nkBzdREbpQ1EDNIv8qSGMFUboImMSZd4/f9zJv8ibJMC8xJQfO3HPPPef7zrvvvnvviIkpC9nsw0UttFunbUhpFzFtarSd6WJkStVMw5xyVqYTvkwfzuf/5FgtkVoB0729j1rjXwThS7Vio+Mo6DNnvLfahoZ+i/o32lULuJ3NNiz7q6+pyAUkJaFF6JwaM2lUJlV0MlnQn5aTRbEu0SEqHUa0A4AdiGuB1kFXRfVyg5d87+Dg4DL6m2TLAub60ilj7A1Ec4odSAc8X95sHh7+ZRPCFo6Fnp7HfU/fBng/hi10CjCnWnJjsxvDNxWw0NfV6Rv5GgP3I3jGWXumdTD/3cbEOP2ZbOZp69yniG3FQ9z1jD7bnBu9Fc2tKGC2q+uAJOQHBDRiZX1x36o7fWBs7J9ownbtO+n0/qWkvW7UPIfc37WgT6ZGR++EOJyeQDSb9UB+DZ1G6DdLDzyS+b/kBCYGsYgJbSQHuThGKRcw5xdeQf8YdNHsc6ePXrlSYMBuSIAFTGAtQo+VuALo4BX83N190NWZWbynBjhOHsmNfFWLeL6v+ynsA58zDvvAC8j5PkbOcXCMg2PZFk3q8MjI7WAG/Dp9AwP7jdGBOOQkAvlFUB+irtm16I1Zw9YBcpGTGXYmk3kQIC/Cds55l+iMI3jqhjAuaoe+am2Jw5GT3Nbz3CkE12NavmzN5+erJW7046n/CH1RO/RVa8lBLozXk9uqykkGAyRXLWlLv5jyp4RFsG5vGVzpDLnIjTWgnRy2Rr+tDKvRc7Y8AyZq10jj8DqXdnIRNtFZb+t/ZRtXcDiVnzpqx8mPcDWxgARUqx0W1QB9MeUZiNrV4qP+Ehc+BpNgATsTX8ozYKL2NtFYAHc84fG7ndxUPr+AR/iQSns7uSUufAymwDOb2+NjK27lEFocm/EE2WpyIy/Hi66MWuMKJn8RvxIcj87IM5Vh9663ziW36kR0HNenXuxmfaD8JC7tfKbrhFr7LiZCrMjrzTeGx+PmkosrkNzW94ObzwocJ7A1HokLolY+AvkTiD/q1H0cN48c5EL8Crkttsa/AXQVDmutfyku0E7jShx49XqV3MFK8IryDhYVbj7Sj2P2eBxwcXoe8T8idsKKPRcnZw1b+slFTubwUwhktrfnAt7J++jwQtLZcm3sr9LQrjRzz6cfMv9aLvgmnAGvpoaGLxM4mAEaLV7iAzQ3oU0IvD5x9ix3yF2RAAuYAOO2f7PEFWCXZ4C9Pb2UsgDeVnFSpbFK7/IWu7TPTvBqzbGdCHOJQSxiEjt6IyZmxQyEJHv6xyQsYk//moVFsN2zP6fRImjfq7/n/wFDguUQFNEwugAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-important.callout-style-default .callout-title {
+    background-color: #f7dddc
+  }
+
+  div.callout-warning {
+    border-left-color: #f0ad4e !important;
+  }
+
+  div.callout-warning .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAETklEQVRYCeVWW2gcVRg+58yaTUnizqbipZeX4uWhBEniBaoUX1Ioze52t7sRq6APio9V9MEaoWlVsFasRq0gltaAPuxms8lu0gcviE/FFOstVbSIxgcv6SU7EZqmdc7v9+9mJtNks51NTUH84ed889/PP+cmxP+d5FIbMJmNbpREu4WUkiTtCicKny0l1pIKmBzovF2S+hIJHX8iEu3hZJ5lNZGqyRrGSIQpq15AzF28jgpeY6yk6GVdrfFqdrD6Iw+QlB8g0YS2g7dyQmXM/IDhBhT0UCiRf59lfqmmDvzRt6kByV/m4JjtzuaujMUM2c5Z2d6JdKrRb3K2q6mA+oYVz8JnDdKPmmNthzkAk/lN63sYPgevrguc72aZX/L9C6x09GYyxBgCX4NlvyGUHOKELlm5rXeR1kchuChJt4SSwyddZRXgvwMGvYo4QSlk3/zkHD8UHxwVJA6zjZZqP8v8kK8OWLnIZtLyCAJagYC4rTGW/9Pqj92N/c+LUaAj27movwbi19tk/whRCIE7Q9vyI6yvRpftAKVTdUjOW40X3h5OXsKCdmFcx0xlLJoSuQngnrJe7Kcjm4OMq9FlC7CMmScQANuNvjfP3PjGXDBaUQmbp296S5L4DrpbrHN1T87ZVEZVCzg1FF0Ft+dKrlLukI+/c9ENo+TvlTDbYFvuKPtQ9+l052rXrgKoWkDAFnvh0wTOmYn8R5f4k/jN/fZiCM1tQx9jQQ4ANhqG4hiL0qIFTGViG9DKB7GYzgubnpofgYRwO+DFjh0Zin2m4b/97EDkXkc+f6xYAPX0KK2I/7fUQuwzuwo/L3AkcjugPNixC8cHf0FyPjWlItmLxWw4Ou9YsQCr5fijMGoD/zpdRy95HRysyXA74MWOnscpO4j2y3HAVisw85hX5+AFBRSHt4ShfLFkIMXTqyKFc46xdzQM6XbAi702a7sy04J0+feReMFKp5q9esYLCqAZYw/k14E/xcLLsFElaornTuJB0svMuJINy8xkIYuL+xPAlWRceH6+HX7THJ0djLUom46zREu7tTkxwmf/FdOZ/sh6Q8qvEAiHpm4PJ4a/doJe0gH1t+aHRgCzOvBvJedEK5OFE5jpm4AGP2a8Dxe3gGJ/pAutug9Gp6he92CsSsWBaEcxGx0FHytmIpuqGkOpldqNYQK8cSoXvd+xLxXADw0kf6UkJNFtdo5MOgaLjiQOQHcn+A6h5NuL2s0qsC2LOM75PcF3yr5STuBSAcGG+meA14K/CI21HcS4LBT6tv0QAh8Dr5l93AhZzG5ZJ4VxAqdZUEl9z7WJ4aN+svMvwHHL21UKTd1mqvChH7/Za5xzXBBKrUcB0TQ+Ulgkfbi/H/YT5EptrGzsEK7tR1B7ln9BBwckYfMiuSqklSznIuoIIOM42MQO+QnduCoFCI0bpkzjCjddHPN/F+2Yu+sd9bKNpVwHhbS3LluK/0zgfwD0xYI5dXuzlQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-warning.callout-style-default .callout-title {
+    background-color: #fcefdc
+  }
+
+  div.callout-tip {
+    border-left-color: #02b875 !important;
+  }
+
+  div.callout-tip .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAADr0lEQVRYCe1XTWgTQRj9ZjZV8a9SPIkKgj8I1bMHsUWrqYLVg4Ue6v9BwZOxSYsIerFao7UiUryIqJcqgtpimhbBXoSCVxUFe9CTiogUrUp2Pt+3aUI2u5vdNh4dmMzOzHvvezuz8xNFM0mjnbXaNu1MvFWRXkXEyE6aYOYJpdW4IXuA4r0fo8qqSMDBU0v1HJUgVieAXxzCsdE/YJTdFcVIZQNMyhruOMJKXYFoLfIfIvVIMWdsrd+Rpd86ZmyzzjJmLStqRn0v8lzkb4rVIXvnpScOJuAn2ACC65FkPzEdEy4TPWRLJ2h7z4cArXzzaOdKlbOvKKX25Wl00jSnrwVxAg3o4dRxhO13RBSdNvH0xSARv3adTXbBdTf64IWO2vH0LT+cv4GR1DJt+DUItaQogeBX/chhbTBxEiZ6gftlDNXTrvT7co4ub5A6gp9HIcHvzTa46OS5fBeP87Qm0fQkr4FsYgVQ7Qg+ZayaDg9jhg1GkWj8RG6lkeSacrrHgDaxdoBiZPg+NXV/KifMuB6//JmYH4CntVEHy/keA6x4h4CU5oFy8GzrBS18cLJMXcljAKB6INjWsRcuZBWVaS3GDrqB7rdapVIeA+isQ57Eev9eCqzqOa81CY05VLd6SamW2wA2H3SiTbnbSxmzfp7WtKZkqy4mdyAlGx7ennghYf8voqp9cLSgKdqNfa6RdRsAAkPwRuJZNbpByn+RrJi1RXTwdi8RQF6ymDwGMAtZ6TVE+4uoKh+MYkcLsT0Hk8eAienbiGdjJHZTpmNjlbFJNKDVAp2fJlYju6IreQxQ08UJDNYdoLSl6AadO+fFuCQqVMB1NJwPm69T04Wv5WhfcWyfXQB+wXRs1pt+nCknRa0LVzSA/2B+a9+zQJadb7IyyV24YAxKp2Jqs3emZTuNnKxsah+uabKbMk7CbTgJx/zIgQYErIeTKRQ9yD9wxVof5YolPHqaWo7TD6tJlh7jQnK5z2n3+fGdggIOx2kaa2YI9QWarc5Ce1ipNWMKeSG4DysFF52KBmTNMmn5HqCFkwy34rDg05gDwgH3bBi+sgFhN/e8QvRn8kbamCOhgrZ9GJhFDgfcMHzFb6BAtjKpFhzTjwv1KCVuxHvCbsSiEz4CANnj84cwHdFXAbAOJ4LTSAawGWFn5tDhLMYz6nWeU2wJfIhmIJBefcd/A5FWQWGgrWzyORZ3Q6HuV+Jf0Bj+BTX69fm1zWgK7By1YTXchFDORywnfQ7GpzOo6S+qECrsx2ifVQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-tip.callout-style-default .callout-title {
+    background-color: #ccf1e3
+  }
+
+  div.callout-caution {
+    border-left-color: #fd7e14 !important;
+  }
+
+  div.callout-caution .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAACV0lEQVRYCdVWzWoUQRCuqp2ICBLJXgITZL1EfQDBW/bkzUMUD7klD+ATSHBEfAIfQO+iXsWDxJsHL96EHAwhgzlkg8nBg25XWb0zIb0zs9muYYWkoKeru+vn664fBqElyZNuyh167NXJ8Ut8McjbmEraKHkd7uAnAFku+VWdb3reSmRV8PKSLfZ0Gjn3a6Xlcq9YGb6tADjn+lUfTXtVmaZ1KwBIvFI11rRXlWlatwIAAv2asaa9mlB9wwygiDX26qaw1yYPzFXg2N1GgG0FMF8Oj+VIx7E/03lHx8UhvYyNZLN7BwSPgekXXLribw7w5/c8EF+DBK5idvDVYtEEwMeYefjjLAdEyQ3M9nfOkgnPTEkYU+sxMq0BxNR6jExrAI31H1rzvLEfRIdgcv1XEdj6QTQAS2wtstEALLG1yEZ3QhH6oDX7ExBSFEkFINXH98NTrme5IOaaA7kIfiu2L8A3qhH9zRbukdCqdsA98TdElyeMe5BI8Rs2xHRIsoTSSVFfCFCWGPn9XHb4cdobRIWABNf0add9jakDjQJpJ1bTXOJXnnRXHRf+dNL1ZV1MBRCXhMbaHqGI1JkKIL7+i8uffuP6wVQAzO7+qVEbF6NbS0LJureYcWXUUhH66nLR5rYmva+2tjRFtojkM2aD76HEGAD3tPtKM309FJg5j/K682ywcWJ3PASCcycH/22u+Bh7Aa0ehM2Fu4z0SAE81HF9RkB21c5bEn4Dzw+/qNOyXr3DCTQDMBOdhi4nAgiFDGCinIa2owCEChUwD8qzd03PG+qdW/4fDzjUMcE1ZpIAAAAASUVORK5CYII=');
+  }
+
+  div.callout-caution.callout-style-default .callout-title {
+    background-color: #ffe5d0
+  }
+
+  </style>
+<style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="center"><h1 class="title">Poisson GLM</h1>
+  <p class="author">Filippo Gambarota</p>
+  <p class="institute">University of Padova</p>
+  <p class="date">2023</p>
+  <p class="last-update"><em>Last Update: 2023-11-29</em></p>
+</section><section id="poisson-glm" class="slide level2"><h2>Poisson GLM</h2>
+<p>Everything that we discussed for the binomial GLM is also relevant for the Poisson GLM. We are gonna focus on specificity of the Poisson model in particular:</p>
+<ul>
+<li>
+<strong>Poisson distribution</strong> and <strong>link function</strong>
+</li>
+<li><strong>Parameters interpretation</strong></li>
+<li>
+<strong>Overdispersion</strong> causes, consequences and remedies</li>
+</ul></section><section><section id="poisson-distribution" class="title-slide slide level1 section center"><h1>Poisson distribution</h1>
+
+</section><section id="poisson-distribution-1" class="slide level2"><h2>Poisson distribution</h2>
+<p>The Poisson distribution is defined as:</p>
+<p><span class="math display">\[
+p(y; \lambda) = \frac{\lambda^y e^{-\lambda}}{y!}
+\]</span> Where the mean is <span class="math inline">\(\lambda\)</span> and the variance is <span class="math inline">\(\lambda\)</span></p>
+</section><section id="poisson-distribution-2" class="slide level2"><h2>Poisson distribution</h2>
+
+<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-4-1.svg" width="576" class="r-stretch quarto-figure-center"></section><section id="poisson-distribution-3" class="slide level2"><h2>Poisson distribution</h2>
+<p>As the mean increases also the variance increase and the distributions is approximately normal:</p>
+
+<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-5-1.svg" width="576" class="r-stretch quarto-figure-center"></section><section id="poisson-distribution-4" class="slide level2"><h2>Poisson distribution</h2>
+
+<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-6-1.svg" width="576" class="r-stretch quarto-figure-center"></section><section id="link-function" class="slide level2"><h2>Link function</h2>
+<p>The common (and default in R) link function (<span class="math inline">\(g(\lambda)\)</span>) for the Poisson distribution is the <strong>log</strong> link function and the inverse of link function is the exponential.</p>
+<p><span class="math display">\[\begin{align*}
+log(\lambda) = \beta_0 + \beta_{1}X_{1} + ...\beta_pX_p \\
+\lambda = e^{\beta_0 + \beta_{1}X_{1} + ...\beta_pX_p}
+\end{align*}\]</span></p>
+</section></section><section><section id="parameters-intepretation" class="title-slide slide level1 section center"><h1>Parameters intepretation</h1>
+
+</section><section id="an-example" class="slide level2"><h2>An example…</h2>
+<p>Let’s start by a simple example trying to explain the number of errors of math exercises by students (N = 100) as a function of the number of hours of study.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+
+<div id="owavvxmhdb" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#owavvxmhdb table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#owavvxmhdb thead, #owavvxmhdb tbody, #owavvxmhdb tfoot, #owavvxmhdb tr, #owavvxmhdb td, #owavvxmhdb th {
+  border-style: none;
+}
+
+#owavvxmhdb p {
+  margin: 0;
+  padding: 0;
+}
+
+#owavvxmhdb .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#owavvxmhdb .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#owavvxmhdb .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#owavvxmhdb .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#owavvxmhdb .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#owavvxmhdb .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#owavvxmhdb .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#owavvxmhdb .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#owavvxmhdb .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#owavvxmhdb .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#owavvxmhdb .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#owavvxmhdb .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#owavvxmhdb .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#owavvxmhdb .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#owavvxmhdb .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#owavvxmhdb .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#owavvxmhdb .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#owavvxmhdb .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#owavvxmhdb .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#owavvxmhdb .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#owavvxmhdb .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#owavvxmhdb .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#owavvxmhdb .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#owavvxmhdb .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#owavvxmhdb .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#owavvxmhdb .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#owavvxmhdb .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#owavvxmhdb .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#owavvxmhdb .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#owavvxmhdb .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#owavvxmhdb .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#owavvxmhdb .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#owavvxmhdb .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#owavvxmhdb .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#owavvxmhdb .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#owavvxmhdb .gt_left {
+  text-align: left;
+}
+
+#owavvxmhdb .gt_center {
+  text-align: center;
+}
+
+#owavvxmhdb .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#owavvxmhdb .gt_font_normal {
+  font-weight: normal;
+}
+
+#owavvxmhdb .gt_font_bold {
+  font-weight: bold;
+}
+
+#owavvxmhdb .gt_font_italic {
+  font-style: italic;
+}
+
+#owavvxmhdb .gt_super {
+  font-size: 65%;
+}
+
+#owavvxmhdb .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#owavvxmhdb .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#owavvxmhdb .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#owavvxmhdb .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#owavvxmhdb .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#owavvxmhdb .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#owavvxmhdb .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead><tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" style="font-weight: bold;" scope="col" id="id">id</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" style="font-weight: bold;" scope="col" id="studyh">studyh</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" style="font-weight: bold;" scope="col" id="solved">solved</th>
+    </tr></thead>
+<tbody class="gt_table_body">
+<tr>
+<td headers="id" class="gt_row gt_center">1</td>
+<td headers="studyh" class="gt_row gt_center">32</td>
+<td headers="solved" class="gt_row gt_center">19</td>
+</tr>
+<tr>
+<td headers="id" class="gt_row gt_center">2</td>
+<td headers="studyh" class="gt_row gt_center">38</td>
+<td headers="solved" class="gt_row gt_center">20</td>
+</tr>
+<tr>
+<td headers="id" class="gt_row gt_center">3</td>
+<td headers="studyh" class="gt_row gt_center">67</td>
+<td headers="solved" class="gt_row gt_center">41</td>
+</tr>
+<tr>
+<td headers="id" class="gt_row gt_center">4</td>
+<td headers="studyh" class="gt_row gt_center">10</td>
+<td headers="solved" class="gt_row gt_center">12</td>
+</tr>
+<tr>
+<td headers="id" class="gt_row gt_center">...</td>
+<td headers="studyh" class="gt_row gt_center">...</td>
+<td headers="solved" class="gt_row gt_center">...</td>
+</tr>
+<tr>
+<td headers="id" class="gt_row gt_center">97</td>
+<td headers="studyh" class="gt_row gt_center">81</td>
+<td headers="solved" class="gt_row gt_center">57</td>
+</tr>
+<tr>
+<td headers="id" class="gt_row gt_center">98</td>
+<td headers="studyh" class="gt_row gt_center">87</td>
+<td headers="solved" class="gt_row gt_center">66</td>
+</tr>
+<tr>
+<td headers="id" class="gt_row gt_center">99</td>
+<td headers="studyh" class="gt_row gt_center">25</td>
+<td headers="solved" class="gt_row gt_center">8</td>
+</tr>
+<tr>
+<td headers="id" class="gt_row gt_center">100</td>
+<td headers="studyh" class="gt_row gt_center">22</td>
+<td headers="solved" class="gt_row gt_center">16</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section><section id="an-example-1" class="slide level2"><h2>An example…</h2>
+<ul>
+<li>There is a clear non-linear and positive relationship</li>
+<li>The both the mean and variance increase as a function of the predictor</li>
+</ul>
+
+<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-8-1.svg" width="576" class="r-stretch quarto-figure-center"></section><section id="model-fitting" class="slide level2"><h2>Model fitting</h2>
+<p>We can fit the model using the <code>glm</code> function in R setting the appropriate <strong>random component</strong> (<code>family</code>) and the <strong>link function</strong> (<code>link</code>):</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">solved</span> <span class="op">~</span> <span class="va">studyh</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">poisson</a></span><span class="op">(</span>link <span class="op">=</span> <span class="st">"log"</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; 
+#&gt; Call:
+#&gt; glm(formula = solved ~ studyh, family = poisson(link = "log"), 
+#&gt;     data = dat)
+#&gt; 
+#&gt; Deviance Residuals: 
+#&gt;     Min       1Q   Median       3Q      Max  
+#&gt; -2.2596  -0.7741  -0.1367   0.7117   2.6079  
+#&gt; 
+#&gt; Coefficients:
+#&gt;              Estimate Std. Error z value Pr(&gt;|z|)    
+#&gt; (Intercept) 2.2830811  0.0505563   45.16   &lt;2e-16 ***
+#&gt; studyh      0.0200652  0.0007048   28.47   &lt;2e-16 ***
+#&gt; ---
+#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#&gt; 
+#&gt; (Dispersion parameter for poisson family taken to be 1)
+#&gt; 
+#&gt;     Null deviance: 1011.993  on 99  degrees of freedom
+#&gt; Residual deviance:   94.958  on 98  degrees of freedom
+#&gt; AIC: 616.12
+#&gt; 
+#&gt; Number of Fisher Scoring iterations: 4</code></pre>
+</div>
+</div>
+</section><section id="parameters-intepretation-1" class="slide level2"><h2>Parameters intepretation</h2>
+<ul>
+<li>The <code>(Intercept)</code> <span class="math inline">\(2.283\)</span> is the log of the expected number of solved exercises for a student with 0 hours of studying. Taking the exponential we obtain the estimation on the response scale <span class="math inline">\(9.807\)</span>
+</li>
+<li>the <code>studyh</code> <span class="math inline">\(0.020\)</span> is the increase in the expected increase of (log) solved exercises for a unit increase in hours of studying. Taking the exponential we obtain the ratio of increase of the number of solved exercises <span class="math inline">\(1.020\)</span>
+</li>
+</ul></section><section id="parameters-intepretation-2" class="slide level2"><h2>Parameters intepretation</h2>
+<p>Again, as in the binomial model, the effects are linear on the log scale but non-linear on the response scale.</p>
+
+<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-11-1.svg" width="576" class="r-stretch quarto-figure-center"></section><section id="parameters-intepretation-3" class="slide level2"><h2>Parameters intepretation</h2>
+<p>The non-linearity can be easily seen using the <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> function:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">linear</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit</span>, newdata <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>studyh <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">11</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="va">linear</span><span class="op">)</span> <span class="co"># same as the beta0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt;          2 
+#&gt; 0.02006518</code></pre>
+</div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">nonlinear</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="va">linear</span><span class="op">)</span> <span class="co"># or predict(..., type = "response")</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="va">nonlinear</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt;         2 
+#&gt; 0.2429288</code></pre>
+</div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># ratio of increase when using the response scale</span></span>
+<span><span class="va">nonlinear</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">/</span><span class="va">nonlinear</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt;        2 
+#&gt; 1.020268</code></pre>
+</div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># equivalent to exp(beta1)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt;   studyh 
+#&gt; 1.020268</code></pre>
+</div>
+</div>
+</section><section id="parameters-intepretation---categorical-variable" class="slide level2"><h2>Parameters intepretation - Categorical variable</h2>
+<p>Let’s make a similar example with the number of solved exercises comparing students who attended online classes and students attending in person. The <code>class_c</code> is the dummy version of <code>class</code> (0 = online, 1 = inperson).</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+
+<div id="dmiquoanae" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#dmiquoanae table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#dmiquoanae thead, #dmiquoanae tbody, #dmiquoanae tfoot, #dmiquoanae tr, #dmiquoanae td, #dmiquoanae th {
+  border-style: none;
+}
+
+#dmiquoanae p {
+  margin: 0;
+  padding: 0;
+}
+
+#dmiquoanae .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#dmiquoanae .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#dmiquoanae .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#dmiquoanae .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#dmiquoanae .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#dmiquoanae .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#dmiquoanae .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#dmiquoanae .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#dmiquoanae .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#dmiquoanae .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#dmiquoanae .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#dmiquoanae .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#dmiquoanae .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#dmiquoanae .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#dmiquoanae .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#dmiquoanae .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#dmiquoanae .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#dmiquoanae .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#dmiquoanae .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#dmiquoanae .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#dmiquoanae .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#dmiquoanae .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#dmiquoanae .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#dmiquoanae .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#dmiquoanae .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#dmiquoanae .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#dmiquoanae .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#dmiquoanae .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#dmiquoanae .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#dmiquoanae .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#dmiquoanae .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#dmiquoanae .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#dmiquoanae .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#dmiquoanae .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#dmiquoanae .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#dmiquoanae .gt_left {
+  text-align: left;
+}
+
+#dmiquoanae .gt_center {
+  text-align: center;
+}
+
+#dmiquoanae .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#dmiquoanae .gt_font_normal {
+  font-weight: normal;
+}
+
+#dmiquoanae .gt_font_bold {
+  font-weight: bold;
+}
+
+#dmiquoanae .gt_font_italic {
+  font-style: italic;
+}
+
+#dmiquoanae .gt_super {
+  font-size: 65%;
+}
+
+#dmiquoanae .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#dmiquoanae .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#dmiquoanae .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#dmiquoanae .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#dmiquoanae .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#dmiquoanae .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#dmiquoanae .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead><tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" style="font-weight: bold;" scope="col" id="id">id</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" style="font-weight: bold;" scope="col" id="class">class</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" style="font-weight: bold;" scope="col" id="class_c">class_c</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" style="font-weight: bold;" scope="col" id="solved">solved</th>
+    </tr></thead>
+<tbody class="gt_table_body">
+<tr>
+<td headers="id" class="gt_row gt_center">1</td>
+<td headers="class" class="gt_row gt_center">online</td>
+<td headers="class_c" class="gt_row gt_center">0</td>
+<td headers="solved" class="gt_row gt_center">8</td>
+</tr>
+<tr>
+<td headers="id" class="gt_row gt_center">2</td>
+<td headers="class" class="gt_row gt_center">inperson</td>
+<td headers="class_c" class="gt_row gt_center">1</td>
+<td headers="solved" class="gt_row gt_center">18</td>
+</tr>
+<tr>
+<td headers="id" class="gt_row gt_center">3</td>
+<td headers="class" class="gt_row gt_center">online</td>
+<td headers="class_c" class="gt_row gt_center">0</td>
+<td headers="solved" class="gt_row gt_center">12</td>
+</tr>
+<tr>
+<td headers="id" class="gt_row gt_center">4</td>
+<td headers="class" class="gt_row gt_center">inperson</td>
+<td headers="class_c" class="gt_row gt_center">1</td>
+<td headers="solved" class="gt_row gt_center">12</td>
+</tr>
+<tr>
+<td headers="id" class="gt_row gt_center">...</td>
+<td headers="class" class="gt_row gt_center">...</td>
+<td headers="class_c" class="gt_row gt_center">...</td>
+<td headers="solved" class="gt_row gt_center">...</td>
+</tr>
+<tr>
+<td headers="id" class="gt_row gt_center">97</td>
+<td headers="class" class="gt_row gt_center">online</td>
+<td headers="class_c" class="gt_row gt_center">0</td>
+<td headers="solved" class="gt_row gt_center">10</td>
+</tr>
+<tr>
+<td headers="id" class="gt_row gt_center">98</td>
+<td headers="class" class="gt_row gt_center">inperson</td>
+<td headers="class_c" class="gt_row gt_center">1</td>
+<td headers="solved" class="gt_row gt_center">21</td>
+</tr>
+<tr>
+<td headers="id" class="gt_row gt_center">99</td>
+<td headers="class" class="gt_row gt_center">online</td>
+<td headers="class_c" class="gt_row gt_center">0</td>
+<td headers="solved" class="gt_row gt_center">8</td>
+</tr>
+<tr>
+<td headers="id" class="gt_row gt_center">100</td>
+<td headers="class" class="gt_row gt_center">inperson</td>
+<td headers="class_c" class="gt_row gt_center">1</td>
+<td headers="solved" class="gt_row gt_center">17</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section><section id="parameters-intepretation---categorical-variable-1" class="slide level2"><h2>Parameters intepretation - Categorical variable</h2>
+
+<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-14-1.svg" width="576" class="r-stretch quarto-figure-center"></section><section id="parameters-intepretation---categorical-variable-2" class="slide level2"><h2>Parameters intepretation - Categorical variable</h2>
+<p>R by default set the categorical variables using <strong>dummy-coding</strong>. In this case we set the reference category to <code>online</code>.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">solved</span> <span class="op">~</span> <span class="va">class</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">poisson</a></span><span class="op">(</span>link <span class="op">=</span> <span class="st">"log"</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; 
+#&gt; Call:
+#&gt; glm(formula = solved ~ class, family = poisson(link = "log"), 
+#&gt;     data = dat)
+#&gt; 
+#&gt; Deviance Residuals: 
+#&gt;      Min        1Q    Median        3Q       Max  
+#&gt; -2.38818  -0.77486  -0.07274   0.74539   2.81362  
+#&gt; 
+#&gt; Coefficients:
+#&gt;               Estimate Std. Error z value Pr(&gt;|z|)    
+#&gt; (Intercept)    2.22138    0.04657  47.695   &lt;2e-16 ***
+#&gt; classinperson  0.48801    0.05917   8.248   &lt;2e-16 ***
+#&gt; ---
+#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#&gt; 
+#&gt; (Dispersion parameter for poisson family taken to be 1)
+#&gt; 
+#&gt;     Null deviance: 173.39  on 99  degrees of freedom
+#&gt; Residual deviance: 103.33  on 98  degrees of freedom
+#&gt; AIC: 534.41
+#&gt; 
+#&gt; Number of Fisher Scoring iterations: 4</code></pre>
+</div>
+</div>
+</section><section id="parameters-intepretation---categorical-variable-3" class="slide level2"><h2>Parameters intepretation - Categorical variable</h2>
+<ul>
+<li>Similarly to the previous example, the intercept is the expected number of solved exercises when the <code>class</code> is 0. Thus the expected number of solved exercises for online students.</li>
+<li>the <code>classinperson</code> is the difference in log solved exercises between online and in person classes. In the response scale is the expected increase in the ratio of solved exercises. People doing in person classes solve 162.91% of the exercises of people doing online classes</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span><span class="op">[</span><span class="st">"(Intercept)"</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span><span class="op">[</span><span class="st">"(Intercept)"</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; (Intercept) (Intercept) 
+#&gt;    2.221375    9.220000</code></pre>
+</div>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span><span class="op">[</span><span class="st">"classinperson"</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span><span class="op">[</span><span class="st">"classinperson"</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; classinperson classinperson 
+#&gt;     0.4880076     1.6290672</code></pre>
+</div>
+</div>
+</section></section><section><section id="overdispersion" class="title-slide slide level1 section center"><h1>Overdispersion</h1>
+
+</section><section id="overdispersion-1" class="slide level2"><h2>Overdispersion</h2>
+<p><strong>Overdispersion</strong> concerns observing a greater variance compared to what would have been expected by the model.</p>
+<p>The <strong>overdispersion</strong> <span class="math inline">\(\phi\)</span> can be estimated using Pearson Residuals:</p>
+<p><span class="math display">\[\begin{align*}
+\hat \phi = \frac{\sum_{i = 1}^n \frac{(y_i - \hat y_i)^2}{\hat y_i}}{n - p - 1}
+\end{align*}\]</span></p>
+<p>Where the numerator is the sum of squared Pearson residuals, <span class="math inline">\(n\)</span> is the number of observations and <span class="math inline">\(k\)</span> the number of predictors. For standard Binomial and Poisson models <span class="math inline">\(\phi = 1\)</span>.</p>
+<!-- ref("Applied Regression Analysis and Generalized Linear Models, Fox (2016)", chapter = "15", page = "432") -->
+</section><section id="overdispersion-2" class="slide level2"><h2>Overdispersion</h2>
+<p>If the model is correctly specified for binomial and poisson models the ratio is equal to 1, of the ratio is <span class="math inline">\(&gt; 1\)</span> there is evidence for overdispersion. In practical terms, if the residual deviance is higher than the residuals degrees of freedom, there is evidence for overdispersion.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">P</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/residuals.html">residuals</a></span><span class="op">(</span><span class="va">fit</span>, type <span class="op">=</span> <span class="st">"pearson"</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">P</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/stats/df.residual.html">df.residual</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span> <span class="co"># nrow(fit$dat) - length(fit_p$coefficients)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; [1] 1.036323</code></pre>
+</div>
+</div>
+</section><section id="testing-overdispersion" class="slide level2"><h2>Testing overdispersion</h2>
+<p>To formally test for overdispersion i.e.&nbsp;testing if the ratio is significantly different from 1 we can use the <code><a href="https://easystats.github.io/performance/reference/check_overdispersion.html">performance::check_overdispersion()</a></code> function.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">performance</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/performance/reference/check_overdispersion.html">check_overdispersion</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; # Overdispersion test
+#&gt; 
+#&gt;        dispersion ratio =   1.036
+#&gt;   Pearson's Chi-Squared = 101.560
+#&gt;                 p-value =   0.383</code></pre>
+</div>
+</div>
+<!-- ref("Regression and Multilevel Models, (Gelman and Hill, 2007)", 6, "114-115") -->
+</section><section id="overdispersion-plot" class="slide level2"><h2>Overdispersion plot</h2>
+<p>Pearson residuals are defined as:</p>
+<p><span class="math display">\[\begin{align*}
+r_p = \frac{y_i - \hat y_i}{\sqrt{V(\hat y_i)}} \\
+V(\hat y_i) = \sqrt{\hat y_i}
+\end{align*}\]</span></p>
+<p>Remember that the mean and the variance are the same in Poisson models. If the model is correct, the standardized residuals should be normally distributed with mean 0 and variance 1.</p>
+</section><section id="overdispersion-plot-1" class="slide level2"><h2>Overdispersion plot</h2>
+
+<!-- ref("Regression and Multilevel Models, (Gelman \\& Hill, 2007)", 6, 114) -->
+<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-20-1.svg" width="576" class="r-stretch quarto-figure-center"></section><section id="variance-mean-relationship" class="slide level2"><h2>Variance-mean relationship</h2>
+<p>The overdispersion can be expressed also in terms of variance-mean ratio. In fact, when the ratio is 1, there is no evidence of overdispersion.</p>
+
+<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-21-1.svg" width="960" class="r-stretch quarto-figure-center"></section><section id="causes-of-overdispersion" class="slide level2"><h2>Causes of overdispersion</h2>
+<p>There could be multiple causes for overdispersion:</p>
+<ul>
+<li>the <strong>phenomenon itself</strong> cannot be modelled with a Poisson distribution</li>
+<li>
+<strong>outliers or anomalous obervations</strong> that increases the observed variance</li>
+<li>
+<strong>missing important variables</strong> in the model</li>
+</ul></section><section id="outliers-or-anomalous-data" class="slide level2"><h2>Outliers or anomalous data</h2>
+<p>This (simulated) dataset contains <span class="math inline">\(n = 30\)</span> observations coming from a poisson model in the form <span class="math inline">\(y = 1 + 2x\)</span> and <span class="math inline">\(n = 7\)</span> observations coming from a model <span class="math inline">\(y = 1 + 10x\)</span>.</p>
+
+<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-22-1.svg" width="576" class="r-stretch quarto-figure-center"></section><section id="outliers-or-anomalous-data-1" class="slide level2"><h2>Outliers or anomalous data</h2>
+<p>Clearly the sum of squared pearson residuals is inflated by these values producing more variance compared to what should be expected.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">datout</span><span class="op">$</span><span class="va">y</span><span class="op">)</span>, var <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span><span class="op">(</span><span class="va">datout</span><span class="op">$</span><span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="co"># mean and variance should be similar</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt;     mean      var 
+#&gt; 2.756757 6.689189</code></pre>
+</div>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">performance</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/performance/reference/check_overdispersion.html">check_overdispersion</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; # Overdispersion test
+#&gt; 
+#&gt;        dispersion ratio =  1.515
+#&gt;   Pearson's Chi-Squared = 53.019
+#&gt;                 p-value =  0.026</code></pre>
+</div>
+</div>
+</section><section id="missing-important-variables-in-the-model" class="slide level2"><h2>Missing important variables in the model</h2>
+<p>Let’s imagine to analyze again the dataset with the number of solved exercises. We have the effect of the <code>studyh</code> variable. In addition we have the effect of the <code>class</code> variable, without interaction.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+
+<div id="hpqpruoaru" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#hpqpruoaru table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#hpqpruoaru thead, #hpqpruoaru tbody, #hpqpruoaru tfoot, #hpqpruoaru tr, #hpqpruoaru td, #hpqpruoaru th {
+  border-style: none;
+}
+
+#hpqpruoaru p {
+  margin: 0;
+  padding: 0;
+}
+
+#hpqpruoaru .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#hpqpruoaru .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#hpqpruoaru .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#hpqpruoaru .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#hpqpruoaru .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#hpqpruoaru .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#hpqpruoaru .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#hpqpruoaru .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#hpqpruoaru .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#hpqpruoaru .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#hpqpruoaru .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#hpqpruoaru .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#hpqpruoaru .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#hpqpruoaru .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#hpqpruoaru .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#hpqpruoaru .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#hpqpruoaru .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#hpqpruoaru .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#hpqpruoaru .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#hpqpruoaru .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#hpqpruoaru .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#hpqpruoaru .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#hpqpruoaru .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#hpqpruoaru .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#hpqpruoaru .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#hpqpruoaru .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#hpqpruoaru .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#hpqpruoaru .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#hpqpruoaru .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#hpqpruoaru .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#hpqpruoaru .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#hpqpruoaru .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#hpqpruoaru .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#hpqpruoaru .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#hpqpruoaru .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#hpqpruoaru .gt_left {
+  text-align: left;
+}
+
+#hpqpruoaru .gt_center {
+  text-align: center;
+}
+
+#hpqpruoaru .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#hpqpruoaru .gt_font_normal {
+  font-weight: normal;
+}
+
+#hpqpruoaru .gt_font_bold {
+  font-weight: bold;
+}
+
+#hpqpruoaru .gt_font_italic {
+  font-style: italic;
+}
+
+#hpqpruoaru .gt_super {
+  font-size: 65%;
+}
+
+#hpqpruoaru .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#hpqpruoaru .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#hpqpruoaru .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#hpqpruoaru .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#hpqpruoaru .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#hpqpruoaru .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#hpqpruoaru .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead><tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" style="font-weight: bold;" scope="col" id="id">id</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" style="font-weight: bold;" scope="col" id="class">class</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" style="font-weight: bold;" scope="col" id="studyh">studyh</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" style="font-weight: bold;" scope="col" id="class_c">class_c</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" style="font-weight: bold;" scope="col" id="lp">lp</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" style="font-weight: bold;" scope="col" id="solved">solved</th>
+    </tr></thead>
+<tbody class="gt_table_body">
+<tr>
+<td headers="id" class="gt_row gt_center">1</td>
+<td headers="class" class="gt_row gt_center">online</td>
+<td headers="studyh" class="gt_row gt_center">82</td>
+<td headers="class_c" class="gt_row gt_center">0</td>
+<td headers="lp" class="gt_row gt_center">22.613</td>
+<td headers="solved" class="gt_row gt_center">24</td>
+</tr>
+<tr>
+<td headers="id" class="gt_row gt_center">2</td>
+<td headers="class" class="gt_row gt_center">inperson</td>
+<td headers="studyh" class="gt_row gt_center">65</td>
+<td headers="class_c" class="gt_row gt_center">1</td>
+<td headers="lp" class="gt_row gt_center">47.734</td>
+<td headers="solved" class="gt_row gt_center">50</td>
+</tr>
+<tr>
+<td headers="id" class="gt_row gt_center">3</td>
+<td headers="class" class="gt_row gt_center">online</td>
+<td headers="studyh" class="gt_row gt_center">12</td>
+<td headers="class_c" class="gt_row gt_center">0</td>
+<td headers="lp" class="gt_row gt_center">11.268</td>
+<td headers="solved" class="gt_row gt_center">15</td>
+</tr>
+<tr>
+<td headers="id" class="gt_row gt_center">4</td>
+<td headers="class" class="gt_row gt_center">inperson</td>
+<td headers="studyh" class="gt_row gt_center">54</td>
+<td headers="class_c" class="gt_row gt_center">1</td>
+<td headers="lp" class="gt_row gt_center">42.785</td>
+<td headers="solved" class="gt_row gt_center">50</td>
+</tr>
+<tr>
+<td headers="id" class="gt_row gt_center">...</td>
+<td headers="class" class="gt_row gt_center">...</td>
+<td headers="studyh" class="gt_row gt_center">...</td>
+<td headers="class_c" class="gt_row gt_center">...</td>
+<td headers="lp" class="gt_row gt_center">...</td>
+<td headers="solved" class="gt_row gt_center">...</td>
+</tr>
+<tr>
+<td headers="id" class="gt_row gt_center">37</td>
+<td headers="class" class="gt_row gt_center">online</td>
+<td headers="studyh" class="gt_row gt_center">85</td>
+<td headers="class_c" class="gt_row gt_center">0</td>
+<td headers="lp" class="gt_row gt_center">23.298</td>
+<td headers="solved" class="gt_row gt_center">35</td>
+</tr>
+<tr>
+<td headers="id" class="gt_row gt_center">38</td>
+<td headers="class" class="gt_row gt_center">inperson</td>
+<td headers="studyh" class="gt_row gt_center">55</td>
+<td headers="class_c" class="gt_row gt_center">1</td>
+<td headers="lp" class="gt_row gt_center">43.213</td>
+<td headers="solved" class="gt_row gt_center">43</td>
+</tr>
+<tr>
+<td headers="id" class="gt_row gt_center">39</td>
+<td headers="class" class="gt_row gt_center">online</td>
+<td headers="studyh" class="gt_row gt_center">80</td>
+<td headers="class_c" class="gt_row gt_center">0</td>
+<td headers="lp" class="gt_row gt_center">22.167</td>
+<td headers="solved" class="gt_row gt_center">26</td>
+</tr>
+<tr>
+<td headers="id" class="gt_row gt_center">40</td>
+<td headers="class" class="gt_row gt_center">inperson</td>
+<td headers="studyh" class="gt_row gt_center">77</td>
+<td headers="class_c" class="gt_row gt_center">1</td>
+<td headers="lp" class="gt_row gt_center">53.788</td>
+<td headers="solved" class="gt_row gt_center">54</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section><section id="missing-important-variables-in-the-model-1" class="slide level2"><h2>Missing important variables in the model</h2>
+<p>We can also have a look at the data:</p>
+
+<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-25-1.svg" width="576" class="r-stretch quarto-figure-center"></section><section id="missing-important-variables-in-the-model-2" class="slide level2"><h2>Missing important variables in the model</h2>
+<p>Now let’s fit the model considering only <code>studyh</code> and ignoring the group:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">solved</span> <span class="op">~</span> <span class="va">studyh</span>, data <span class="op">=</span> <span class="va">dat</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">poisson</a></span><span class="op">(</span>link <span class="op">=</span> <span class="st">"log"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; 
+#&gt; Call:
+#&gt; glm(formula = solved ~ studyh, family = poisson(link = "log"), 
+#&gt;     data = dat)
+#&gt; 
+#&gt; Deviance Residuals: 
+#&gt;    Min      1Q  Median      3Q     Max  
+#&gt; -5.047  -2.247  -0.107   2.214   3.246  
+#&gt; 
+#&gt; Coefficients:
+#&gt;             Estimate Std. Error z value Pr(&gt;|z|)    
+#&gt; (Intercept) 2.692791   0.068831   39.12   &lt;2e-16 ***
+#&gt; studyh      0.013624   0.001063   12.82   &lt;2e-16 ***
+#&gt; ---
+#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#&gt; 
+#&gt; (Dispersion parameter for poisson family taken to be 1)
+#&gt; 
+#&gt;     Null deviance: 417.99  on 39  degrees of freedom
+#&gt; Residual deviance: 243.99  on 38  degrees of freedom
+#&gt; AIC: 451.39
+#&gt; 
+#&gt; Number of Fisher Scoring iterations: 4</code></pre>
+</div>
+</div>
+</section><section id="missing-important-variables-in-the-model-3" class="slide level2"><h2>Missing important variables in the model</h2>
+<p>Essentially, we are fitting an average relationship across groups but the model ignore that the two groups differs, thus the observed variance is definitely higher because we need two separate means to explain the <code>class</code> effect.</p>
+
+<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-27-1.svg" width="576" class="r-stretch quarto-figure-center"></section><section id="missing-important-variables-in-the-model-4" class="slide level2"><h2>Missing important variables in the model</h2>
+<p>By fitting the appropriate model, the overdispersion is no longer a problem:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">solved</span> <span class="op">~</span> <span class="va">studyh</span> <span class="op">+</span> <span class="va">class</span>, data <span class="op">=</span> <span class="va">dat</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">poisson</a></span><span class="op">(</span>link <span class="op">=</span> <span class="st">"log"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit2</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; 
+#&gt; Call:
+#&gt; glm(formula = solved ~ studyh + class, family = poisson(link = "log"), 
+#&gt;     data = dat)
+#&gt; 
+#&gt; Deviance Residuals: 
+#&gt;      Min        1Q    Median        3Q       Max  
+#&gt; -1.93006  -0.48422   0.00417   0.43834   1.97814  
+#&gt; 
+#&gt; Coefficients:
+#&gt;               Estimate Std. Error z value Pr(&gt;|z|)    
+#&gt; (Intercept)   2.275159   0.078239   29.08   &lt;2e-16 ***
+#&gt; studyh        0.010895   0.001068   10.21   &lt;2e-16 ***
+#&gt; classinperson 0.907365   0.065373   13.88   &lt;2e-16 ***
+#&gt; ---
+#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#&gt; 
+#&gt; (Dispersion parameter for poisson family taken to be 1)
+#&gt; 
+#&gt;     Null deviance: 417.993  on 39  degrees of freedom
+#&gt; Residual deviance:  29.022  on 37  degrees of freedom
+#&gt; AIC: 238.41
+#&gt; 
+#&gt; Number of Fisher Scoring iterations: 4</code></pre>
+</div>
+</div>
+</section><section id="missing-important-variables-in-the-model-5" class="slide level2"><h2>Missing important variables in the model</h2>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">performance</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/performance/reference/check_overdispersion.html">check_overdispersion</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; # Overdispersion test
+#&gt; 
+#&gt;        dispersion ratio =   6.115
+#&gt;   Pearson's Chi-Squared = 232.369
+#&gt;                 p-value = &lt; 0.001</code></pre>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">performance</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/performance/reference/check_overdispersion.html">check_overdispersion</a></span><span class="op">(</span><span class="va">fit2</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; # Overdispersion test
+#&gt; 
+#&gt;        dispersion ratio =  0.777
+#&gt;   Pearson's Chi-Squared = 28.738
+#&gt;                 p-value =  0.832</code></pre>
+</div>
+</div>
+</section><section id="missing-important-variables-in-the-model-6" class="slide level2"><h2>Missing important variables in the model</h2>
+<p>Also the residuals plots clearly improved after including all relevant predictors:</p>
+
+<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-31-1.svg" width="576" class="r-stretch quarto-figure-center"></section><section id="why-worring-about-overdispersion" class="slide level2"><h2>Why worring about overdispersion?</h2>
+<p>Before analyzing the two main strategies to deal with overdispersion, it is important to understand why it is very problematic.</p>
+<ul>
+<li><p>Despite the estimated parameters (<span class="math inline">\(\beta\)</span>) are not affected by overdispersion, standard errors are underestimated. The underestimation increase as the severity of the overdispersion increase.</p></li>
+<li><p>Underestimated standard errors produce (biased) higher <span class="math inline">\(z\)</span> scores inflating the type-1 error (i.e., lower p values)</p></li>
+</ul></section><section id="why-worring-about-overdispersion-1" class="slide level2"><h2>Why worring about overdispersion?</h2>
+<p>The estimated overdispersion of <code>fit</code> is ~ 6.4208936. The <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> function in R has a <code>dispersion</code> argument to check how model parameters are affected.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">phi</span> <span class="op">&lt;-</span> <span class="va">fit</span><span class="op">$</span><span class="va">deviance</span> <span class="op">/</span> <span class="va">fit</span><span class="op">$</span><span class="va">df.residual</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit</span>, dispersion <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">$</span><span class="va">coefficients</span> <span class="co"># the default</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt;               Estimate  Std. Error  z value     Pr(&gt;|z|)
+#&gt; (Intercept) 2.69279058 0.068830558 39.12202 0.000000e+00
+#&gt; studyh      0.01362422 0.001062724 12.82009 1.265575e-37</code></pre>
+</div>
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit</span>, dispersion <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">$</span><span class="va">coefficients</span> <span class="co"># assuming phi = 2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt;               Estimate  Std. Error   z value      Pr(&gt;|z|)
+#&gt; (Intercept) 2.69279058 0.097341109 27.663447 1.923115e-168
+#&gt; studyh      0.01362422 0.001502919  9.065171  1.244091e-19</code></pre>
+</div>
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit</span>, dispersion <span class="op">=</span> <span class="va">phi</span><span class="op">)</span><span class="op">$</span><span class="va">coefficients</span> <span class="co"># the appropriate</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt;               Estimate  Std. Error   z value     Pr(&gt;|z|)
+#&gt; (Intercept) 2.69279058 0.174413070 15.439156 8.926080e-54
+#&gt; studyh      0.01362422 0.002692888  5.059333 4.207258e-07</code></pre>
+</div>
+</div>
+</section><section id="why-worring-about-overdispersion-2" class="slide level2"><h2>Why worring about overdispersion?</h2>
+<p>By using multiple values for <span class="math inline">\(\phi\)</span> we can see the impact on the standard error. <span class="math inline">\(\phi = 1\)</span> is what is assumed by the Poisson model.</p>
+
+<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-33-1.svg" width="576" class="r-stretch quarto-figure-center"></section></section><section><section id="dealing-with-overdispersion" class="title-slide slide level1 section center"><h1>Dealing with overdispersion</h1>
+
+</section><section id="dealing-with-overdispersion-1" class="slide level2"><h2>Dealing with overdispersion</h2>
+<p>If all the variables are included and there are no outliers, the phenomenon itself contains more variability compared to what predicted by the Poisson. There are two main approaches to deal with the situation:</p>
+<ul>
+<li>
+<strong>quasi-poisson</strong> model</li>
+<li>poisson-gamma model AKA <strong>negative-binomial model</strong>
+</li>
+</ul></section><section id="quasi-poisson-model" class="slide level2"><h2>Quasi-poisson model</h2>
+<p>The <strong>quasi-poisson</strong> model is essentially a poisson model that estimate the <span class="math inline">\(\phi\)</span> parameter and adjust the standard errors accordingly. Again, assuming to fit the <code>studyh</code> only model (with overdispersion):</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">solved</span> <span class="op">~</span> <span class="va">studyh</span>, data <span class="op">=</span> <span class="va">dat</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">quasipoisson</a></span><span class="op">(</span>link <span class="op">=</span> <span class="st">"log"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; 
+#&gt; Call:
+#&gt; glm(formula = solved ~ studyh, family = quasipoisson(link = "log"), 
+#&gt;     data = dat)
+#&gt; 
+#&gt; Deviance Residuals: 
+#&gt;    Min      1Q  Median      3Q     Max  
+#&gt; -5.047  -2.247  -0.107   2.214   3.246  
+#&gt; 
+#&gt; Coefficients:
+#&gt;             Estimate Std. Error t value Pr(&gt;|t|)    
+#&gt; (Intercept) 2.692791   0.170209  15.821  &lt; 2e-16 ***
+#&gt; studyh      0.013624   0.002628   5.184 7.46e-06 ***
+#&gt; ---
+#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#&gt; 
+#&gt; (Dispersion parameter for quasipoisson family taken to be 6.115055)
+#&gt; 
+#&gt;     Null deviance: 417.99  on 39  degrees of freedom
+#&gt; Residual deviance: 243.99  on 38  degrees of freedom
+#&gt; AIC: NA
+#&gt; 
+#&gt; Number of Fisher Scoring iterations: 4</code></pre>
+</div>
+</div>
+</section><section id="quasi-poisson-model-1" class="slide level2"><h2>Quasi-poisson model</h2>
+<p>The quasi-poisson model estimates the same parameters (<span class="math inline">\(\beta\)</span>) and adjust standard errors. Notice that using <code>summary(dispersion = )</code> is the same as fitting a quasi-Poisson model and using the estimated <span class="math inline">\(\phi\)</span>.</p>
+<p>The quasi-poisson model is useful because it is a very simple way to deal with overdispersion.</p>
+<p>The variance (<span class="math inline">\(V(\mu)\)</span>) of the Poisson model is no longer <span class="math inline">\(\mu\)</span> but <span class="math inline">\(V(\mu) = \mu\phi\)</span>. When <span class="math inline">\(\phi\)</span> is close to 1, the quasi-Poisson model reduced to a standard Poisson model</p>
+</section><section id="quasi-poisson-model-2" class="slide level2"><h2>Quasi-poisson model</h2>
+<p>Here we compare the expected variance (<span class="math inline">\(\pm 2\sqrt{V(y_i)}\)</span>)<sup>1</sup> of the Quasi-Poisson and Poisson models:</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure><p><img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-35-1.svg" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<aside><ol class="aside-footnotes"><li id="fn1"><p>This is just an example that did not take into account the link function (notice that the yellow line goes a little bit under 0)</p></li></ol></aside></section><section id="problems-of-quasi--model" class="slide level2"><h2>Problems of Quasi-* model</h2>
+<p>The main problem of quasi-* models is that they are not a specific distribution family and there is not a likelihood function. For this reason, we cannot perform model comparison the standard AIC/BIC. See <span class="citation" data-cites="Ver_Hoef2007-jc">(<a href="#/references" role="doc-biblioref" onclick="">Ver Hoef &amp; Boveng, 2007</a>)</span> for an overview.</p>
+</section><section id="negative-binomial-model" class="slide level2"><h2>Negative-binomial model</h2>
+<p>A negative binomial model is different probability distribution with two parameters: the mean as in standard poisson model and the dispersion parameter. Similarly to the quasi-poisson model it estimates a dispersion parameter.</p>
+<p>Practically the negative-binomial model can be considered as a hierarchical model:</p>
+<p><span class="math display">\[\begin{align*}
+y_i \sim Poisson(\lambda_i) \\
+\lambda_i \sim Gamma(\mu, \frac{1}{\theta})
+\end{align*}\]</span></p>
+<p>In this way, the Gamma distribution regulate the <span class="math inline">\(\lambda\)</span> variability that otherwise is fixed to a single value in the Poisson model.</p>
+<!-- ref("Generalized linear models, Dunn (2018)", "10", "400") -->
+</section><section id="negative-binomial-model-1" class="slide level2"><h2>Negative-binomial model<sup>1</sup>
+</h2>
+<p>The Poisson-Gamma mixture can be expressed as:</p>
+<p><span class="math display">\[
+p(y; \mu, \theta) = \frac{\Gamma(y + \theta)}{\Gamma(\theta)\Gamma(y + 1)}\left(\frac{\mu}{\mu + \theta}\right)^{y} \left(\frac{\theta}{\mu + \theta}\right)^\theta
+\]</span></p>
+<p>Where <span class="math inline">\(\theta\)</span> is the overdispersion parameter, <span class="math inline">\(\Gamma()\)</span> is the gamma function. The mean is <span class="math inline">\(\mu\)</span> and the variance is <span class="math inline">\(\mu + \frac{\mu^2}{\theta}\)</span>. The <span class="math inline">\(\theta\)</span> is the inverse of the overdispersion in terms that as <span class="math inline">\(1/\theta\)</span> increase the data are more overdispersed. As <span class="math inline">\(1/\theta\)</span> approaches 0, the negative-binomial reduced to a Poisson model.</p>
+<!-- ref("Generalized linear models, Dunn (2018)", "10", "400") -->
+<aside><ol class="aside-footnotes"><li id="fn2"><p>There are multiple parametrizations of the negative-binomial distribution. The one used by <code>MASS</code> is in terms of poisson-gamma mixture see https://mc-stan.org/docs/2_20/functions-reference/nbalt.html</p></li></ol></aside></section><section id="negative-binomial-model-2" class="slide level2"><h2>Negative-binomial model</h2>
+<p>Compared to the Poisson model, the negative binomial allows for overdispersion estimating the parameter <span class="math inline">\(\theta\)</span> and compared to the quasi-poisson model the variance is not a linear increase of the mean (<span class="math inline">\(V(\mu) = \theta\mu\)</span>) but have a quadratic relationship <span class="math inline">\(V(\mu) = \mu + \mu^2/\theta\)</span></p>
+
+<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-36-1.svg" width="576" class="r-stretch quarto-figure-center"></section><section id="negative-binomial-model-3" class="slide level2"><h2>Negative-binomial model</h2>
+<p>We can use the <code>MASS</code> package to implement the negative binomial distribution using the <code><a href="https://rdrr.io/pkg/MASS/man/rnegbin.html">MASS::rnegbin()</a></code>:</p>
+
+<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-37-1.svg" width="576" class="r-stretch quarto-figure-center"></section><section id="negative-binomial-model-4" class="slide level2"><h2>Negative-binomial model</h2>
+<p>The <span class="math inline">\(\theta\)</span> parameter is the estimated dispersion. To note, is not the same as <span class="math inline">\(\phi\)</span> in the quasi-poisson model. As <span class="math inline">\(\theta\)</span> increase, the overdispersion is reduced and the model is similar to a standard Poisson model.</p>
+
+<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-38-1.svg" width="576" class="r-stretch quarto-figure-center"></section><section id="negative-binomial-model-5" class="slide level2"><h2>Negative-binomial model</h2>
+<p>For fitting a negative-binomial model we cannot use the <code>glm</code> function but we need to use the <code><a href="https://rdrr.io/pkg/MASS/man/glm.nb.html">MASS::glm.nb()</a></code> function. The syntax is almost the same but we do not need to specify the family because this function only fit negative-binomial models. Let’s simulate some data coming from a negative binomial distribution with <span class="math inline">\(\theta = 10\)</span></p>
+<div class="cell" data-layout-align="center">
+<details><summary>Code</summary><div class="sourceCode" id="cb41"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">theta</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
+<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">100</span></span>
+<span><span class="va">b0</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
+<span><span class="va">b1</span> <span class="op">&lt;-</span> <span class="fl">5</span></span>
+<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu">sim_design</span><span class="op">(</span><span class="va">n</span>, nx <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">dat</span><span class="op">$</span><span class="va">lp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span><span class="op">(</span><span class="va">dat</span>, <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">b0</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">b1</span><span class="op">)</span><span class="op">*</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">dat</span><span class="op">$</span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span><span class="op">(</span><span class="va">dat</span>, <span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/rnegbin.html">rnegbin</a></span><span class="op">(</span><span class="va">n</span>, <span class="va">lp</span>, <span class="va">theta</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+
+<div id="rhoqkiyghr" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#rhoqkiyghr table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#rhoqkiyghr thead, #rhoqkiyghr tbody, #rhoqkiyghr tfoot, #rhoqkiyghr tr, #rhoqkiyghr td, #rhoqkiyghr th {
+  border-style: none;
+}
+
+#rhoqkiyghr p {
+  margin: 0;
+  padding: 0;
+}
+
+#rhoqkiyghr .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#rhoqkiyghr .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#rhoqkiyghr .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#rhoqkiyghr .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#rhoqkiyghr .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#rhoqkiyghr .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#rhoqkiyghr .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#rhoqkiyghr .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#rhoqkiyghr .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#rhoqkiyghr .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#rhoqkiyghr .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#rhoqkiyghr .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#rhoqkiyghr .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#rhoqkiyghr .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#rhoqkiyghr .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#rhoqkiyghr .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#rhoqkiyghr .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#rhoqkiyghr .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#rhoqkiyghr .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rhoqkiyghr .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#rhoqkiyghr .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#rhoqkiyghr .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#rhoqkiyghr .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rhoqkiyghr .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#rhoqkiyghr .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#rhoqkiyghr .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#rhoqkiyghr .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rhoqkiyghr .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#rhoqkiyghr .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#rhoqkiyghr .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#rhoqkiyghr .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#rhoqkiyghr .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#rhoqkiyghr .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rhoqkiyghr .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#rhoqkiyghr .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#rhoqkiyghr .gt_left {
+  text-align: left;
+}
+
+#rhoqkiyghr .gt_center {
+  text-align: center;
+}
+
+#rhoqkiyghr .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#rhoqkiyghr .gt_font_normal {
+  font-weight: normal;
+}
+
+#rhoqkiyghr .gt_font_bold {
+  font-weight: bold;
+}
+
+#rhoqkiyghr .gt_font_italic {
+  font-style: italic;
+}
+
+#rhoqkiyghr .gt_super {
+  font-size: 65%;
+}
+
+#rhoqkiyghr .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#rhoqkiyghr .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#rhoqkiyghr .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#rhoqkiyghr .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#rhoqkiyghr .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#rhoqkiyghr .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#rhoqkiyghr .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead><tr class="gt_col_headings">
+<th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" style="font-weight: bold;" scope="col" id="id">id</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" style="font-weight: bold;" scope="col" id="x">x</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" style="font-weight: bold;" scope="col" id="y">y</th>
+    </tr></thead>
+<tbody class="gt_table_body">
+<tr>
+<td headers="id" class="gt_row gt_center">1</td>
+<td headers="x" class="gt_row gt_center">0.427</td>
+<td headers="y" class="gt_row gt_center">11</td>
+</tr>
+<tr>
+<td headers="id" class="gt_row gt_center">2</td>
+<td headers="x" class="gt_row gt_center">0.365</td>
+<td headers="y" class="gt_row gt_center">13</td>
+</tr>
+<tr>
+<td headers="id" class="gt_row gt_center">...</td>
+<td headers="x" class="gt_row gt_center">...</td>
+<td headers="y" class="gt_row gt_center">...</td>
+</tr>
+<tr>
+<td headers="id" class="gt_row gt_center">99</td>
+<td headers="x" class="gt_row gt_center">0.966</td>
+<td headers="y" class="gt_row gt_center">41</td>
+</tr>
+<tr>
+<td headers="id" class="gt_row gt_center">100</td>
+<td headers="x" class="gt_row gt_center">0.154</td>
+<td headers="y" class="gt_row gt_center">12</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section><section id="negative-binomial-model-6" class="slide level2"><h2>Negative-binomial model</h2>
+
+<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-41-1.svg" width="576" class="r-stretch quarto-figure-center"></section><section id="negative-binomial-model-7" class="slide level2"><h2>Negative-binomial model</h2>
+<p>Then we can fit the model:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit_nb</span> <span class="op">&lt;-</span> <span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/glm.nb.html">glm.nb</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit_nb</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; 
+#&gt; Call:
+#&gt; MASS::glm.nb(formula = y ~ x, data = dat, init.theta = 11.32327809, 
+#&gt;     link = log)
+#&gt; 
+#&gt; Deviance Residuals: 
+#&gt;     Min       1Q   Median       3Q      Max  
+#&gt; -2.7104  -0.7507  -0.1075   0.6324   2.4510  
+#&gt; 
+#&gt; Coefficients:
+#&gt;             Estimate Std. Error z value Pr(&gt;|z|)    
+#&gt; (Intercept)  2.17693    0.08282   26.28   &lt;2e-16 ***
+#&gt; x            1.82119    0.13811   13.19   &lt;2e-16 ***
+#&gt; ---
+#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#&gt; 
+#&gt; (Dispersion parameter for Negative Binomial(11.3233) family taken to be 1)
+#&gt; 
+#&gt;     Null deviance: 273.823  on 99  degrees of freedom
+#&gt; Residual deviance:  98.035  on 98  degrees of freedom
+#&gt; AIC: 696.14
+#&gt; 
+#&gt; Number of Fisher Scoring iterations: 1
+#&gt; 
+#&gt; 
+#&gt;               Theta:  11.32 
+#&gt;           Std. Err.:  2.38 
+#&gt; 
+#&gt;  2 x log-likelihood:  -690.143</code></pre>
+</div>
+</div>
+</section><section id="negative-binomial-model-8" class="slide level2"><h2>Negative-binomial model</h2>
+<p>Here we compare the expected variance (<span class="math inline">\(\pm 2\sqrt{V(y_i)}\)</span>) of the Negative binomial and Poisson models:</p>
+
+<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-43-1.svg" width="576" class="r-stretch quarto-figure-center"></section><section id="negative-binomial-model-9" class="slide level2"><h2>Negative-binomial model</h2>
+<p>Here we compare the expected variance (<span class="math inline">\(\pm 2\sqrt{V(y_i)}\)</span>) of the three models:</p>
+
+<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-44-1.svg" width="576" class="r-stretch quarto-figure-center"></section><section id="negative-binomial-model-10" class="slide level2"><h2>Negative-binomial model</h2>
+<p>We can compare the coefficients fitting the Poisson, the Quasi-Poisson and the Negative-binomial model:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit_p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span>, data <span class="op">=</span> <span class="va">dat</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">poisson</a></span><span class="op">(</span>link <span class="op">=</span> <span class="st">"log"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">fit_qp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span>, data <span class="op">=</span> <span class="va">dat</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">quasipoisson</a></span><span class="op">(</span>link <span class="op">=</span> <span class="st">"log"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">car</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/car/man/compareCoefs.html">compareCoefs</a></span><span class="op">(</span><span class="va">fit_nb</span>, <span class="va">fit_p</span>, <span class="va">fit_qp</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; Calls:
+#&gt; 1: MASS::glm.nb(formula = y ~ x, data = dat, init.theta = 11.32327809, link 
+#&gt;   = log)
+#&gt; 2: glm(formula = y ~ x, family = poisson(link = "log"), data = dat)
+#&gt; 3: glm(formula = y ~ x, family = quasipoisson(link = "log"), data = dat)
+#&gt; 
+#&gt;             Model 1 Model 2 Model 3
+#&gt; (Intercept)  2.1769  2.2043  2.2043
+#&gt; SE           0.0828  0.0534  0.0970
+#&gt;                                    
+#&gt; x            1.8212  1.7723  1.7723
+#&gt; SE           0.1381  0.0802  0.1456
+#&gt; </code></pre>
+</div>
+</div>
+</section><section id="negative-binomial-model-nb-vs-quasi-poisson-qp" class="slide level2"><h2>Negative-binomial model (NB) vs Quasi-poisson (QP)</h2>
+<ul>
+<li>The NB has the likelihood function thus AIC, LRT and other likelihood-based metrics works compared to the QP</li>
+<li>The NB assume a different mean-variance relationship thus estimated coefficients could be different to the P where QP produce the same estimates.</li>
+<li>Both NB and QP estimate higher standard errors in the presence of overdispersion</li>
+<li>If there is evidence of overdispersion, the important is to fit a model that take into account it</li>
+</ul></section><section id="simulate-nb-data-extra" class="slide level2"><h2>Simulate NB data <code>#extra</code><sup>1</sup>
+</h2>
+<p>If you want to try to simulate NB data you can use the <code>MASS::rnegbin(n, mu, theta)</code> function or the <code>rnb(n, mu, vmr)</code> custom function that could be more intuitive because requires <span class="math inline">\(\mu\)</span> (i.e., the mean) and <code>vmr</code> that is the desired variance-mean ratio. Using <code>message = TRUE</code> it will tells the <span class="math inline">\(\theta\)</span> value:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu">rnb</span><span class="op">(</span><span class="fl">1e5</span>, mu <span class="op">=</span> <span class="fl">10</span>, vmr <span class="op">=</span> <span class="fl">7</span>, message <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>#&gt; y ~ NegBin(mu = 10, theta = 1.67), var = 70.00, vmr = 7.00</code></pre>
+</div>
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">nprint</span><span class="op">(</span>mu <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span>, v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span>, vmr <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt;     mu      v    vmr 
+#&gt;  9.958 69.569  6.986</code></pre>
+</div>
+</div>
+<aside><ol class="aside-footnotes"><li id="fn3"><p>Using <code>vmr = 1</code> it will use the <code><a href="https://rdrr.io/r/stats/Poisson.html">rpois()</a></code> function</p></li></ol></aside></section><section id="simulate-nb-data-extra-1" class="slide level2"><h2>Simulate NB data <code>#extra</code>
+</h2>
+<p>You can also use the <code>theta</code> parameter within the <code>rnb</code> function. As <span class="math inline">\(\theta\)</span> increase the overdispersion is reduced. Thus you can think the inverse of <span class="math inline">\(1/\theta\)</span> as an index of overdispersion.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu">rnb</span><span class="op">(</span><span class="fl">1e5</span>, mu <span class="op">=</span> <span class="fl">10</span>, theta <span class="op">=</span> <span class="fl">10</span>, message <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu">rnb</span><span class="op">(</span><span class="fl">1e5</span>, mu <span class="op">=</span> <span class="fl">10</span>, theta <span class="op">=</span> <span class="fl">5</span>, message <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu">rnb</span><span class="op">(</span><span class="fl">1e5</span>, mu <span class="op">=</span> <span class="fl">10</span>, theta <span class="op">=</span> <span class="fl">1</span>, message <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section><section id="deviance-based-pseudo-r2" class="slide level2"><h2>Deviance based pseudo-<span class="math inline">\(R^2\)</span>
+</h2>
+<p>The Deviance based pseudo-<span class="math inline">\(R^2\)</span> is computed from the ratio between the residual deviance and the null deviance<sup>1</sup>:</p>
+<p><span class="math display">\[
+R^2 = 1 - \frac{D_{current}}{D_{null}}
+\]</span> <!-- ref("Applied Regression Analysis and Generalized Linear Models, Fox (2016)", "14.1", "383") --></p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fl">1</span> <span class="op">-</span> <span class="va">fit_p</span><span class="op">$</span><span class="va">deviance</span><span class="op">/</span><span class="va">fit_p</span><span class="op">$</span><span class="va">null.deviance</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; [1] 0.6229535</code></pre>
+</div>
+</div>
+<aside><ol class="aside-footnotes"><li id="fn4"><p>https://en.wikipedia.org/wiki/Pseudo-R-squared</p></li></ol></aside></section><section id="mcfaddens-pseudo-r2" class="slide level2"><h2>McFadden’s pseudo-<span class="math inline">\(R^2\)</span>
+</h2>
+<p>The McFadden’s pseudo-<span class="math inline">\(R^2\)</span> compute the ratio between the log-likelihood of the intercept-only (i.e., null) model and the current model <span class="citation" data-cites="McFadden1987-qq">(<a href="#/references" role="doc-biblioref" onclick="">McFadden, 1987</a>)</span>:</p>
+<p><span class="math display">\[
+R^2 = 1 - \frac{\log(\mathcal{L_{current}})}{\log(\mathcal{L_{null}})}
+\]</span></p>
+<p>There is also the adjusted version that take into account the number of parameters of the model. In R can be computed manually or using the <code><a href="https://easystats.github.io/performance/reference/r2_mcfadden.html">performance::r2_mcfadden()</a></code>:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">performance</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/performance/reference/r2_mcfadden.html">r2_mcfadden</a></span><span class="op">(</span><span class="va">fit_p</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; # R2 for Generalized Linear Regression
+#&gt;        R2: 0.396
+#&gt;   adj. R2: 0.394</code></pre>
+</div>
+</div>
+</section><section id="nagelkerkes-pseudo-r2" class="slide level2"><h2>Nagelkerke’s pseudo-<span class="math inline">\(R^2\)</span>
+</h2>
+<p>The Cox and Snell’s <span class="citation" data-cites="Cox1989-ql">(<a href="#/references" role="doc-biblioref" onclick="">Cox &amp; Snell, 1989</a>)</span> <span class="math inline">\(R^2\)</span> is defined as:</p>
+<p><span class="math display">\[
+R^2 = 1 - \left(\frac{\mathcal{L_{null}}}{\mathcal{L_{current}}}\right)^{\frac{2}{n}}
+\]</span></p>
+<p>Where Nagelkerke <span class="citation" data-cites="Nagelkerke1991-gr">(<a href="#/references" role="doc-biblioref" onclick="">Nagelkerke, 1991</a>)</span> provide a correction to set the range of values between 0 and 1.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">performance</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/performance/reference/r2_nagelkerke.html">r2_nagelkerke</a></span><span class="op">(</span><span class="va">fit_p</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; Nagelkerke's R2 
+#&gt;       0.9950421</code></pre>
+</div>
+</div>
+</section></section><section><section id="extra" class="title-slide slide level1 section center"><h1>Extra</h1>
+
+</section><section id="interaction-poisson-vs-linear" class="slide level2"><h2>Interaction, Poisson vs Linear<sup>1</sup>
+</h2>
+<p>Let’s simulate a GLM where there is a main effect but no interaction:</p>
+<div class="cell" data-layout-align="center">
+<details><summary>Code</summary><div class="sourceCode" id="cb57"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu">sim_design</span><span class="op">(</span><span class="fl">200</span>, nx <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">200</span><span class="op">)</span><span class="op">)</span>, cx <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>g <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"b"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu">sim_data</span><span class="op">(</span><span class="va">dat</span>, <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="fl">1.5</span><span class="op">)</span> <span class="op">*</span> <span class="va">x</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">*</span> <span class="va">g_c</span> <span class="op">+</span> <span class="fl">0</span> <span class="op">*</span> <span class="va">g_c</span> <span class="op">*</span> <span class="va">x</span><span class="op">)</span>, model <span class="op">=</span> <span class="st">"poisson"</span><span class="op">)</span></span>
+<span><span class="va">dat</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span>, color <span class="op">=</span> <span class="va">g</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">stat_smooth</span><span class="op">(</span>method <span class="op">=</span> <span class="st">"glm"</span>,</span>
+<span>              method.args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">poisson</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure><p><img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-51-1.svg" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<aside><ol class="aside-footnotes"><li id="fn5"><p>Thank to Enrico Toffalini for this great example</p></li></ol></aside></section><section id="interaction-poisson-vs-linear-1" class="slide level2"><h2>Interaction, Poisson vs Linear</h2>
+<p>Let’s fit a linear model and the Poisson GLM with the interaction term:</p>
+<div class="panel-tabset">
+<ul id="tabset-1" class="panel-tabset-tabby">
+<li><a data-tabby-default="" href="#tabset-1-1">Poisson GLM</a></li>
+<li><a href="#tabset-1-2">Gaussian GLM</a></li>
+</ul>
+<div class="tab-content">
+<div id="tabset-1-1">
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit_lm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span> <span class="op">*</span> <span class="va">g</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit_lm</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; 
+#&gt; Call:
+#&gt; lm(formula = y ~ x * g, data = dat)
+#&gt; 
+#&gt; Residuals:
+#&gt;      Min       1Q   Median       3Q      Max 
+#&gt; -10.9594  -2.7974  -0.3394   2.4466  14.8487 
+#&gt; 
+#&gt; Coefficients:
+#&gt;             Estimate Std. Error t value Pr(&gt;|t|)    
+#&gt; (Intercept)  11.0610     0.2941  37.603   &lt;2e-16 ***
+#&gt; x             3.9829     0.2979  13.371   &lt;2e-16 ***
+#&gt; g2            9.9577     0.4163  23.921   &lt;2e-16 ***
+#&gt; x:g2          4.0287     0.4347   9.269   &lt;2e-16 ***
+#&gt; ---
+#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#&gt; 
+#&gt; Residual standard error: 4.116 on 396 degrees of freedom
+#&gt; Multiple R-squared:  0.7717, Adjusted R-squared:   0.77 
+#&gt; F-statistic: 446.3 on 3 and 396 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-1-2">
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit_glm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span> <span class="op">*</span> <span class="va">g</span>, data <span class="op">=</span> <span class="va">dat</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">poisson</a></span><span class="op">(</span>link <span class="op">=</span> <span class="st">"log"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit_glm</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; 
+#&gt; Call:
+#&gt; glm(formula = y ~ x * g, family = poisson(link = "log"), data = dat)
+#&gt; 
+#&gt; Deviance Residuals: 
+#&gt;      Min        1Q    Median        3Q       Max  
+#&gt; -2.61194  -0.71125  -0.05532   0.55622   2.75160  
+#&gt; 
+#&gt; Coefficients:
+#&gt;             Estimate Std. Error z value Pr(&gt;|z|)    
+#&gt; (Intercept)  2.33573    0.02238 104.350   &lt;2e-16 ***
+#&gt; x            0.38286    0.02254  16.986   &lt;2e-16 ***
+#&gt; g2           0.64219    0.02765  23.226   &lt;2e-16 ***
+#&gt; x:g2         0.02549    0.02850   0.894    0.371    
+#&gt; ---
+#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#&gt; 
+#&gt; (Dispersion parameter for poisson family taken to be 1)
+#&gt; 
+#&gt;     Null deviance: 1816.48  on 399  degrees of freedom
+#&gt; Residual deviance:  385.92  on 396  degrees of freedom
+#&gt; AIC: 2157.8
+#&gt; 
+#&gt; Number of Fisher Scoring iterations: 4</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section><section id="interaction-poisson-vs-linear-2" class="slide level2"><h2>Interaction, Poisson vs Linear</h2>
+<p>The linear model is estimating a completely misleading interaction due to the mean-variance relationship of the Poisson distribution.</p>
+<div class="cell" data-layout-align="center">
+<details><summary>Code</summary><div class="sourceCode" id="cb62"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lp_plot</span> <span class="op">&lt;-</span> <span class="va">dat</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">select</span><span class="op">(</span><span class="va">id</span>, <span class="va">g</span>, <span class="va">x</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">add_predict</span><span class="op">(</span><span class="va">fit_glm</span>, se.fit <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, </span>
+<span>             y <span class="op">=</span> <span class="va">fit</span>, </span>
+<span>             fill <span class="op">=</span> <span class="va">g</span>,</span>
+<span>             ymin <span class="op">=</span> <span class="va">fit</span> <span class="op">-</span> <span class="va">se.fit</span> <span class="op">*</span> <span class="fl">2</span>, </span>
+<span>             ymax <span class="op">=</span> <span class="va">fit</span> <span class="op">+</span> <span class="va">se.fit</span> <span class="op">*</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_ribbon</span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ylab</span><span class="op">(</span><span class="st">"y"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Linear Predictor"</span><span class="op">)</span></span>
+<span><span class="va">lp_plot</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="fu">ggeffect</span><span class="op">(</span><span class="va">fit_glm</span>, terms <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="st">"g"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="fu">ggeffect</span><span class="op">(</span><span class="va">fit_lm</span>, terms <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="st">"g"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-54-1.svg" width="576" class="r-stretch quarto-figure-center"></section><section id="references" class="slide level2 smaller scrollable"><h2>References</h2>
+
+<div class="footer footer-default">
+
+</div>
+<div id="refs" class="references csl-bib-body hanging-indent" data-line-spacing="2" role="list">
+<div id="ref-Cox1989-ql" class="csl-entry" role="listitem">
+Cox, D. R., &amp; Snell, E. J. (1989). <em>Analysis of binary data, second edition</em>. CRC Press. <a href="https://play.google.com/store/books/details?id=0R8J71LCLXsC">https://play.google.com/store/books/details?id=0R8J71LCLXsC</a>
+</div>
+<div id="ref-McFadden1987-qq" class="csl-entry" role="listitem">
+McFadden, D. (1987). Regression-based specification tests for the multinomial logit model. <em>Journal of Econometrics</em>, <em>34</em>, 63–82. <a href="https://doi.org/10.1016/0304-4076(87)90067-4">https://doi.org/10.1016/0304-4076(87)90067-4</a>
+</div>
+<div id="ref-Nagelkerke1991-gr" class="csl-entry" role="listitem">
+Nagelkerke, N. J. D. (1991). A note on a general definition of the coefficient of determination. <em>Biometrika</em>, <em>78</em>, 691–692. <a href="https://doi.org/10.1093/biomet/78.3.691">https://doi.org/10.1093/biomet/78.3.691</a>
+</div>
+<div id="ref-Ver_Hoef2007-jc" class="csl-entry" role="listitem">
+Ver Hoef, J. M., &amp; Boveng, P. L. (2007). Quasi-poisson vs. Negative binomial regression: How should we model overdispersed count data? <em>Ecology</em>, <em>88</em>, 2766–2772. <a href="https://doi.org/10.1890/07-0043.1">https://doi.org/10.1890/07-0043.1</a>
+</div>
+</div>
+</section></section><!-- FINAL SLIDE --><!-- END FINAL SLIDE -->
+</div>
+  </div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="../../site_libs/revealjs/dist/reveal.js"></script><!-- reveal.js plugins --><script src="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script><script src="../../site_libs/revealjs/plugin/pdf-export/pdfexport.js"></script><script src="../../site_libs/revealjs/plugin/reveal-menu/menu.js"></script><script src="../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script><script src="../../site_libs/revealjs/plugin/quarto-support/support.js"></script><script src="../../site_libs/revealjs/plugin/notes/notes.js"></script><script src="../../site_libs/revealjs/plugin/search/search.js"></script><script src="../../site_libs/revealjs/plugin/zoom/zoom.js"></script><script src="../../site_libs/revealjs/plugin/math/math.js"></script><script>window.define = window.backupDefine; window.backupDefine = undefined;</script><script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'smaller': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: false,
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script><script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script><script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button', {
+        text: function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+      });
+      clipboard.on('success', function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      });
+      function tippyHover(el, contentFn) {
+        const config = {
+          allowHTML: true,
+          content: contentFn,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start'
+        };
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          return note.innerHTML;
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
+
+
+</body></html>
