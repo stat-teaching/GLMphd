@@ -54,3 +54,4 @@ rsconnect/
 /_site/
 
 local/
+.DS_Store
