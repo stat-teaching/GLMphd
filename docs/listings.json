@@ -1,0 +1,25 @@
+[
+  {
+    "listing": "/labs.html",
+    "items": [
+      "/labs/lab1.html",
+      "/labs/lab2.html",
+      "/labs/lab3.html",
+      "/labs/lab4.html",
+      "/labs/lab5.html",
+      "/labs/lab6.html",
+      "/labs/lab7.html"
+    ]
+  },
+  {
+    "listing": "/slides.html",
+    "items": [
+      "/slides/00-intro-course/00-intro-course.html",
+      "/slides/01-intro-glm/01-intro-glm.html",
+      "/slides/02-binomial-glm/02-binomial-glm.html",
+      "/slides/03-poisson-glm/03-poisson-glm.html",
+      "/slides/04-gamma-glm/04-gamma-glm.html",
+      "/slides/05-extra-glm/binomial-glm-power.html"
+    ]
+  }
+]
