@@ -1,5 +1,6 @@
 project:
   type: website
+  output-dir: docs
 
 execute:
   freeze: auto  # re-render only when source changes
@@ -20,7 +21,7 @@ website:
         aria-label: GitHub
 
 institute: "University of Padova"
-author: 
+author:
   - name: "Filippo Gambarota"
     email: filippo.gambarota@unipd.it
     twitter: fgambarota
