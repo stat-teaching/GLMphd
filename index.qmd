@@ -17,11 +17,3 @@ This repository contains the materials for the course *Generalized Linear Models
 To start with the course you can download or clone the entire Git repository. Simply run `git clone link` or follow this link.
 
 Then you can open the `GLMphd.Rproj` file and R Studio will be opened on the correct folder. From now, everything is organized as a package. To load all the custom function of the `R` folder and datasets (`data` folder) you can use `devtools::load_all()`. This is the same as doing `source("file.R")` without cluttering the global environment.
-
-# Schedule
-
-|     Day    |     Hour    | Room |    Course    |
-|:----------:|:-----------:|:----:|:------------:|
-| 04-12-2023 | 09:00-12:00 |  4T  | GLM - Part B |
-| 05-12-2023 | 09:00-11:00 |  4T  | GLM - Part B |
-

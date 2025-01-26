@@ -16,13 +16,20 @@ website:
       - labs.qmd
     right:
       - icon: github
-        href: https://github.com/
+        href: https://github.com/stat-teaching/GLMphd
         aria-label: GitHub
+
+institute: "University of Padova"
+author: 
+  - name: "Filippo Gambarota"
+    email: filippo.gambarota@unipd.it
+    twitter: fgambarota
+    github: filippogambarota
 
 format:
   html:
     theme: cosmo
-    css: styles.css
+    #css: styles.css
     toc: true
 
 

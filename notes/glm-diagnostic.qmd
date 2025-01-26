@@ -1,0 +1,152 @@
+---
+title: "GLM Diagnostics"
+---
+
+```{r}
+#| echo: false
+
+devtools::load_all()
+library(tidyverse)
+```
+
+
+The model diagnostics are a set of tools (plots, statistics, etc.) used to evaluate if the assumptions hold and indentify patterns of poor fitting.
+
+## Observed vs simulated data
+
+Monte Carlo simulations can be used to assess the quality of a fitted model by comparing observed with simulated data. A discrepancy between real and simulated data could inform about model misspecifications such as missing predictors, wrong predictors transformations (e.g., log vs linear) or wrong assumed distributions (e.g., Gaussian instead of Gamma for bounded and skewed data).
+
+Let's simulate a Poisson model:
+
+```{r}
+N <- 1e3
+x <- runif(N, 0, 100)
+y <- rpois(N, exp(log(5) + log(1.01) * x))
+
+hist(y)
+plot(x, y)
+
+dat <- data.frame(y, x)
+```
+
+Now let's fit a standard linear model and a generalized linear model with a Poisson distribution and log link function:
+
+```{r}
+fit_lm <- lm(y ~ x, data = dat)
+fit_glm <- glm(y ~ x, data = dat, family = poisson(link = "log"))
+```
+
+We want to focus only on predictions and not about intepreting parameters. See [Poisson GLM](../slides/03-poisson-glm/03-poisson-glm.qmd) for parameters intepretation.
+
+We can use the `simulate()` function to generate, given the fitted model, new observations:
+
+```{r}
+head(simulate(fit_lm))
+head(simulate(fit_glm))
+```
+
+We already see an important differences related to the type of generated data. The `fit_glm` model correctly generates discrete data that are similar to the observed data. The `fit_lm` on the other side generates continous data because is assuming a Gaussian distribution.
+
+```{r}
+pp_lm <- simulate(fit_lm)
+pp_glm <- simulate(fit_glm)
+
+# adding the observed data
+pp_lm$y <- dat$y
+pp_glm$y <- dat$y
+
+ggplot(pp_lm, aes(x = y)) +
+  geom_density(col = "firebrick", lwd = 1) +
+  geom_density(aes(x = sim_1)) +
+  ggtitle("Linear Model")
+
+ggplot(pp_glm, aes(x = y)) +
+  geom_density(col = "firebrick", lwd = 1) +
+  geom_density(aes(x = sim_1)) +
+  ggtitle("Generalized Linear Model")
+```
+
+We can generate $B$ datasets to see the range of simulated data compared to the observed data. This can be done with the `performance::check_prediction()` function:
+
+```{r}
+performance::check_predictions(fit_lm)
+performance::check_predictions(fit_glm)
+```
+
+## Checking the link function
+
+```{r}
+N <- 1e3
+shape <- 5
+x <- runif(N, 0, 100)
+lp <- log(10) + log(1.01) * x
+y <- rgamma(N, shape, scale = exp(lp)/shape)
+
+fit_log <- glm(y ~ x, family = Gamma(link = "log"))
+fit_inv <- glm(y ~ x, family = Gamma(link = "inverse"))
+
+par(mfrow = c(1,2))
+plot(predict(fit_log), resid(fit_log, type = "working"))
+plot(predict(fit_inv), resid(fit_inv, type = "working"))
+```
+
+```{r}
+N <- 1e3
+x <- runif(N, 0, 1)
+lp <- qlogis(0.01) + 10 * x
+p <- plogis(lp)
+y <- rbinom(N, 1, p)
+
+fit_logit <- glm(y ~ x, family = binomial(link = "logit"))
+fit_probit <- glm(y ~ x, family = binomial(link = "probit"))
+
+ri_logit <- resid(fit_logit, type = "working")
+ri_probit <- resid(fit_probit, type = "working")
+
+plot(predict(fit_logit), ri_logit)
+plot(predict(fit_probit), ri_probit)
+```
+
+## GLM assumptions
+
+From @Dunn2018-ww, the assumptions made when ﬁtting glms concern:
+
+- Lack of outliers: All responses were generated from the same process, so
+that the same model is appropriate for all the observations.
+- Link function: The correct link function $g(\cdot)$ is used.
+- Linearity: All important explanatory variables are included, and each
+explanatory variable is included in the linear predictor on the correct
+scale.
+- Variance function: The correct variance function $V(\mu)$ is used.
+- Dispersion parameter: The dispersion parameter $\phi$ is constant.
+- Independence: The responses $y_i$ are independent of each other.
+- Distribution: The responses $y_i$ come from the speciﬁed edm.
+
+## Residuals
+
+### Response Residuals
+
+Response residuals are defined as:
+
+$$
+r_i = y_i - \hat{\mu}_i
+$$
+
+These residuals are problematic because most of the time mean and variance are linked in GLMs, thus the same raw residual is not intepreted in the same way along the mean-variance relationship.
+
+### Pearson Residuals
+
+<!-- Agresti says something about pearson residuals -->
+
+Should be normally distributed under some conditions.
+
+### Deviance Residuals
+
+Should be normally distributed under some conditions.
+
+### Quantile Residuals
+
+
+# Resources
+
+- [https://rpubs.com/benhorvath/glm_diagnostics](https://rpubs.com/benhorvath/glm_diagnostics)

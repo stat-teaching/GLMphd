@@ -1,32 +1,8 @@
 ---
-title: Simulating GLM
-institute: "University of Padova"
-author: 
-  - name: "Filippo Gambarota"
-    email: filippo.gambarota@unipd.it
-    github: filippogambarota
-format:
-  quarto-slides-revealjs:
-    incremental: false
-    code-link: true
-    code-line-numbers: false
-    html-math-method: mathjax
-    code-fold: false
-    filters:
-      - nutshell
-      - code-fullscreen
-from: markdown+emoji
-date: last-modified
-date-format: "YYYY"
-final-slide: false
+title: Simulating a GLM
 df-print: tibble
 bibliography: "`r filor::fil()$bib`"
 csl: "`r filor::fil()$csl`"
-updated: "*Last Update: `r Sys.Date()`*"
-toc: true
-toc-title: Contents
-toc-depth: 1
-engine: knitr
 ---
 
 ```{r}

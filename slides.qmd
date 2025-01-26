@@ -1,12 +1,8 @@
 ---
 title: "Slides"
+listing:
+    type: table
+    contents: slides
+    sort: "filename"
+    fields: [title, date]
 ---
-
-On this page are collected the slides presented during the course.
-
-- [Course introduction](slides/00-intro-course/00-intro-course.qmd)
-- [Introduction to GLM](slides/01-intro-glm/01-intro-glm.qmd)
-- [Binomial GLM](slides/02-binomial-glm/02-binomial-glm.qmd)
-- [Poisson GLM](slides/03-poisson-glm/03-poisson-glm.qmd)
-- [Gamma GLM](slides/04-gamma-glm/04-gamma-glm.qmd)
-- [Simulating GLM](slides/05-extra-glm/binomial-glm-power.qmd)

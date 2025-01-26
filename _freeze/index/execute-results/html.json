@@ -1,10 +1,9 @@
 {
-  "hash": "920ea7d9a7ad1da78179d48b3ee1df4c",
+  "hash": "5a64fc5921994cb972dcd1628e022a1b",
   "result": {
-    "markdown": "---\ntitle: \"Generalized Linear Models\"\nsubtitle: \"PhD Program in Psychological Sciences - University of Padova\"\n---\n\n\n\n\n# Course\n\nThis repository contains the materials for the course *Generalized Linear Models* from the PhD program in Psychological Sciences (University of Padova). The repository is organized as an R Package.\n\n## Getting Started\n\nTo start with the course you can download or clone the entire Git repository. Simply run `git clone link` or follow this link.\n\nThen you can open the `GLMphd.Rproj` file and R Studio will be opened on the correct folder. From now, everything is organized as a package. To load all the custom function of the `R` folder and datasets (`data` folder) you can use `devtools::load_all()`. This is the same as doing `source(\"file.R\")` without cluttering the global environment.\n\n# Schedule\n\n|     Day    |     Hour    | Room |    Course    |\n|:----------:|:-----------:|:----:|:------------:|\n| 04-12-2023 | 09:00-12:00 |  4T  | GLM - Part B |\n| 05-12-2023 | 09:00-11:00 |  4T  | GLM - Part B |\n\n",
-    "supporting": [
-      "index_files"
-    ],
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Generalized Linear Models\"\nsubtitle: \"PhD Program in Psychological Sciences - University of Padova\"\n---\n\n\n\n\n\n\n# Course\n\nThis repository contains the materials for the course *Generalized Linear Models* from the PhD program in Psychological Sciences (University of Padova). The repository is organized as an R Package.\n\n## Getting Started\n\nTo start with the course you can download or clone the entire Git repository. Simply run `git clone link` or follow this link.\n\nThen you can open the `GLMphd.Rproj` file and R Studio will be opened on the correct folder. From now, everything is organized as a package. To load all the custom function of the `R` folder and datasets (`data` folder) you can use `devtools::load_all()`. This is the same as doing `source(\"file.R\")` without cluttering the global environment.",
+    "supporting": [],
     "filters": [
       "rmarkdown/pagebreak.lua"
     ],

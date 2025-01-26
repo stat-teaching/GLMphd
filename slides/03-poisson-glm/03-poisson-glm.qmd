@@ -1,28 +1,7 @@
 ---
 title: Poisson GLM
-institute: "University of Padova"
-author: 
-  - name: "Filippo Gambarota"
-    email: filippo.gambarota@unipd.it
-    twitter: fgambarota
-    github: filippogambarota
-format:
-  quarto-slides-revealjs:
-    incremental: false
-    code-link: true
-    code-line-numbers: false
-    html-math-method: mathjax
-    filters:
-      - nutshell
-      - code-fullscreen
-from: markdown+emoji
-date: last-modified
-date-format: "YYYY"
-final-slide: false
-df-print: tibble
 bibliography: "`r filor::fil()$bib`"
 csl: "`r filor::fil()$csl`"
-updated: "*Last Update: `r Sys.Date()`*"
 ---
 
 ```{r}
@@ -175,8 +154,8 @@ dat |>
 The common (and default in R) link function ($g(\lambda)$) for the Poisson distribution is the **log** link function and the inverse of link function is the exponential.
 
 \begin{align*}
-log(\lambda) = \beta_0 + \beta_{1}X_{1} + ...\beta_pX_p \\
-\lambda = e^{\beta_0 + \beta_{1}X_{1} + ...\beta_pX_p}
+log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip} \\
+\lambda_i = e^{\beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip}}
 \end{align*}
 
 # Parameters intepretation {.section}
@@ -308,6 +287,8 @@ fitt <- broom::tidy(fit)
 
 - Similarly to the previous example, the intercept is the expected number of solved exercises when the `class` is 0. Thus the expected number of solved exercises for online students.
 - the `classinperson` is the difference in log solved exercises between online and in person classes. In the response scale is the expected increase in the ratio of solved exercises. People doing in person classes solve `r round(exp(fitt$estimate[2])*100, 2)`% of the exercises of people doing online classes
+
+. . .
 
 ```{r}
 c(coef(fit)["(Intercept)"], exp(coef(fit)["(Intercept)"]))
@@ -595,9 +576,8 @@ car::residualPlot(fit2)
 
 Before analyzing the two main strategies to deal with overdispersion, it is important to understand why it is very problematic.
 
-- Despite the estimated parameters ($\beta$) are not affected by overdispersion, standard errors are underestimated. The underestimation increase as the severity of the overdispersion increase.
-
-- Underestimated standard errors produce (biased) higher $z$ scores inflating the type-1 error (i.e., lower p values)
+- Despite the estimated parameters ($\beta$) are not affected by overdispersion, standard errors are underestimated. The underestimation increases as the severity of the overdispersion increases.
+- Underestimated standard errors produces (biased) higher $z$ scores inflating the type-1 error (i.e., lower p values)
 
 ## Why worring about overdispersion?
 
@@ -640,6 +620,7 @@ If all the variables are included and there are no outliers, the phenomenon itse
 
 - **quasi-poisson** model
 - poisson-gamma model AKA **negative-binomial model**
+- **multilevel poisson** model
 
 ## Quasi-poisson model
 
@@ -684,6 +665,11 @@ dat |>
 ## Problems of Quasi-* model
 
 The main problem of quasi-* models is that they are not a specific distribution family and there is not a likelihood function. For this reason, we cannot perform model comparison the standard AIC/BIC. See [@Ver_Hoef2007-jc] for an overview.
+
+```{r}
+AIC(fit)
+BIC(fit)
+```
 
 ## Negative-binomial model
 
@@ -906,6 +892,52 @@ car::compareCoefs(fit_nb, fit_p, fit_qp)
 - Both NB and QP estimate higher standard errors in the presence of overdispersion
 - If there is evidence of overdispersion, the important is to fit a model that take into account it
 
+## Multilevel Poisson
+
+- Even if we did not discussed multilevel models, the negative binomial model implicitly introduced the topic.
+- Putting a Gamma distribution on the $\lambda$ parameter allows to introduce more variability than assuming a fixed $\lambda$.
+- A similar result can be achieved assuming that each observation has a different $\lambda$ i.e. adding a random-effect
+
+## Multilevel Poisson
+
+```{r}
+#| include: false
+
+# hidden, just using the correct data
+dat <- fit$data
+```
+
+In fact, if we think about number of errors (or whatever variable) for each participant, we are implicitly saying that each participant perform multiple "trials".
+
+```{r}
+head(dat)
+```
+
+Each `id` performs multiple problems solving a certain number of them (`solved`). There is an hidden multilevel structure here.
+
+## Multilevel Poisson
+
+```{r}
+library(lme4)
+fit_m <- glmer(solved ~ studyh + (1|id), data = dat, family = poisson())
+summary(fit_m)
+```
+
+## Multilevel Poisson
+
+Let's see the overdispersion compared to the non-multilevel poisson and the negative-binomial model:
+
+```{r}
+#| collapse: true
+fit_p <- glm(solved ~ studyh, data = dat, family = poisson(link = "log"))
+fit_nb <- MASS::glm.nb(solved ~ studyh, data = dat)
+
+performance::check_overdispersion(fit_p)
+performance::check_overdispersion(fit_nb)
+performance::check_overdispersion(fit_m)
+```
+
+
 ## Simulate NB data `#extra`^[Using `vmr = 1` it will use the `rpois()` function]
 
 If you want to try to simulate NB data you can use the `MASS::rnegbin(n, mu, theta)` function or the `rnb(n, mu, vmr)` custom function that could be more intuitive because requires $\mu$ (i.e., the mean) and `vmr` that is the desired variance-mean ratio. Using `message = TRUE` it will tells the $\theta$ value:
@@ -990,7 +1022,7 @@ Let's fit a linear model and the Poisson GLM with the interaction term:
 
 ::: {.panel-tabset}
 
-### Poisson GLM
+### Gaussian GLM
 
 ```{r}
 fit_lm <- lm(y ~ x * g, data = dat)
@@ -998,7 +1030,7 @@ summary(fit_lm)
 ```
 
 
-### Gaussian GLM
+### Poisson GLM
 
 ```{r}
 fit_glm <- glm(y ~ x * g, data = dat, family = poisson(link = "log"))
@@ -1012,21 +1044,56 @@ summary(fit_glm)
 The linear model is estimating a completely misleading interaction due to the mean-variance relationship of the Poisson distribution.
 
 ```{r}
-#| code-fold: true
+#| echo: false
 lp_plot <- dat |> 
   select(id, g, x) |> 
-  add_predict(fit_glm, se.fit = TRUE) |> 
+  add_predict(fit_glm) |> 
   ggplot(aes(x = x, 
-             y = fit, 
-             fill = g,
-             ymin = fit - se.fit * 2, 
-             ymax = fit + se.fit * 2)) +
-  geom_line() +
-  geom_ribbon(alpha = 0.5) +
-  ylab("y") +
-  ggtitle("Linear Predictor")
-lp_plot | plot(ggeffect(fit_glm, terms = c("x", "g"))) | plot(ggeffect(fit_lm, terms = c("x", "g")))
+             y = pr, 
+             color = g)) +
+  geom_line(lwd = 2) +
+  ylab(latex2exp::TeX("\\eta")) +
+  ggtitle("Linear Predictor (link function scale)") +
+  theme(legend.position = "none")
+
+resp_plot <- dat |> 
+  select(id, g, x) |> 
+  add_predict(fit_glm, type = "response") |> 
+  ggplot(aes(x = x, 
+             y = pr, 
+             color = g)) +
+  geom_line(lwd = 2) +
+  ylab(latex2exp::TeX("\\eta")) +
+  ggtitle("Response Scale (inverse link function)") +
+  theme(legend.position = "none")
+
+resp_lm_plot <- dat |> 
+  select(id, g, x) |> 
+  add_predict(fit_lm, type = "response") |> 
+  ggplot(aes(x = x, 
+             y = pr, 
+             color = g)) +
+  geom_line(lwd = 2) +
+  ylab(latex2exp::TeX("\\eta")) +
+  ggtitle("Response Scale (linear model)") +
+  theme(legend.position = "none")
+
+resp_plot
 ```
+
+## Interaction, Poisson vs Linear
+
+```{r}
+#| fig-width: 10
+#| echo: false
+lp_plot | resp_lm_plot
+```
+
+## For a more extensive example...
+
+In this presentation we showed how serious could be the situation when fitting the wrong distribution and link function and estimating an interaction term.
+
+[https://filippogambarota.github.io/files/slides/2024-aip-sviluppo.pdf](https://filippogambarota.github.io/files/slides/2024-aip-sviluppo.pdf)
 
 ## References
 

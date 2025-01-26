@@ -127,37 +127,6 @@ plot_class <- function(data, y, x){
   par(def.par)
 }
 
-#' getdata
-#'
-#' @export
-#'
-getdata <- function(dataset, package){
-  env <- new.env()
-  lapply(dataset, function(x) data(list = x, package = package, envir = env))
-  dlist <- lapply(dataset, function(x) base::get(x, envir = env))
-  names(dlist) <- dataset
-  if(length(dlist) == 1){
-      dlist <- dlist[[1]]
-  }
-  return(dlist)
-}
-
-#' get_gene_names
-#'
-#' @export
-#'
-get_gene_names <- function(data){
-  rownames(Biobase::exprs(data))
-}
-
-#' get_gene_names
-#'
-#' @export
-#'
-get_pheno_names <- function(data){
-    rownames(data.frame(Biobase::phenoData(data)@varMetadata))
-}
-
 #' contingency_tab
 #' @description
 #' Create an HTML contingency table from a classification table created with the \code{classify()} function. Useful for teaching.
@@ -258,44 +227,6 @@ npv <- function(tn = NULL,
     (specificity * (1 - prevalence)) / ((1 - sensitivity) * prevalence + specificity * (1 - prevalence))
   } else{
     stop("To calculate NPV tn AND fn OR sensitivity AND specificity AND prevalence need to be specified!")
-  }
-}
-
-#' plot_gene_range
-#' @export
-plot_gene_range <- function(datal, gene){
-
-  datal <- list(datal)
-
-  datal <- lapply(datal, function(x) x[complete.cases(x[, c("debulking", gene)]), ])
-
-  ddlist <- lapply(datal, function(x) tapply(x[[gene]], x$debulking, density, na.rm = TRUE))
-
-  xmin <- min(sapply(ddlist, function(x) min(c(x$optimal$x, x$suboptimal$x))))
-  xmax <- max(sapply(ddlist, function(x) max(c(x$optimal$x, x$suboptimal$x))))
-  ymax <- max(sapply(ddlist, function(x) max(c(x$optimal$y, x$suboptimal$y))))
-
-  plot(ddlist[[1]]$optimal,
-       xlim = c(xmin, xmax),
-       ylim = c(0, ymax),
-       type = "n",
-       xlab = gene,
-       ylab = "Density",
-       main = "")
-  print(ddlist)
-
-  if(length(datal) == 1){
-    rug(datal[[1]][[gene]][datal[[1]]$debulking == "optimal"], col = "green")
-    rug(datal[[1]][[gene]][datal[[1]]$debulking == "suboptimal"], col = "red")
-  }
-
-  legend("topleft",
-         legend = c("Optimal", "Suboptimal"),
-         fill = c("green", "red"))
-
-  for(i in 1:length(ddlist)){
-    lines(ddlist[[i]]$suboptimal, col = "red", lwd = 1.2)
-    lines(ddlist[[i]]$optimal, col = "green", lwd = 1.2)
   }
 }
 

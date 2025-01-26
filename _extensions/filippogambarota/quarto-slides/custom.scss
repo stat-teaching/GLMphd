@@ -60,6 +60,7 @@ aside {
   font-size: $p-font-size;
 }
 
+
 .emp {
   color: $emp-color;
   font-weight: bold;
@@ -148,16 +149,12 @@ code {
 
 /* REFERENCES */
 
-.refs h2 {
-  font-size: $h2-font-size!important;
+.reveal .slides section.smaller {
+    font-size: 100%;
 }
 
-.refs {
-  font-size: 100%!important;
-}
-
-.csl-entry {
-  font-size: $refs-font-size!important;
+.reveal .references {
+  font-size: 60%;
 }
 
 /* FINAL SLIDE */
@@ -243,7 +240,7 @@ code {
 }
 
 .question {
-  background-color: #A9A9A9!important;
+  background-color: $base-color!important;
 }
 
 .last-update {

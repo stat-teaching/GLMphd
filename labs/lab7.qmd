@@ -1,9 +1,6 @@
 ---
 title: "Lab 7"
-author: "Filippo Gambarota"
 format: html
-bibliography: "`r filor::fil()$bib`"
-embed-resources: true
 ---
 
 ```{r}

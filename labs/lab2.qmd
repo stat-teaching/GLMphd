@@ -1,8 +1,6 @@
 ---
 title: "Lab 2"
-author: Filippo Gambarota
 format: html
-embed-resources: true
 ---
 
 ```{r setup, include=FALSE}

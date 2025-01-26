@@ -1,36 +1,16 @@
 ---
-title: Generalized Linear Models
-subtitle: Course overview
-institute: "University of Padova"
-author: 
-  - name: "Filippo Gambarota"
-    email: filippo.gambarota@unipd.it
-    twitter: fgambarota
-    github: filippogambarota
-format:
-  quarto-slides-revealjs:
-    code-fold: false
-    incremental: true
-    code-link: true
-    code-line-numbers: false
-    html-math-method: mathjax
-    filters:
-      - nutshell
-      - code-fullscreen
-from: markdown+emoji
-date: last-modified
-date-format: "YYYY"
-final-slide: false
-updated: "*Last Update: `r Sys.Date()`*"
+title: Course Introduction
 ---
 
 ```{r}
-#| label: setup
+#| label: packages
 #| include: false
 
+devtools::load_all()
 library(tidyverse)
 ```
 
+{{< include ../_setup.qmd >}}
 
 # Material {.section}
 
@@ -38,13 +18,14 @@ library(tidyverse)
 
 The material is available on **Github** You can find the slides, code, datasets and other stuff.
 
+
 <h4 style="text-align:center">
     <a href="https://stat-teaching.github.io/GLMphd/">stat-teaching.github.io/GLMphd</a> 
 </h4>
 
 ## Getting started
 
-1. Download the repository from Github
+1. Download the repository from Github. You can use the following [link](https://github.com/stat-teaching/GLMphd/archive/refs/heads/main.zip)
 2. Unzip the folder
 3. Open the `GLMphd.Rproj` file
 

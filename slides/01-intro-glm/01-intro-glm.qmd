@@ -1,43 +1,10 @@
 ---
-title: Generalized Linear Models
-subtitle: Introduction
-institute: "University of Padova"
-author: 
-  - name: "Filippo Gambarota"
-    email: filippo.gambarota@unipd.it
-    twitter: fgambarota
-    github: filippogambarota
-format:
-  quarto-slides-revealjs:
-    code-fold: true
-    incremental: true
-    code-link: true
-    code-line-numbers: false
-    html-math-method: mathjax
-    filters:
-      - nutshell
-      - code-fullscreen
-    slide-number: true
-from: markdown+emoji
-date: last-modified
-date-format: "YYYY"
-final-slide: false
+title: Introduction to Generalized Linear Models
 bibliography: "`r filor::fil()$bib`"
 csl: "`r filor::fil()$csl`"
 nocite: |
   @Gelman2020-tg, @Agresti2018-oh, @Agresti2015-cz, @Dunn2018-ww, @Fox2015-ps, @Faraway2016-py
-updated: "*Last Update: `r Sys.Date()`*"
 ---
-
-```{r}
-#| label: setup
-knitr::opts_chunk$set(echo = TRUE,
-                      dev = "svg",
-                      fig.width = 6,
-                      fig.asp = 0.618,
-                      fig.align = "center",
-                      comment = "#>")
-```
 
 ```{r packages, include=FALSE}
 devtools::load_all()
@@ -53,17 +20,6 @@ funs <- filor::get_funs(here("R", funs_files))
 ```
 
 ```{r}
-#| label: ggplot
-#| include: false
-
-mytheme <- function(size = 15){
-  theme_minimal(size)
-}
-
-theme_set(mytheme())
-```
-
-```{r}
 #| label: gt
 #| include: false
 qtab <- function(data, digits = 3){
@@ -75,10 +31,19 @@ qtab <- function(data, digits = 3){
       style = cell_text(weight = "bold"),
       locations = cells_column_labels()
     ) |> 
-    gt::fmt_number(decimals = digits)
+    gt::fmt_number(decimals = digits) |>
+    gt::fmt_markdown()
+}
+
+oqtab <- function(data, digits = 3, ...){
+  data |>
+    kableExtra::kable(escape = FALSE,
+                      format = "html") |>
+    kableExtra::kable_styling(...)
 }
 ```
 
+{{< include ../_setup.qmd >}}
 
 # Beyond the Gaussian distribution {.section}
 
@@ -134,7 +99,7 @@ dat <- data.frame(
 
 dat |> 
     ggplot(aes(x = x)) +
-    geom_histogram(fill = "lightblue",
+    geom_histogram(fill = "dodgerblue",
                    color = "black") +
     xlab("Reaction Times (ms)") +
     ylab("Count")
@@ -150,10 +115,9 @@ dat <- data.frame(y = c(70, 30), x = c("Passed", "Failed"))
 dat |> 
     ggplot(aes(x = x, y = y)) +
     geom_col(color = "black",
-             fill = "lightblue") +
+             fill = "dodgerblue") +
     ylab("%") +
     ylim(c(0, 100)) +
-    mytheme() +
     theme(axis.title.x = element_blank()) +
     ggtitle("Statistics Final Exam (n = 100)")
 ```
@@ -167,9 +131,8 @@ dat <- data.frame(x = rpois(1e5, 15))
 
 dat |> 
     ggplot(aes(x = x)) +
-    geom_bar(fill = "lightblue",
+    geom_bar(fill = "dodgerblue",
              color = "black") +
-    mytheme() +
     scale_x_continuous(breaks = seq(0, 50, 5)) +
     xlab("Number of new patients during one month") +
     ylab("Count")
@@ -286,7 +249,6 @@ exam_plot <- dat |>
     ggplot(aes(x = nattended, y = nsolved)) +
     geom_hline(yintercept = 0, linetype = "dashed", col = "firebrick") +
     geom_point(size = 3) +
-    mytheme() +
     xlab("Number of attended lectures") +
     ylab("Solved exercises")
 exam_plot
@@ -337,13 +299,11 @@ qqn <- dfit |>
     stat_qq() + 
     stat_qq_line() +
     xlab("Theoretical Quantiles") +
-    ylab("Residuals") +
-    mytheme()
+    ylab("Residuals")
 
 res_fit <- dfit |> 
     ggplot(aes(x = fitted, y = residuals)) +
     geom_point() +
-    mytheme() +
     ylab("Residuals") +
     xlab("Fitted") +
     geom_smooth(se = FALSE, color = "red")
@@ -387,7 +347,7 @@ As a general rule in ~~life~~ statistics:
 
 For a detailed introduction about GLMs
 
-- Chapters: 1 (intro), 4 (GLM fitting), 5 (GLM for binary data)
+Chapters: 1 (intro), 4 (GLM fitting), 5 (GLM for binary data)
 
 ```{r, echo = FALSE, out.width="30%"}
 knitr::include_graphics("img/agresti2015-foundations-lm-glm.jpg")
@@ -397,7 +357,7 @@ knitr::include_graphics("img/agresti2015-foundations-lm-glm.jpg")
 
 For a basic and well written introduction about GLM, especially the Binomial GLM
 
-- Chapters: 3 (intro GLMs), 4-5 (Binomial Logistic Regression)
+Chapters: 3 (intro GLMs), 4-5 (Binomial Logistic Regression)
 
 ```{r, echo = FALSE, out.width="50%"}
 knitr::include_graphics("img/agresti2019-intro-to-categorical.jpg")
@@ -407,7 +367,8 @@ knitr::include_graphics("img/agresti2019-intro-to-categorical.jpg")
 
 Great resource for interpreting Binomial GLM parameters:
 
-- Chapters: 13-14 (Binomial Logistic GLM), 15 (Poisson and others GLMs)
+Chapters: 13-14 (Binomial Logistic GLM), 15 (Poisson and others GLMs)
+
 ```{r, echo = FALSE, out.width="30%"}
 knitr::include_graphics("img/gelman2020-reg-and-other-stories.jpg")
 ```
@@ -416,7 +377,7 @@ knitr::include_graphics("img/gelman2020-reg-and-other-stories.jpg")
 
 Detailed GLMs book. Very useful especially for the diagnostic part:
 
-- Chapters: 8 (intro), 9 (Binomial GLM), 10 (Poisson GLM and overdispersion)
+Chapters: 8 (intro), 9 (Binomial GLM), 10 (Poisson GLM and overdispersion)
 
 ```{r, echo = FALSE, out.width="30%"}
 knitr::include_graphics("img/dunn2018-glm.jpg")
@@ -426,7 +387,7 @@ knitr::include_graphics("img/dunn2018-glm.jpg")
 
 The holy book :)
 
-- Chapters: 14 and 15
+Chapters: 14 and 15
 
 ```{r, echo = FALSE, out.width="30%"}
 knitr::include_graphics("img/fox2015-applied-glm.jpg")
@@ -436,7 +397,7 @@ knitr::include_graphics("img/fox2015-applied-glm.jpg")
 
 Another good reference...
 
-- Chapters: 8
+Chapters: 8
 
 ```{r, echo = FALSE, out.width="30%"}
 knitr::include_graphics("img/faraway2016-extending-glm.jpg")
@@ -472,24 +433,26 @@ plot(0:20, dpois(0:20, 8), type = "h", main = "Poisson", ylab = "density(x)",
 
 ## Systematic Component
 
-The **systematic component** or *linear predictor* ($\eta$) of a GLM is $\beta_0 + \beta_1x_{1i} + ... + \beta_px_{pi}$.
+The **systematic component** or *linear predictor* ($\eta$) of a GLM is:
 
-\begin{align*}
-\eta = \beta_0 + \beta_1x_1 + ... + \beta_px_p
-\end{align*}
+$$
+\eta_i = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \cdots + \beta_p x_{ip}
+$$
 
 This part is invariant to the type of model and is the combination of explanatory variables to predict the expected value $\mu$ (i.e. the mean) of the distribution.
 
 ## Link Function
 
-The **link function** $g(\mu)$ is an **invertible** function that connects the mean $\mu$ of the random component with the *linear combination* of predictors $g(\mu) = \beta_0 + \beta_1x_{1i} + ... + \beta_px_{pi}$. The inverse of the link function $g^{-1}$ map the linear predictor ($\eta$) into the original scale.
+The **link function** $g(\mu)$ is an **invertible** function that connects the mean $\mu$ of the random component with the *linear combination* of predictors.
+
+$g(\mu) = \beta_0 + \beta_1x_{1i} + ... + \beta_px_{pi}$. The inverse of the link function $g^{-1}$ map the linear predictor ($\eta$) into the original scale.
 
 $$
-g(\mu) = \eta = \beta_0 + \beta_1x_{1i} + ... + \beta_px_{pi}
+g(\mu_i) = \eta_i = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \cdots + \beta_p x_{ip}
 $$
 
 $$
-\mu = g^{-1}(\eta) = g^{-1}(\beta_0 + \beta_1x_{1i} + ... + \beta_px_{pi}) 
+\mu_i = g(\eta_i)^{-1} = \eta_i = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \cdots + \beta_p x_{ip}
 $$
 
 Thus, the relationship between $\mu$ and $\eta$ is linear only when the **link function ** is applied i.e. $g(\mu) = \eta$. 
@@ -501,7 +464,7 @@ The simplest **link function** is the **identity link** where $g(\mu) = \mu$ and
 ```{r}
 #| echo: false
 #| tbl-cap: Main distributions and link functions
-fam <- c("`gaussian`", "`gamma`", "`binomial`", "`binomial`", "`poisson`")
+fam <- c("gaussian", "gamma", "binomial", "binomial", "poisson")
 link <- c("identity", "log", "logit", "probit", "log")
 range <- c("$$(-\\infty,+\\infty)$$", "$$(0,+\\infty)$$",
            "$$\\frac{0, 1, ..., n_{i}}{n_{i}}$$",
@@ -509,6 +472,7 @@ range <- c("$$(-\\infty,+\\infty)$$", "$$(0,+\\infty)$$",
            "$$0, 1, 2, ...$$")
 
 linktab <- data.frame(Family = fam, Link = link, Range = range)
+linktab$Family <- code(linktab$Family, "markdown")
 linktab |> 
   qtab()
 ```
@@ -533,7 +497,7 @@ $$
 f(n, k, p)= \binom{n}{k} p^k(1 - p)^{n - k}
 $$
 
-The $np$ is the mean of the binomial distribution is $np$ is the variance $npq = np(1-p)$. The binomial distribution is just the repetition of $n$ independent Bernoulli trials.
+The $np$ is the mean of the binomial distribution and $np(1 - p)$ is the variance. The binomial distribution is just the repetition of $n$ independent Bernoulli trials.
 
 ## Bernoulli and Binomial
 
@@ -554,6 +518,7 @@ rbinom(1, n, p) # binomial version
 ## Binomial
 
 ```{r}
+#| echo: false
 n <- 30
 p <- 0.7
 dat <- data.frame(k = 0:n)
@@ -563,7 +528,6 @@ dat |>
     ggplot(aes(x = k, y = y)) +
     geom_point() +
     geom_segment(aes(x = k, xend = k, y = 0, yend = y)) +
-    mytheme() +
     ylab("dbinom(x, n, p)") +
     ggtitle(latex2exp::TeX("$n = 30$, $p = 0.7$"))
 
@@ -617,6 +581,7 @@ Most of the GLM models deal with a mean-variance relationship:
 
 ```{r}
 #| fig-width: 10
+#| echo: false
 
 p <- seq(0, 1, 0.01)
 par(mfrow = c(1,2))
@@ -674,10 +639,11 @@ We can also use all the other functions such as the `dpois()`, `qpois()` and `pp
 The mean-variance relationship can be easily seen with a continuous predictor:
 
 ```{r}
+#| echo: false
 x <- rnorm(1000)
 y <- rpois(1000, exp(log(10) + log(1.8)*x))
 
-plot(x, y, pch = 19)
+qplot(x, y, alpha = 0.5, size = 2)
 ```
 
 ## Gamma distribution

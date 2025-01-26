@@ -1,0 +1,23 @@
+date-format: "*[Last modified:] DD-MM-YYYY*"
+date: last-modified
+subtitle: "Psychological Sciences"
+format:
+  quarto-slides-revealjs:
+    code-fold: false
+    incremental: true
+    code-link: true
+    code-line-numbers: false
+    html-math-method: mathjax
+    filters:
+      - nutshell
+      - code-fullscreen
+from: markdown+emoji
+final-slide: false
+df-print: tibble
+execute:
+  message: false
+  warning: false
+knitr:
+  opts_chunk: 
+    comment: "#>"
+fig-align: center
