@@ -811,7 +811,7 @@ In a similar way we can use the inverse logit function to find the predicted pro
 
 - $p(y = 1|x = 2.5) = \frac{e^{\beta_0 + \beta_1 2.5}}{1 + e^{\beta_0 + \beta_1 2.5}}$
 - $p(y = 1|x = 5) = \frac{e^{\beta_0 + \beta_1 5}}{1 + e^{\beta_0 + \beta_1 5}}$
-- $p(y = 1|x = 5) -  p(y = 1|x = 2.5)$
+- $p(y = 1|x = 5) - p(y = 1|x = 2.5)$
 
 . . .
 
@@ -1478,7 +1478,7 @@ The diagnostic for GLM is similar to standard linear models. Some areas are more
 The likelihood is the joint probability of the observed data viewed as a function of the parameters.
 
 $$
-\log \mathcal{L}(\mu|x) = \sum^n_{i = 1} \log(\mu|x_i)
+\ell(\boldsymbol{\theta} \mid \mathbf{y}) = \log \mathcal{L}(\boldsymbol{\theta} \mid \mathbf{y}) = \sum_{i=1}^n \log f(y_i \mid \boldsymbol{\theta})
 $$
 
 ```{r}
@@ -1813,13 +1813,31 @@ performance::r2_mcfadden(fit)
 This measure is the easiest to interpret and calculate but can only be applied for binomial binary models [@Tjur2009-ml]. Is the absolute value of the difference between the proportions of correctly classifying $y = 1$ and $y = 0$ from the model:
 
 \begin{align*}
-p_1 = p(y_i = 1 |\hat y_i = 1) \\
-p_2 = p(y_i = 0 |\hat y_i = 0) = 1 - p_1 \\
-R^2 = |p_1 - p_2|
+\pi_0 = \frac{1}{n_0} \sum_{i = 1}^{n_0} \hat p_i \\
+\pi_1 = \frac{1}{n_1} \sum_{i = 1}^{n_1} \hat p_i
+R^2 = \abs{\pi_1 - \pi_0}
 \end{align*}
 
 ```{r}
-performance::r2_tjur(fit2)
+performance::r2_tjur(fit)
+```
+
+## Tjur's $R^2$
+
+We can do the same manually to check the result:
+
+```{r}
+# predict the probability of each observation
+pp <- predict(fit, type = "response")
+
+# predicted probabilities of y = 0
+p0 <- mean(pp[fit$y == 0])
+
+# predicted probabilities of y = 1
+p1 <- mean(pp[fit$y == 1])
+
+# R2
+abs(p1 - p0)
 ```
 
 ## Residuals
