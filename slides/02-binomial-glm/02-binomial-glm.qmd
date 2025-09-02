@@ -809,9 +809,9 @@ sapply(predictions, diff)
 
 In a similar way we can use the inverse logit function to find the predicted probability specific values of $x$. For example, the difference between $p(y = 1|x = 2.5) - p(y = 1|x = 5)$ can be calculated using the model equation:
 
-- $logit^{-1}p(y = 1|x = 2.5) = \frac{e^{\beta_0 + \beta_1 2.5}}{1 + e^{\beta_0 + \beta_1 2.5}}$
-- $logit^{-1}p(y = 1|x = 5) = \frac{e^{\beta_0 + \beta_1 5}}{1 + e^{\beta_0 + \beta_1 5}}$
-- $logit^{-1}p(y = 1|x = 5) - logit^{-1}p(y = 1|x = 2.5)$
+- $p(y = 1|x = 2.5) = \frac{e^{\beta_0 + \beta_1 2.5}}{1 + e^{\beta_0 + \beta_1 2.5}}$
+- $p(y = 1|x = 5) = \frac{e^{\beta_0 + \beta_1 5}}{1 + e^{\beta_0 + \beta_1 5}}$
+- $p(y = 1|x = 5) -  p(y = 1|x = 2.5)$
 
 . . .
 
@@ -828,14 +828,6 @@ In R we can use directly the `predict()` function with the argument `type = "res
 preds <- predict(fit, newdata = list(x = c(2.5, 5)), type = "response")
 preds
 preds[2] - preds[1]
-```
-
-## Predicted probabilities
-
-I have written the `epredict()` function that extend the `predict()` function giving some useful messages when computing predictions. you can use it with every model and also with multiple predictors.
-
-```{r}
-epredict(fit, values = list(x = c(2.5, 5)), type = "response")
 ```
 
 ## Marginal effects
