@@ -52,3 +52,5 @@ rsconnect/
 
 local/
 .DS_Store
+
+**/*.quarto_ipynb

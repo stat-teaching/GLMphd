@@ -3,3 +3,15 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^README\.Rmd$
+^LICENSE\.md$
+^slides$
+^scripts$
+^notes$
+^labs$
+^docs$
+^_freeze$
+^_extensions$
+\\.qmd$
+^files$
+.quarto
+.nojekyll

@@ -443,6 +443,8 @@ This part is invariant to the type of model and is the combination of explanator
 
 ## Link Function
 
+<!-- TODO fix with Sara suggestions -->
+
 The **link function** $g(\mu)$ is an **invertible** function that connects the mean $\mu$ of the random component with the *linear combination* of predictors.
 
 $g(\mu) = \beta_0 + \beta_1x_{1i} + ... + \beta_px_{pi}$. The inverse of the link function $g^{-1}$ map the linear predictor ($\eta$) into the original scale.
@@ -560,6 +562,8 @@ pbinom(k, n, p)
 ```
 
 ## Binomial GLM
+
+<!-- TODO fix with Sara suggestions -->
 
 The Bernoulli distributions is used as **random component** when we have a binary dependent variable or the number of successes over the total number of trials:
 

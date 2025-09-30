@@ -15,6 +15,16 @@ devtools::load_all()
 #| label: ggplot2
 #| include: false
 
+mtheme <- function(size = 15) {
+  ggplot2::theme_minimal(base_size = size, base_family = "sans") +
+    ggplot2::theme(
+      legend.position = "bottom",
+      plot.title = element_text(hjust = 0.5),
+      strip.text = element_text(face = "bold"),
+      panel.grid.minor = element_blank()
+    )
+}
+
 theme_set(mtheme())
 
 # palettes

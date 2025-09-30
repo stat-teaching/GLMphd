@@ -1,50 +1,74 @@
-#'@description
-#'read rda file as rds giving a name
+#' Format code into rmd/qmd documents
 #'
-read_rda <- function(x){
-  env <- new.env()
-  load(x, envir = env)
-  get(ls(env), envir = env)
+#' @param x text to format
+#' @param format type of formatting
+#'
+#' @returns the formatted string
+#' @export
+#'
+code <- function(x, format = c("html", "markdown", "latex")) {
+  format <- match.arg(format)
+  if (format == "html") {
+    sprintf("<code>%s</code>", x)
+  } else if (format == "markdown") {
+    sprintf("`%s`", x)
+  } else {
+    sprintf("\\texttt{%s}", x)
+  }
+}
+
+#' Wrapper for the latex2exp::TeX function
+#' @description
+#' Wrapper for the latex2exp::TeX function including also a `sprintf` functionality
+#'
+#' @param text the string to be passed into latex2exp::TeX
+#' @param ... other objects passed to `sprintf(fmt, ...)`
+#'
+#' @returns the formatted expression
+#' @export
+#'
+latex <- function(text, ...) {
+  latex2exp::TeX(sprintf(text, ...))
 }
 
 
-cut_extreme <- function(x, min, max){
-  x[x < min] <- min
-  x[x > max] <- max
-  return(x)
-}
-
-mtheme <- function(size = 15){
-  ggplot2::theme_minimal(base_size = size,
-                base_family = "sans") +
-  ggplot2::theme(legend.position = "bottom",
-        plot.title = element_text(hjust = 0.5),
-        strip.text = element_text(face = "bold"),
-        panel.grid.minor = element_blank())
-}
-
-qplot <- function(x, y,
-                  type = c("none", "p", "l"),
-                  data = NULL, ...){
-
-  require(ggplot2)
-
-  type <- match.arg(type, type, several.ok = FALSE)
-
-  if(is.null(data)){
-    data <- data.frame(x, y)
+#' Show code and results in rmd/qmd documents
+#' @description
+#' Show code and results in rmd/qmd documents. The expression is evaluated in the parent frame.
+#'
+#' @param expr code
+#' @param between string to include between code and result
+#' @param digits number of digits for numbers
+#'
+#' @returns the string with code and result
+#' @export
+#'
+dcode <- function(expr, between = NULL, digits = NULL) {
+  if (is.null(digits)) {
+    digits <- options()$digits
   }
 
-  pp <- ggplot2::ggplot(data = data, aes(x = x, y = y))
+  code <- deparse(substitute(expr))
+  result <- eval(expr, envir = parent.env(environment()))
 
-  if(type == "p"){
-    pp + ggplot2::geom_point(...)
-  } else if(type == "l"){
-    pp + ggplot2::geom_line(...)
-  } else if(type == "none") {
-    pp
-  } else{
-    stop("method not implemented yet")
+  if (is.numeric(result)) {
+    result <- round(result, digits)
   }
 
+  if (is.null(between)) {
+    sprintf("`%s` %s", code, result)
+  } else {
+    sprintf("`%s` %s %s", code, between, result)
+  }
+}
+
+#' @keywords internal
+.paste_arg_value <- function(x){
+  x <- data.frame(x)
+  rr <- vector(mode = "list", length = ncol(x))
+  for(i in 1:ncol(x)){
+    rr[[i]] <- sprintf("%s = %s", names(x)[i], x[[i]])
+  }
+  rr <- data.frame(rr)
+  apply(rr, 1, function(x) paste(x, collapse = ", "))
 }

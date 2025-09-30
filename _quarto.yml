@@ -29,8 +29,7 @@ author:
 
 format:
   html:
-    theme: cosmo
-    #css: styles.css
+    theme: brite
     toc: true
 
 

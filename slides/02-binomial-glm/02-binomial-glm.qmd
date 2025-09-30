@@ -170,7 +170,8 @@ We considered a Study conducted by the University of Padua (TEDDY Child
 Study, 2020)^[Thanks to Prof. Paolo Girardi for the example, see https://teddychild.dpss.psy.unipd.it/ for information]. Within the study, researchers asked the participants (mothers of a young child) about the presence of post-partum depression and measured the parental stress using the PSI-Parenting Stress Index.
 
 ```{r, echo = FALSE}
-teddy <- read.csv(here("data", "teddy_child.csv"))
+load("data/teddy.rda")
+# TODO load dataset as package
 teddy <- teddy |> 
     select(ID, Parental_stress, Depression_pp)
 
@@ -2348,26 +2349,22 @@ The first two columns are the DFBETAs for each parameter, the `cook.d` columns c
 
 ## Plotting influence measures
 
-I wrote the `cook_plot()` function to easily plot the cook distances along with the identification of influential observations:
-
 ```{r, eval = FALSE}
-cook_plot(fit)
+plot(cooks.distance(fit))
 ```
 
 ```{r, echo = FALSE}
-cook_plot(fit)
+plot(cooks.distance(fit))
 ```
 
 ## Plotting influence measures
 
-I wrote the `dfbeta_plot()` function to easily plot the cook distances along with the identification of influential observations:
-
 ```{r, eval = FALSE}
-dfbeta_plot(fit)
+car::dfbetaPlots(fit)
 ```
 
 ```{r, echo = FALSE}
-dfbeta_plot(fit)
+car::dfbetaPlots(fit)
 ```
 
 ## Binomial vs Binary

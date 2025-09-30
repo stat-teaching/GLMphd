@@ -227,7 +227,7 @@ car::influenceIndexPlot(fit1, vars = c("Studentized", "hat", "Cook"))
 Plotting also the dfbeta:
 
 ```{r, fig.width=10, fig.height=10}
-dfbeta_plot(fit1)
+car::dfbetaPlots(fit1)
 ```
 
 Check if there are observations with high standardized (studentized) residuals:
