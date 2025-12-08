@@ -12,6 +12,14 @@ library(kableExtra)
 
 This repository contains the materials for the course *Generalized Linear Models* from the PhD program in Psychological Sciences (University of Padova). The repository is organized as an R Package.
 
+<center>
+
+{{< qrcode https://github.com/stat-teaching/GLMphd >}}
+</br>
+*QR code pointing to the Github repository*
+
+</center>
+
 ## Getting Started
 
 To start with the course you can download or clone the entire Git repository. Simply run `git clone link` or download the repository directly using this [link](https://downgit.github.io/#/home?url=https://github.com/stat-teaching/GLMphd).
