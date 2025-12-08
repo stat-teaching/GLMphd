@@ -7,12 +7,12 @@
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-ea1d7ac60288e0f1efdbc993fd8432ae.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dc55a5b9e770e841cd82e46aadbfb9b0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/quarto-contrib/nutshell-1.0.0/nutshell.min.js"></script><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <meta charset="utf-8">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" rel="stylesheet">
-<meta name="generator" content="quarto-1.8.21">
+<meta name="generator" content="quarto-1.8.24">
 <meta name="author" content="Filippo Gambarota">
 <title>Generalized Linear Models – Model Diagnostics</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -800,7 +800,7 @@ h_i = \frac{1}{n} + {\color{red}{\frac{(x_i - \bar x)^2}{\sum_{j=1}^n (x_j - \ba
 </li>
 <li class="fragment">Then we can plot each bin and the confidence intervals (e.g., as <span class="math inline">\(\pm 2*SE\)</span>) where ~95% of binned residuals should be within the CI if the model is true</li>
 </ul></section><section id="example-with-the-teddy-dataset-binned-residuals-1" class="slide level2"><h2>Example with the <code>teddy</code> dataset, binned residuals</h2>
-<p>We can use the <code><a href="https://rdrr.io/pkg/arm/man/binnedplot.html">arm::binnedplot()</a></code> function to automatically create and plot the binned residuals:</p>
+<p>We can use the <code>arm::binnedplot()</code> function to automatically create and plot the binned residuals:</p>
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb38"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="fu">performance</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/performance/reference/binned_residuals.html">binned_residuals</a></span><span class="op">(</span><span class="va">fit_teddy</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 
@@ -1120,13 +1120,14 @@ Tjur, T. (2009). <span class="nocase">Coefficients of Determination in Logistic 
           e.clearSelection();
         }
         const getTextToCopy = function(trigger) {
-            const codeEl = trigger.previousElementSibling.cloneNode(true);
-            for (const childEl of codeEl.children) {
-              if (isCodeAnnotation(childEl)) {
-                childEl.remove();
-              }
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
             }
-            return codeEl.innerText;
+          }
+          return codeEl.innerText;
         }
         const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
           text: getTextToCopy

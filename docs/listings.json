@@ -1,12 +1,5 @@
 [
   {
-    "listing": "/notes.html",
-    "items": [
-      "/notes/linear-non-linear.html",
-      "/notes/misc-lm-glm.html"
-    ]
-  },
-  {
     "listing": "/labs.html",
     "items": [
       "/labs/lab1.html",
@@ -16,6 +9,13 @@
       "/labs/lab5.html",
       "/labs/lab6.html",
       "/labs/lab7.html"
+    ]
+  },
+  {
+    "listing": "/notes.html",
+    "items": [
+      "/notes/linear-non-linear.html",
+      "/notes/misc-lm-glm.html"
     ]
   },
   {

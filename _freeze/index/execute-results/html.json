@@ -1,9 +1,11 @@
 {
-  "hash": "5124b62c0308634829d076e1b750b7d8",
+  "hash": "c90f4b6e0d1a10485b7323370889a985",
   "result": {
     "engine": "knitr",
-    "markdown": "---\ntitle: \"Generalized Linear Models\"\nsubtitle: \"PhD Program in Psychological Sciences - University of Padova\"\n---\n\n\n\n# Course\n\nThis repository contains the materials for the course *Generalized Linear Models* from the PhD program in Psychological Sciences (University of Padova). The repository is organized as an R Package.\n\n<center>\n\n{{< qrcode https://github.com/stat-teaching/GLMphd >}}\n</br>\n*QR code pointing to the Github repository*\n\n</center>\n\n## Getting Started\n\nTo start with the course you can download or clone the entire Git repository. Simply run `git clone link` or download the repository directly using this [link](https://downgit.github.io/#/home?url=https://github.com/stat-teaching/GLMphd).\n\nIf you downloaded the folder you need to unzip it. Then you can open the `GLMphd.Rproj` file and R Studio will be opened on the correct folder. From now, everything is organized as a R package. To load all the custom function of the `R` folder and datasets (`data` folder) you can use `devtools::load_all()`. This is the same as doing `source(\"file.R\")` without cluttering the global environment.\n\n## Useful links\n\n- Moodle page for the course: [https://psico.elearning.unipd.it/course/view.php?id=6426](https://psico.elearning.unipd.it/course/view.php?id=6426)",
-    "supporting": [],
+    "markdown": "---\ntitle: \"Generalized Linear Models\"\nsubtitle: \"PhD Program in Psychological Sciences - University of Padova\"\n---\n\n\n\n# Course\n\nThis repository contains the materials for the course *Generalized Linear Models* from the PhD program in Psychological Sciences (University of Padova). The repository is organized as an R Package.\n\n<center>\n\n{{< qrcode https://github.com/stat-teaching/GLMphd >}}\n</br>\n*QR code pointing to the Github repository*\n\n</center>\n\n## Getting Started\n\nTo start with the course you can download or clone the entire Git repository. Simply run `git clone link` or download the repository directly using this [link](https://downgit.github.io/#/home?url=https://github.com/stat-teaching/GLMphd).\n\nIf you downloaded the folder you need to unzip it. Then you can open the `GLMphd.Rproj` file and R Studio will be opened on the correct folder. From now, everything is organized as a R package. To load all the custom function of the `R` folder and datasets (`data` folder) you can use `devtools::load_all()`. This is the same as doing `source(\"file.R\")` without cluttering the global environment.\n\n## Useful links\n\n- Moodle page for the course: [https://psico.elearning.unipd.it/course/view.php?id=6426](https://psico.elearning.unipd.it/course/view.php?id=6426)\n",
+    "supporting": [
+      "index_files"
+    ],
     "filters": [
       "rmarkdown/pagebreak.lua"
     ],
