@@ -21,7 +21,7 @@ of their odds:
 }
 \examples{
 # OR comparing 0.8 vs 0.5
-odds_ratio(0.8, 0.5)
+or(0.8, 0.5)
 
 # Vectorized input
 or(c(0.8, 0.6), 0.5)

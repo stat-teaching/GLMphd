@@ -5,25 +5,24 @@
 \title{Compute Gamma Distribution Parameters}
 \usage{
 gamma_params(
+  shape = NULL,
+  scale = 1/rate,
+  rate = 1,
   mean = NULL,
   sd = NULL,
-  shape = NULL,
-  scale = NULL,
-  rate = NULL,
-  skew = NULL,
-  cv = NULL
+  eqs = FALSE
 )
 }
 \arguments{
-\item{mean}{Numeric. The mean of the distribution.}
-
-\item{sd}{Numeric. The standard deviation of the distribution.}
-
 \item{shape}{Numeric. The shape parameter (\eqn{\alpha}) of the gamma distribution.}
 
 \item{scale}{Numeric. The scale parameter (\eqn{\theta}) of the gamma distribution.}
 
 \item{rate}{Numeric. The rate parameter (\eqn{\lambda = 1/\theta}) of the gamma distribution.}
+
+\item{mean}{Numeric. The mean of the distribution.}
+
+\item{sd}{Numeric. The standard deviation of the distribution.}
 
 \item{skew}{Numeric. The skewness of the gamma distribution (\eqn{2 / \sqrt{\alpha}}).}
 
