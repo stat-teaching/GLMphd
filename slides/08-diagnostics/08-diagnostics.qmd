@@ -1,0 +1,648 @@
+---
+title: Model Diagnostics
+bibliography: "`r filor::fil()$bib`"
+csl: "`r filor::fil()$csl`"
+---
+
+{{< include ../_setup.qmd >}}
+
+# GLM - Diagnostic {.section}
+
+## GLM - Diagnostic
+
+The diagnostic for GLM is similar to standard linear models. Some areas are more complicated for example residual analysis and goodness of fit. We will see:
+
+- $R^2$
+- Residuals
+  - Types of residuals
+  - Residual deviance
+- Outliers and influential observations
+
+## $R^2$
+
+Compared to the standard linear regression, there are multiple ways to calculate an $R^2$ like measure for GLMs and there is no consensus about the most appropriate method. There are some useful resources:
+
+- https://stats.oarc.ucla.edu/other/mult-pkg/faq/general/faq-what-are-pseudo-r-squareds/
+
+. . .
+
+To note, some measures are specific for the binomial GLM while other measures can be applied also to other GLMs (e.g., the poisson)
+
+## $R^2$
+
+We will se:
+
+- McFadden's pseudo-$R^2$ (for GLMs in general)
+- Tjur's $R^2$ (only for binomial/binary models)
+
+## McFadden's pseudo-$R^2$
+
+The McFadden's pseudo-$R^2$ compute the ratio between the log-likelihood of the intercept-only (i.e., null) model and the current model[@McFadden1987-qq]:
+
+$$
+R^2 = 1 - \frac{\log(\mathcal{L_{current}})}{\log(\mathcal{L_{null}})}
+$$
+
+There is also the adjusted version that take into account the number of parameters of the model. In R can be computed manually or using the `performance::r2_mcfadden()`:
+
+```{r}
+#| eval: false
+performance::r2_mcfadden(fit)
+```
+
+## Tjur's $R^2$
+
+This measure is the easiest to interpret and calculate but can only be applied for binomial binary models [@Tjur2009-ml]. Is the absolute value of the difference between the proportions of correctly classifying $y = 1$ and $y = 0$ from the model:
+
+$$
+\begin{align*}
+\pi_0 = \frac{1}{n_0} \sum_{i = 1}^{n_0} \hat p_i \\
+\pi_1 = \frac{1}{n_1} \sum_{i = 1}^{n_1} \hat p_i \\
+R^2 = |\pi_1 - \pi_0|
+\end{align*}
+$$
+
+```{r}
+#| eval: false
+performance::r2_tjur(fit)
+```
+
+## Residuals
+
+Residuals in regression models represent the **deviation of each observed value $y_i$ from the fitted value** $\mu_i$ (remember that $\mu_i = g^{-1}(\eta_i)$).
+
+This means that a large residuals (depending on the $y$ scale and the expected error variance) indicate a problem with the model and/or with that specific observation.
+
+We can identify three types of residuals:
+
+- **raw** residuals
+- **standardized** residuals
+- **studentized** residuals
+
+## Raw residuals
+
+Is the basic type of residual, that is very common in Gaussian linear models:
+
+$$
+r_i = y_i - \mu_i
+$$
+
+With $\mu_i = g^{-1}(\eta_i)$. That is the observed value in the raw scale minus the predicted value from the model in the raw scale (i.e., after inverting the link function).
+
+## Raw residuals are problematic in GLMs
+
+The problem with raw residuals is that, given the mean-variance relationship the same distance from the fitted value is intepreted differently depending on the fitted value itself.
+
+In standard linear models, $\mu$ and $\sigma^2$ are independent and $\sigma^2$ is constant. This means that for each $\mu_i$ the expected variance is always $\sigma^2$.
+
+In non Gaussian GLMs, the variance increases with the mean. For example in Poisson models, $\mbox{var}(\mu_i) = \mu_i$.
+
+## Raw residuals are problematic in GLMs
+
+This plot^[Adapted from @Dunn2018-ww, Fig. 8.1] shows an example with the same residual for two different $x$ values on a Poisson GLM. Beyond the model itself, the same residual can be considered as extreme for low $x$ values and plausible for high $x$ values:
+
+```{r echo = FALSE}
+set.seed(120)
+
+xs <- c(0.2, 1)
+x <- c(xs, runif(300 - length(xs), 0, 1.5))
+
+b0 <- log(3)
+b1 <- log(8)
+
+y <- rpois(300, exp(b0 + b1*x))
+
+dat_temp <- data.frame(x, y)
+
+fit_temp <- glm(y ~ x, data = dat_temp, family = poisson(link = "log"))
+
+dat_temp$yi <- predict(fit_temp, type = "response")
+
+ds <- data.frame(x = xs)
+ds$y <- dat_temp$y[x %in% xs]
+ds$yi <- predict(fit_temp, ds, type = "response")
+ds$dist <- distributional::dist_normal(ds$y, sqrt(ds$yi))
+
+library(distributional)
+library(ggdist)
+
+ggplot(data = dat_temp, aes(x = x, y = y)) +
+    geom_point() +
+    geom_point(x = xs[1] - 0.02, y = dat_temp$y[x == xs[1]], size = 5, col = "red") +
+    geom_point(x = xs[1] - 0.02, y = dat_temp$y[x == xs[1]] + 8, size = 5, col = "red") +
+    geom_point(x = xs[2] - 0.02, y = dat_temp$y[x == xs[2]], size = 5, col = "red") + 
+    geom_point(x = xs[2] - 0.02 , y = dat_temp$y[x == xs[2]] + 8, size = 5, col = "red") +
+    stat_dist_halfeye(data = ds, aes(y = y, dist = dist),
+                      .width = c(NA, NA),
+                      scale = 1,
+                      point_color = NA,
+                      alpha = 0.7, width = 0.3) +
+    ylim(c(-10, 90))
+```
+
+## Pearson residuals
+
+To take into account the mean-variance relationship we can divide each raw residual by the expected variance at that specific level:
+
+$$
+r_{P_i} = \frac{r_i}{\sqrt{\mbox{var}(\mu_i)}}
+$$
+
+This is in fact, reducing the residuals when the variance is large, stabilizing the mean-variance relationship.
+
+## Pearson residuals, example
+
+plot about before and after stabilizing
+
+## Deviance residuals
+
+Deviance residuals are similar to the Pearson residuals:
+
+$$
+r_{Ð_i} = \mbox{sign}(y_i - \mu_i) \sqrt{d(y_i, \mu_i)}
+$$
+
+Deviance residuals are the default in R when using the `residuals()` function. When using `lm` (i.e., the Gaussian GLM) raw residuals are computed by default.
+
+## Quantile residuals
+
+This is a less common type of residuals but very promising. @Dunn1996-yd is the first paper proposing the idea and expanded with examples in @Dunn2018-ww.
+
+The idea is the following:
+
+- take the Cumulative Density Function (CDF) of the chosen random component (e.g., Poisson) considering the systematic component and estimated parameters
+- map each observed value on the CDF thus finding a value between 0 and 1
+- convert the CDF value into a standard normal CDF. This in fact transform values into $z$ scores
+
+## Quantile residuals
+
+If everything is well specified (random component, link function, systematic component, etc.), the residuals are normally distributed.
+
+The quantile residuals are particularly useful with discrete responses (e.g., Poisson or Binomial) where other residuals patterns could be confounded by the nature of the variable.
+
+The process of calculating quantile residuals for discrete random variables is a little bit more complex but clearly described in @Dunn2018-ww [pp. 301-304].
+
+## Quantile residuals, formally
+
+$$
+r_{Q_i} = \Phi^{-1}\{\mathcal{F}\;(y_i\;; \mu_i, \phi)\}
+$$
+
+Where $\Phi$ is the CDF of the standard normal distribution (`qnorm` in R)
+
+## Quantile residuals, an example
+
+Let's use a Gamma distribution as an example:
+
+```{r}
+N <- 500
+x <- runif(N)
+shape <- 10
+eta <- exp(log(50) + 2 * x)
+y <- rgamma(N, shape = shape, rate = shape/eta)
+hist(y, main = "Distribution of RT", breaks = 30, col = "dodgerblue")
+```
+
+## Quantile residuals, an example
+
+We want to see if `y` is related to `x`, a variable between 0 and 1:
+
+```{r}
+scatter.smooth(x, y, pch = 19, col = scales::alpha("black", 0.2), main = "y ~ x")
+```
+
+Probably yes!
+
+## Quantile residuals, an example
+
+Assume that we know is a Gamma distribution thus we use a Gamma GLM:
+
+```{r}
+#| echo: true
+fit <- glm(y ~ x, family = Gamma(link = "log"))
+summary(fit)
+```
+
+## Quantile residuals, an example
+
+Firsly let's use the Gamma CDF that is `pgamma` in R to compute the cumulative probability of each $y_i$:
+
+```{r}
+#| echo: true
+#| output-location: slide
+
+mu <- fitted(fit) # exp(eta)
+shape <- 1/summary(fit)$dispersion
+cdf_gamma <- pgamma(y, shape = shape, rate = shape/mu)
+z <- qnorm(cdf_gamma)
+hist(z)
+```
+
+## Quantile residuals, an example
+
+The residuals can be directly calculated using the `statmod::qresid()` function (the package from the @Dunn2018-ww book) and they match our calculation:
+
+```{r}
+#| echo: true
+library(statmod)
+rq <- qresid(fit)
+
+rq[1:10] # from the package
+z[1:10]  # our manual calculation
+```
+
+## Quantile residuals, `DHARMa` package
+
+The [`DHARMa`](https://cran.r-project.org/web/packages/DHARMa/vignettes/DHARMa.html) package is a modern R package based on the idea of Quantile residuals. The package supports several models including (generalized) linear mixed-effects models.
+
+In fact, the package used a simulation-based version of Quantile residuals but the idea is very similar. See the [documentation](https://cran.r-project.org/web/packages/DHARMa/vignettes/DHARMa.html) for more details.
+
+```{r}
+#| echo: true
+#| output-location: slide
+
+library(DHARMa)
+
+plot(simulateResiduals(fit))
+```
+
+## Standardized residuals and the \mathbf{H} matrix
+
+All the previous types of residuals can be considered *raw*. We can compute the standardized version of the previous residuals by using the so-called *hatvalues*. The matrix algebra is beyond my expertise so I can give you the intuition about the hat matrix.
+
+The hat matrix $\mathop{\mathbf{H}}\underset{n \times n}{}$ is calculated as $\mathbf{H} = \mathbf{X} \left(\mathbf{X}^{\top} \mathbf{X} \right)^{-1} \mathbf{X}^{\top}$ where $\mathop{\mathbf{X}}\underset{n \times p'}{}$ is the model matrix.
+
+The hatvalues $h_{ii}$ ($i = 1, \dots, n$) are the diagonal elements of $\mathop{\mathbf{H}}\underset{n \times n}{}$.
+
+## The *hatvalues* $h_{ii}$
+
+The *hatvalues* $h_{ii}$ represent the influence of the $i$ observation on the fitted value $\mu_i$. A large *hatvalue* means that this specific observation has predictors with a large influence on the fitted value. They are also called leverage points because they influence the regression line.
+
+- $h_{ii}$ ranges between 0 and 1
+- The sum of all hatvalues is the number of parameters $\sum_{i = 1}^n h_{ii} = p'$
+
+## *hatvalues* is simple linear regression
+
+Equation for *hatvalues* in simple linear regression ($\mu_i = \beta_0 + \beta_1x_{1i}$) reduces to:
+
+$$
+h_i = \frac{1}{n} + \frac{(x_i - \bar x)^2}{\sum^n_{j = 1}(x_i - \bar x)^2}
+$$
+
+We use the simple linear regression as a toy example to have an intuition about *hatvalues*.
+
+## *hatvalues* is simple linear regression
+
+The first term is the contribution of the intercept:
+
+$$
+h_i = {\color{red}{\frac{1}{n}}} + \frac{(x_i - \bar x)^2}{\sum_{j=1}^n (x_j - \bar x)^2}
+$$
+
+If no predictors are added into the model there are no leverage points. Each datapoint contribute equally. We have $p' = 1$ so each observation has $p'/n$ influence.
+
+## *hatvalues* is simple linear regression
+
+The second term is the contribution of the slope, the effect of $x$:
+
+$$
+h_i = \frac{1}{n} + {\color{red}{\frac{(x_i - \bar x)^2}{\sum_{j=1}^n (x_j - \bar x)^2}}}
+$$
+
+The equation is just the squared residual of $x_i$ from the mean, rescaled by the total sum of squares. How far is $x_i$ from the mean.
+
+## *hatvalues* is simple linear regression
+
+This is the intercept-only model. No leverage because we are omitting $x$. The values of $x$ have no influence on the slope that is 0 by definition.
+
+```{r}
+#| echo: true
+#| output-location: slide
+
+N <- 100
+x <- runif(N)
+y <- 0.3 + 1.5 * x + rnorm(N)
+
+fit0 <- glm(y ~ 1)
+fit1 <- glm(y ~ x)
+
+plot(x, y, pch = 19, cex = 1.5, main = "y ~ 1")
+abline(fit0, col = "firebrick")
+```
+
+## *hatvalues* is simple linear regression
+
+When including the predictor $x$ each observation $x_i$ try to pull toward themselves the regression line. Some observations have a greater leverage and these observations are far from the mean of $x$.
+
+```{r}
+#| echo: true
+#| output-location: slide
+
+dat <- data.frame(
+    x, y, h = hatvalues(fit1)
+)
+
+ggplot(dat, aes(x = x, y = y)) +
+    geom_point(size = 3, aes(color = h)) +
+    geom_vline(xintercept = mean(x), lty = "dotted") +
+    geom_smooth(method = "lm", se = FALSE) +
+    labs(
+        color = latex2exp::TeX("$h_{ii}$")
+    )
+```
+
+
+## *hatvalues* and residuals
+
+What is the point about residuals? If observations with a large $h_{ii}$ pull the regression line toward themselves, this means the on average the residuals are lower for values with high leverage.
+
+Same model as before but with more obervations to show the pattern:
+```{r}
+#| echo: true
+#| output-location: slide
+
+N <- 1e4
+x <- runif(N)
+y <- 0.3 + 1.5 * x + rnorm(N)
+
+fit1 <- glm(y ~ x)
+
+dat <- data.frame(
+    x, y, h = hatvalues(fit1)
+)
+
+dat$ri <- residuals(fit1)
+
+ggplot(dat, aes(x = h, y = ri)) +
+    geom_point(alpha = 0.5)
+```
+
+## *hatvalues* and standardized residuals
+
+If we divide the residuals using $1 - h_{ii}$ (or better $\sqrt{1 - h_{ii}}$) we can stabilize this pattern and make residuals comparable taking into account the leverage.
+
+Dividing each residual by each own leverage will make the residual variance homogeneous across all residuals, regardless the actual leverage.
+
+In R there is the `hatvalues()` function to extract the diagonal of the $\mathbf{H}$ matrix and `rstandard()` to compute the standardized residuals.
+
+## Checking the systematic component
+
+This is a simulated example where the true model contains a systematic component with $\beta_0 + \beta_1 x_1 + \beta_2 x^2_1$ and we fit the model with and without the systematic component:
+
+```{r}
+#| echo: true
+
+N <- 500
+x <- runif(N)
+y <- 0.3 + 1 * x + 5 * x^2 + rnorm(N)
+
+fit_x <- lm(y ~ x)
+fit_x2 <- lm(y ~ poly(x, 2))
+```
+
+## Checking the systematic component
+
+Firstly you can plot residuals against fitted values. Better using standardized Pearson, Deviance or Quantile residuals. `car` for example uses the raw Pearson residuals as default.
+
+```{r}
+#| echo: true
+car::residualPlots(fit_x)
+```
+
+## Checking the systematic component
+
+Then we can plot each predictor against residuals. A pattern here could be caused by a misspesification of the predictor (e.g., linear instead of quadratic).
+
+## Checking the systematic component
+
+```{r}
+#| echo: true
+#| output-location: slide
+
+par(mfrow = c(1, 2))
+
+scatter.smooth(x, 
+               residuals(fit_x), 
+               lpars = list(col = "red", lwd = 3), 
+               xlab = "x",
+               ylab = "Residuals", 
+               main = "y ~ x")
+
+scatter.smooth(x, 
+               residuals(fit_x2), 
+               lpars = list(col = "red", lwd = 3), 
+               xlab = "x",
+               ylab = "Residuals", 
+               main = latex2exp::TeX("$y \\sim x + x^2$", bold = TRUE))
+```
+
+## Checking the systematic component
+
+Or a complete check with `performance::check_model()`:
+
+```{r}
+#| echo: true
+performance::check_model(fit_x)
+```
+
+## Checking the systematic component
+
+```{r}
+#| echo: true
+performance::check_model(fit_x2)
+```
+
+## Checking the systematic component
+
+As a general principle, after using the appropriate residuals (i.e., correcting for the mean-variance relationship and maybe standardizing) fitted againsts residuals and predictors against residuals should apper as a flat relationship with approximately constant variance.
+
+# Outliers and influential observations
+
+## Outliers
+
+We introduced the concept of *leverage* in the previous slides as an obervation with a extreme $x_i$ value.
+
+An **outlier** is an observation with a large *residual* thus the extremeness is about $y_i$ (or better the distance between $y_i$ and and corresponding fitted value $\mu_i$)
+
+Methods for assessing outliers have in common the following principle: 
+
+> *How the model change in terms of goodness-of-fit when a certain observation is removed/included?*
+
+## Are outliers always problematic?
+
+Outliers are observation that are *inconsistent* with the fitted model producing large residuas.
+
+An **influential observation** is an outlier with high leverage. A value with high leverage is a value that could, in principle, pull the regression line.
+
+In addition, a value that is also inconsistent with $y$ have also larger power of pulling the regression line.
+
+When we remove an influential observation from the model, we can have a visible impact on the model fit.
+
+## Outlier vs leverage vs influential
+
+Let's visually illustrate the difference between the three concepts. Again let's simulate a simple linear regression without any outlier or influential point:
+
+```{r}
+#| echo: true
+#| output-location: slide
+
+N <- 100
+x <- runif(N, 0, 100)
+y <- 0.3 * 0.1 * x + rnorm(N)
+dat <- data.frame(y, x, problem = "none")
+
+with(dat, plot(x, y, pch = 19, cex = 1.5))
+with(dat, abline(lm(y ~ x), col = "dodgerblue", lwd = 2))
+```
+
+## No outlier, high leverage
+
+Let's add a point with very high leverage but still consistent with the model. Remember that a point with high leverage is only extreme on $x$. Despite the high leverage the impact on the model fit, slope and so on is very limited:
+
+```{r}
+#| echo: true
+#| output-location: slide
+
+leverage <- data.frame(
+    y = NA,
+    x = with(dat, mean(x) + 5 * sd(x)), # 5 standard deviation away
+    problem = "leverage"
+)
+leverage$y <- 0.3 * 0.1 * leverage$x + rnorm(1) # simulate from the same model
+
+dat <- rbind(dat, leverage)
+
+with(dat, plot(x, y, pch = 19, cex = 1.5, main = "without high leverage (red), full dataset (blue)"), col = ifelse(dat$problem == "none", 1, 2))
+with(dat, abline(lm(y ~ x), col = "dodgerblue", lwd = 2))
+with(dat[dat$problem == "none", ], abline(lm(y ~ x), col = "red", lwd = 2))
+```
+
+## Outlier, low leverage
+
+Now we simulate an observation with a very large outlier but with small leverage. Still the impact on the fitted regression line is minimal.
+
+```{r}
+#| echo: true
+#| output-location: slide 
+
+out <- data.frame(
+    y = with(dat, mean(y) + sd(y) * 4),
+    x = mean(dat[dat$problem == "none", "x"]),
+    problem = "outlier"
+)
+
+dat <- rbind(dat, out)
+dat_out <- dat[dat$problem != "leverage", ]
+
+with(dat_out, plot(x, y, pch = 19, cex = 1.5, main = "without high outlier (red), full dataset (blue)"))
+points(dat_out$x[dat_out$problem == "outlier"], dat_out$y[dat_out$problem == "outlier"], col = "red", pch = 19, cex = 1.8)
+
+with(dat_out, abline(lm(y ~ x), col = "dodgerblue", lwd = 2))
+with(dat_out[dat_out$problem == "none", ], abline(lm(y ~ x), col = "red", lwd = 2))
+```
+
+## High leverage and outlier
+
+This is the deadly combination. We can combine the two previous simulations to show the actual impact. Clearly this is an *extreme* example:
+
+```{r}
+influential <- leverage
+influential$y <- max(dat$y) + sd(dat$y) * 4 # extreme on y and x
+influential$problem <- "influential"
+dat <- rbind(dat, influential)
+
+dat_inf <- dat[dat$problem %in% c("none", "influential"), ]
+
+with(dat_inf, plot(x, y, pch = 19, cex = 1.5, col = ifelse(problem == "none", 1, 2), main = "without influential (red), full dataset (blue)"))
+with(dat_inf, abline(lm(y ~ x), col = "dodgerblue", lwd = 2))
+with(dat_inf[dat_inf$problem == "none", ], abline(lm(y ~ x), col = "red", lwd = 2))
+```
+
+# Example
+
+## Example with the `teddy` dataset
+
+```{r}
+data("teddy")
+
+fit_teddy <- glm(Depression_pp01 ~ Parental_stress, data = teddy, family = binomial(link = "logit"))
+summary(fit_teddy)
+```
+
+## Example with the `teddy` dataset, $R^2$
+
+```{r}
+performance::r2_mcfadden(fit_teddy)
+performance::r2_tjur(fit_teddy)
+```
+
+## ## Example with the `teddy` dataset, Tjur's $R^2$
+
+We can do the same manually to check the result:
+
+```{r}
+# predict the probability of each observation
+pp <- predict(fit, type = "response")
+
+# predicted probabilities of y = 0
+p0 <- mean(pp[fit$y == 0])
+
+# predicted probabilities of y = 1
+p1 <- mean(pp[fit$y == 1])
+
+# R2
+abs(p1 - p0)
+```
+
+## Example with the `teddy` dataset, residuals
+
+Residuals for binomial models in the binary form are really bad:
+
+```{r}
+car::residualPlots(fit_teddy)
+```
+
+## Example with the `teddy` dataset, quantile residuals
+
+```{r}
+qr <- statmod::qresiduals(fit_teddy)
+qqnorm(qr)
+abline(0,1)
+```
+
+## Example with the `teddy` dataset, quantile residuals
+
+```{r}
+plot(DHARMa::simulateResiduals(fit_teddy))
+```
+
+## Example with the `teddy` dataset, binned residuals
+
+Gelman and colleagues [@Gelman2020-tg, @Gelman2006-pc] proposed a type of residuals called **binned residuals** to solve the problem of the previous plot for Binomial GLMs:
+
+- divide the fitted values into $n$ bins. The number is arbitrary but we need each bin to have enough observation to compute a reliable average
+- calculate the average fitted value and residual for each bin
+- for each bin we can compute the standard error as $SE = \frac{\hat p_j (1 - p_j)}{n_j}$ where $p_j$ is the average fitted probability and $n_j$ is the number of observation in the bin $j$
+- Then we can plot each bin and the confidence intervals (e.g., as $\pm 2*SE$) where ~95% of binned residuals should be within the CI if the model is true
+
+## Example with the `teddy` dataset, binned residuals
+
+We can use the `arm::binnedplot()` function to automatically create and plot the binned residuals:
+
+```{r}
+plot(performance::binned_residuals(fit_teddy))
+```
+
+## Plotting influence measures
+
+```{r}
+plot(cooks.distance(fit_teddy))
+```
+
+## Plotting influence measures
+
+```{r}
+car::dfbetaPlots(fit_teddy) # no intercept
+```
+
+## References

@@ -2,14 +2,6 @@
 title: Course Introduction
 ---
 
-```{r}
-#| label: packages
-#| include: false
-
-devtools::load_all()
-library(tidyverse)
-```
-
 {{< include ../_setup.qmd >}}
 
 # Material {.section}

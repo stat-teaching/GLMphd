@@ -4,7 +4,7 @@ listing:
     type: table
     contents: labs
     sort: "title"
-    fields: [title, subtitle, date]
+    fields: [title, date]
 ---
 
 On this page are collected the laboratories with real and simulated data.

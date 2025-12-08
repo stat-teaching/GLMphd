@@ -4,28 +4,10 @@ bibliography: "`r filor::fil()$bib`"
 csl: "`r filor::fil()$csl`"
 ---
 
-```{r}
-#| label: setup
-knitr::opts_chunk$set(echo = TRUE,
-                      dev = "svg",
-                      fig.width = 6,
-                      fig.asp = 0.618,
-                      fig.align = "center",
-                      comment = "#>")
-```
-
-```{r packages, include=FALSE}
-devtools::load_all()
-library(tidyverse)
-library(kableExtra)
-library(patchwork)
-library(here)
-library(ggeffects)
-library(emmeans)
-```
+{{< include ../_setup.qmd >}}
 
 ```{r functions, include = FALSE}
-funs <- filor::get_funs(c(here("R", "utils-glm.R"), here("R", "utils-distr.R")))
+funs <- filor::get_funs(c(here("R", "utils-glm.R"), here("R", "utils-distr.R"), here("R", "utils-distr.R")))
 ```
 
 # Gamma Distribution {.section}
@@ -37,6 +19,7 @@ The Gamma distribution has several [:parametrizations](https://en.wikipedia.org/
 $$
 f(x;k,\theta )={\frac {x^{k-1}e^{-x/\theta }}{\theta ^{k}\Gamma (k)}}
 $$
+
 Where $\theta$ is the **scale** parameter and $k$ is the **shape** parameter.
 
 ## Gamma distribution
@@ -329,10 +312,10 @@ knitr::include_graphics("img/simon-task.jpg")
 
 ## Example: the Simon effect
 
-Let's import the `data/simon.rda` file^[Source: https://github.com/michael-franke/aida-package]. You can use the `load()` function or the `read_rda()`.
+Let's import the `data/simon.rda` file^[Source: https://github.com/michael-franke/aida-package]. You can use the `load()` function:
 
 ```{r}
-simon <- read_rda(here("data", "simon.rda"))
+load(here("data", "simon.rda"))
 head(simon)
 ```
 
@@ -411,9 +394,7 @@ emmeans(fit, pairwise ~ condition, type = "response")$contrast
 
 ## More about the Gamma distribution
 
-I have written more notes about the intepretation of Gamma parameters especially for simulations:
-
-[https://filippogambarota.github.io/statnotes/understanding-gamma/understanding-gamma.html](https://filippogambarota.github.io/statnotes/understanding-gamma/understanding-gamma.html)
+I have written more notes about the intepretation of Gamma parameters especially for simulations: [https://filippogambarota.github.io/notes/understanding-gamma/](https://filippogambarota.github.io/notes/understanding-gamma/)
 
 ## References
 

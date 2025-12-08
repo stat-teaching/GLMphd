@@ -1,0 +1,10 @@
+---
+title: "Notes"
+listing:
+    type: table
+    contents: notes
+    sort: "title"
+    fields: [title, date]
+---
+
+On this page are collected some notes about specific topics that integrate the main [slides](slides.qmd).

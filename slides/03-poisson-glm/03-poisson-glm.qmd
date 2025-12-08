@@ -4,66 +4,7 @@ bibliography: "`r filor::fil()$bib`"
 csl: "`r filor::fil()$csl`"
 ---
 
-```{r}
-#| label: setup
-knitr::opts_chunk$set(echo = TRUE,
-                      dev = "svg",
-                      fig.width = 6,
-                      fig.asp = 0.618,
-                      fig.align = "center",
-                      comment = "#>")
-```
-
-```{r packages, include=FALSE}
-devtools::load_all()
-library(tidyverse)
-library(kableExtra)
-library(patchwork)
-library(here)
-library(ggeffects)
-```
-
-```{r functions, include = FALSE}
-funs <- filor::get_funs(here("R", "utils-glm.R"))
-```
-
-
-```{r}
-#| label: gt
-#| include: false
-qtab <- function(data, digits = 3){
-  require(gt)
-  data |> 
-    gt::gt() |> 
-    gt::cols_align(align = "center") |> 
-    gt::tab_style(
-      style = cell_text(weight = "bold"),
-      locations = cells_column_labels()
-    ) |> 
-    gt::fmt_number(decimals = digits)
-}
-```
-
-```{r}
-#| label: ggplot2
-#| include: false
-mtheme <- function(size = 15){
-  theme_minimal(base_size = size, 
-                base_family = "sans") +
-  theme(legend.position = "bottom",
-        plot.title = element_text(hjust = 0.5),
-        strip.text = element_text(face = "bold"),
-        panel.grid.minor = element_blank())
-}
-
-theme_set(mtheme())
-
-# palettes
-options(ggplot2.continuous.colour="viridis")
-options(ggplot2.continuous.fill = "viridis")
-scale_colour_discrete <- scale_colour_viridis_d
-scale_fill_discrete <- scale_fill_viridis_d
-```
+{{< include ../_setup.qmd >}}
 
 ## Poisson GLM
 
@@ -82,6 +23,7 @@ The Poisson distribution is defined as:
 $$
 p(y; \lambda) = \frac{\lambda^y e^{-\lambda}}{y!}
 $$
+
 Where the mean is $\lambda$ and the variance is $\lambda$
 
 ## Poisson distribution
@@ -138,8 +80,10 @@ dat |>
 ## Poisson distribution
 
 ```{r, echo = FALSE}
-dat <- sim_design(50, nx = list(x = runif(50, 0, 2))) |> 
-    sim_data(exp(log(2) + 1*x), model = "poisson")
+
+n <- 50
+dat <- sim_design(n, covariates = list(x = new_cov(function(n) runif(n, 0, 2), level = "obs"))) |> 
+    sim_data(~x, beta = c(log(2), 1), family = poisson(), which.mu = "lambda")
 
 dat |> 
     ggplot(aes(x = x, y = y)) +
@@ -165,8 +109,8 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
 Let's start by a simple example trying to explain the number of errors of math exercises by students (N = 100) as a function of the number of hours of study.
 
 ```{r, echo = FALSE}
-dat <- sim_design(100, nx = list(studyh = round(runif(100, 0, 100), 0))) |> 
-    sim_data(exp(log(10) + 0.02*studyh), model = "poisson")
+dat <- sim_design(100, covariates = list(studyh = new_cov(function(n) round(runif(100, 0, 100), 0), level = "obs")))  |> 
+    sim_data(~studyh, beta = c(log(10), 0.02), family = poisson(), which.mu = "lambda")
 
 dat <- dat |> 
     rename("solved" = y) |> 
@@ -247,10 +191,10 @@ exp(coef(fit)[2])
 Let's make a similar example with the number of solved exercises comparing students who attended online classes and students attending in person. The `class_c` is the dummy version of `class` (0 = online, 1 = inperson).
 
 ```{r echo = FALSE}
-dat <- sim_design(50, cx = list(class = c("online", "inperson")))
+dat <- sim_design(50, between = list(class = c("online", "inperson")))
 dat$class <- factor(dat$class, levels = c("online", "inperson"))
 dat$class_c <- ifelse(dat$class == "online", 0, 1)
-dat <- sim_data(dat, exp(log(10) + log(1.5)*class_c), model = "poisson")
+dat <- sim_data(dat, ~ class_c, beta = c(log(10), log(1.5)), family = poisson(), which.mu = "lambda")
 dat <- rename(dat, "solved" = y)
 dat |> 
     select(-lp) |> 
@@ -310,8 +254,6 @@ The **overdispersion** $\phi$ can be estimated using Pearson Residuals:
 
 Where the numerator is the sum of squared Pearson residuals, $n$ is the number of observations and $k$ the number of predictors. For standard Binomial and Poisson models $\phi = 1$.
 
-<!-- ref("Applied Regression Analysis and Generalized Linear Models, Fox (2016)", chapter = "15", page = "432") -->
-
 ## Overdispersion
 
 If the model is correctly specified for binomial and poisson models the ratio is equal to 1, of the ratio is $> 1$ there is evidence for overdispersion. In practical terms, if the residual deviance is higher than the residuals degrees of freedom, there is evidence for overdispersion.
@@ -329,23 +271,23 @@ To formally test for overdispersion i.e. testing if the ratio is significantly d
 performance::check_overdispersion(fit)
 ```
 
-<!-- ref("Regression and Multilevel Models, (Gelman and Hill, 2007)", 6, "114-115") -->
-
 ## Overdispersion plot
 
 Pearson residuals are defined as:
 
+$$
 \begin{align*}
 r_p = \frac{y_i - \hat y_i}{\sqrt{V(\hat y_i)}} \\
 V(\hat y_i) = \sqrt{\hat y_i}
 \end{align*}
+$$
 
 Remember that the mean and the variance are the same in Poisson models. If the model is correct, the standardized residuals should be normally distributed with mean 0 and variance 1.
 
 ## Overdispersion plot
 
 ```{r, echo = FALSE, message = FALSE}
-dat <- sim_design(100, nx = list(x = runif(100)))
+dat <- sim_design(100, covariate = list(x = new_cov(fun = function(n) runif(n))))
 
 dat$yp <- rpois(100, exp(log(5) + 0.2*dat$x))
 dat$ynb <- rnbinom(100, mu = exp(log(5) + 0.2*dat$x), size = 2)
@@ -438,11 +380,14 @@ This (simulated) dataset contains $n = 30$ observations coming from a poisson mo
 ```{r, echo = FALSE}
 set.seed(222)
 
-dat <- sim_design(30, nx = list(x = runif(30), g = "Normal"))
-out <- sim_design(7, nx = list(x = runif(7), g = "Outlier"))
+dat <- sim_design(30, covariates = list(x = new_cov(runif)))
+dat$g <- "Normal"
 
-dat <- sim_data(dat, 1 + 2*x, "poisson")
-out <- sim_data(out, 1 + 10* x, "poisson")
+out <- sim_design(7, covariates = list(x = new_cov(runif)))
+out$g <- "Outlier"
+
+dat <- sim_data(dat, ~ x, c(1, 2), family = poisson(), which.mu = "lambda")
+out <- sim_data(out, ~ x, c(1, 4), family = poisson(), which.mu = "lambda")
 
 datout <- rbind(dat, out)
 
@@ -483,9 +428,9 @@ Let's imagine to analyze again the dataset with the number of solved exercises. 
 ```{r, echo = FALSE}
 set.seed(2022)
 n <- 20
-dat <- sim_design(n, 
-                  nx = list(studyh = round(runif(n*2, 0, 100), 0)),
-                  cx = list(class = c("online", "inperson")))
+dat <- sim_design(n/2, 
+                  covariates = list(studyh = new_cov(function(n) round(runif(n*2, 0, 100), 0))),
+                  between = list(class = c("online", "inperson")))
 
 dat$class <- factor(dat$class, levels = c("online", "inperson"))
 dat$class_c <- ifelse(dat$class == "online", 0, 1)
@@ -494,7 +439,7 @@ b0 <- log(10)
 b1 <- log(2.5)
 b2 <- log(1.01)
 
-dat <- sim_data(dat, exp(b0 + b1*class_c + b2*studyh), model = "poisson")
+dat <- sim_data(dat, ~ class_c + studyh, beta = c(b0, b1, b2), family = poisson(), which.mu = "lambda")
 dat <- rename(dat, "solved" = y)
 
 dat |> 
@@ -789,7 +734,7 @@ theta <- 10
 n <- 100
 b0 <- 10
 b1 <- 5
-dat <- sim_design(n, nx = list(x = runif(n)))
+dat <- sim_design(n, covariates = list(x = new_cov(fun = runif)))
 dat$lp <- with(dat, exp(log(b0) + log(b1)*x))
 dat$y <- with(dat, MASS::rnegbin(n, lp, theta))
 ```
@@ -804,7 +749,7 @@ dat |>
 ## Negative-binomial model
 
 ```{r, echo=FALSE}
-dat <- sim_design(100, nx = list(x = runif(100)))
+dat <- sim_design(n, covariates = list(x = new_cov(fun = runif)))
 dat$lp <- with(dat, exp(log(10) + log(5)*x))
 dat$y <- MASS::rnegbin(nrow(dat), dat$lp, 10)
 
@@ -944,7 +889,7 @@ If you want to try to simulate NB data you can use the `MASS::rnegbin(n, mu, the
 
 ```{r, message = TRUE}
 y <- rnb(1e5, mu = 10, vmr = 7, message = TRUE)
-nprint(mu = mean(y), v = var(y), vmr = var(y) / mean(y))
+c(mu = mean(y), v = var(y), vmr = var(y) / mean(y))
 ```
 
 ## Simulate NB data `#extra`
@@ -964,7 +909,6 @@ The Deviance based pseudo-$R^2$ is computed from the ratio between the residual 
 $$
 R^2 = 1 - \frac{D_{current}}{D_{null}}
 $$
-<!-- ref("Applied Regression Analysis and Generalized Linear Models, Fox (2016)", "14.1", "383") -->
 
 ```{r}
 1 - fit_p$deviance/fit_p$null.deviance
@@ -1007,8 +951,10 @@ Let's simulate a GLM where there is a main effect but no interaction:
 
 ```{r}
 #| code-fold: true
-dat <- sim_design(200, nx = list(x = rnorm(200)), cx = list(g = c("a", "b")))
-dat <- sim_data(dat, exp(log(10) + log(1.5) * x + log(2) * g_c + 0 * g_c * x), model = "poisson")
+#| out-width: 80%
+
+dat <- sim_design(100, between = list(g = c("a", "b")), covariates = list(x = new_cov(rnorm)))
+dat <- sim_data(dat, ~ x * g, beta = c(log(10), log(1.5), log(2), 0), family = poisson(), which.mu = "lambda")
 dat |> 
   ggplot(aes(x = x, y = y, color = g)) +
   geom_point() +

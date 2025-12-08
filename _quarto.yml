@@ -11,14 +11,17 @@ website:
     background: primary
     search: true
     left:
-      - href: index.qmd
-        text: Home
-      - slides.qmd
-      - labs.qmd
+      - href: slides.qmd
+        text: slides
+      - href: labs.qmd
+        text: labs
+      - href: notes.qmd
+        text: notes
     right:
       - icon: github
         href: https://github.com/stat-teaching/GLMphd
         aria-label: GitHub
+  favicon: files/favicon.png
 
 institute: "University of Padova"
 author:
@@ -26,6 +29,7 @@ author:
     email: filippo.gambarota@unipd.it
     twitter: fgambarota
     github: filippogambarota
+    orcid: 0000-0002-6666-1747
 
 format:
   html:

@@ -3,45 +3,8 @@ title: Introduction to Generalized Linear Models
 bibliography: "`r filor::fil()$bib`"
 csl: "`r filor::fil()$csl`"
 nocite: |
-  @Gelman2020-tg, @Agresti2018-oh, @Agresti2015-cz, @Dunn2018-ww, @Fox2015-ps, @Faraway2016-py
+  @Gelman2020-tg, @Agresti2018-oh, @Agresti2015-cz, @Dunn2018-ww, @Fox2015-ps, @Faraway2016-py, @McCullagh1989-dy
 ---
-
-```{r packages, include=FALSE}
-devtools::load_all()
-library(tidyverse)
-library(kableExtra)
-library(patchwork)
-library(here)
-```
-
-```{r functions, include = FALSE}
-funs_files <- list.files(here("R"), pattern = ".R")
-funs <- filor::get_funs(here("R", funs_files))
-```
-
-```{r}
-#| label: gt
-#| include: false
-qtab <- function(data, digits = 3){
-  require(gt)
-  data |> 
-    gt::gt() |> 
-    gt::cols_align(align = "center") |> 
-    gt::tab_style(
-      style = cell_text(weight = "bold"),
-      locations = cells_column_labels()
-    ) |> 
-    gt::fmt_number(decimals = digits) |>
-    gt::fmt_markdown()
-}
-
-oqtab <- function(data, digits = 3, ...){
-  data |>
-    kableExtra::kable(escape = FALSE,
-                      format = "html") |>
-    kableExtra::kable_styling(...)
-}
-```
 
 {{< include ../_setup.qmd >}}
 
@@ -77,6 +40,181 @@ ggnorm(c(0, 0, 1), c(1, 2, 0.5))
 \begin{center}
 But not always gaussian-like variables!
 \end{center}
+
+# Quick recap about the (Gaussian) linear model {.section}
+
+## (Gaussian) Linear Model
+
+I have some [notes](../../notes/misc-lm-glm.qmd) about basic stuff and notation for Linear Models.
+
+```{r}
+#| echo: false
+
+x  <- seq(0, 1, 0.2)
+lp <- 0.1 + 0.2 * x
+
+dd <- data.frame(
+  x    = x,
+  mean = lp,
+  sd   = 0.02
+)
+
+dd$dist <- dist_normal(dd$mean, dd$sd)
+
+dd_points <- data.frame(
+  x = runif(100, 0, 1) 
+)
+
+dd_points$y <- rnorm(100, 0.1 + 0.2 * dd_points$x, 0.05)
+
+ggplot(dd, aes(x = x, y = mean)) +
+  stat_slab(aes(ydist = dist), alpha = 0.5) +
+  geom_line() +
+  geom_point(aes(y = mean), size = 5, col = "dodgerblue") +
+  xlab("x") +
+  ylab("y") +
+  geom_point(data = dd_points, aes(x = x, y = y), size = 3, alpha = 0.5)
+```
+
+## (Generalized) Linear Model, notation
+
+A quick summary about the notation used in the notes:
+
+- $n$ number of observations in the dataset indexed with $i$ ($i = 1, 2, \dots, n$)
+- $y_i$ is the observed response for the $i$-th observation while $\mu_i$ is the predicted value from the model (i.e., no errors/residuals)
+- $p$ is the number of model coefficients (e.g, $\beta_1, \dots, \beta_p$) while $p' = p + 1$ with 1 being the intercept $\beta_0$ (if included). $\mathop{\boldsymbol{\beta}}\underset{p' \times 1}{}$ is the vector of all coefficients.
+- $p'$ is also the number of columns in the model matrix. In other terms the number of predictors (considering that categorical predictors with $k$ levels will create $k - 1$ columns). $\mathop{\mathbf{X}}\underset{n \times p'}{}$ is the model matrix with all predictors
+- $x_{p_i}$ is the value of the predictor $x_p$ for the $i$ th observation
+- $\mathbf{y}$ is a vector with all the observations. Each element is $y_i$ with $i = 1, 2, \dots, n$
+
+# Understanding distributions {.section}
+
+## Understanding distributions
+
+A probability distribution of a random variable $X$ is the set of probabilities assigned to each possible value $x$.
+
+We can have:
+
+- **discrete random variables**: counts, binary, etc.
+- **continuous random variables**: time, weight, etc.
+
+## Variables and constants
+
+As any other function, the probability function has constants and variables:
+
+$$
+f(x \mid \boldsymbol{\theta})
+$$
+
+Where $x$ is a specific value and $\theta$ is a vector of variables defining a specific function and $f(\cdot)$ is a certain function.
+
+## Variables and constants, an example
+
+For example, the Gaussian distribution is defined as:
+
+$$
+f(x \mid \mu, \sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left( - \frac{(x - \mu)^2}{2\sigma^2} \right)
+$$
+
+Here the variables are $\mu$ (the mean) and $\sigma^2$ (the variance) while $\pi$ is a constant.
+
+## Probability mass and density function
+
+An important distinction is about discrete and continuous random variables:
+
+- For discrete random variables $f(X)$ becomes $P(X = x \mid \boldsymbol{\theta})$ because we are assigning a certain probability to a discrete variables. The function is called **probability mass function** (PMF)
+- For continuous random variables we stick with $f(X \mid \boldsymbol{\theta})$ and the function is called **probability density function** (PDF)
+
+. . .
+
+The PMF return the probability associated with a certain value of $x$ while the PDF returns the probability density of a certain value of $x$
+
+## Variables and constants, an example (discrete)
+
+In the case of a Poisson random variable:
+
+$$
+p(x \mid \lambda) = \frac{\lambda^{x} e^{-\lambda}}{x!}
+$$
+
+Where the only variable is $\lambda$.
+
+## Moments of the distributions
+
+When we use the distributions, we are usually interested in some properties describing the distribution. These are called *moments* defined as quantitative measures related to the shape of the function's graph^[https://en.wikipedia.org/wiki/Moment_(mathematics)]. Common moments are:
+
+- **First moment**: is the expected value (i.e., the mean) of the distribution
+- **Second moment**: is the variance of the distribution
+- **Third moment**: is the skewness
+- **Fourth moment**: is the kurtosis
+
+## Moments of the distributions
+
+- Moments are always the same but the way we actual compute them could change according to the distribution. For example, in the case of Gaussian distribution the mean and the variance are the same as the parameters defining the distribution.
+- In the Gamma distribution for example, the parameters are the shape $\alpha$ and scale $\theta$ or rate $\lambda$. But the mean is, for example, $\frac{\alpha}{\lambda}$ and the variance is, for example, $\frac{\alpha}{\lambda^2}$
+
+## Suggestions for distributions
+
+The Wikipedia pages of the probability distributions are very clear and complete. For the [Gamma distribution](https://en.wikipedia.org/wiki/Gamma_distribution):
+
+![](img/wiki-gamma.png){fig-align="center"}
+
+## Why is important?
+
+In linear and generalized linear models we generally include predictors on the mean (first moment) of the distribution. Knowing how the mean and is computed from the parameters is crucial to understand the model.
+
+. . .
+
+In addition we can note that:
+
+- The Gaussian distribution is a very special and ideal case where $\mu$ and $\sigma^2$ are directly available and they are independent
+- Other distributions (e.g., the Gamma) are more complicated due to parameters being used for the mean and the variance (i.e., mean-variance relationship)
+
+## Other useful information
+
+In addition to the PDF/PMF we have also:
+
+- **Cumulative Distribution Function** (CDF) usually defined as $F(x) = P(X \leq x)$. Basically provides the probability of being equal or less compared to a certain $x$ value. In R, this is the `q*` (e.g., `qnorm()`) function.
+- **Quantile Function** (QF) is the inverse of the CDF. Usually defined as $Q(p) = F^{-1}(p)$ where $p$ is the cumulative probability of interest. Basically it returns the $x$ value (i.e., the quantile) associated with a certain cumulative probability. In R, this is the `p*` (e.g., `pnorm()`) function.
+
+## Examples in R, Gaussian PDF
+
+With the Gaussian distribution the PDF is computed using `dnorm(x, mean, sd)`:
+
+```{r}
+#| code-fold: true
+x <- seq(-4, 4, 0.01)
+d <- dnorm(x, mean = 0, sd = 1)
+
+data.frame(x, d) |> 
+  ggplot(aes(x = x, y = d)) +
+  geom_line(lwd = 1, col = "dodgerblue") +
+  xlab("x") +
+  ylab("Density")
+```
+
+## Examples in R, Gaussian CDF and QF
+
+```{r}
+#| code-fold: true
+cp <- pnorm(x, mean = 0, sd = 1)
+qf <- qnorm(cp, mean = 0, sd = 1)
+
+cpp <- data.frame(
+  x, cp
+) |> 
+  ggplot(aes(x = x, y = cp)) +
+  geom_line()
+
+qfp <- data.frame(
+  x, cp
+) |> 
+  ggplot(aes(x = cp, y = x)) +
+  geom_line()
+
+cpp + qfp
+```
+
 
 ## But...
 
@@ -140,12 +278,10 @@ dat |>
 
 # Should we use a linear model for these variables? {.question}
 
-## Should we use a linear model for these variables?
+## Example 1: passing the exam
 
-Example: probability of passing the exam as a function of hours of study:
+Probability of **passing the exam** as a function of **how many hours people study**:
 
-::: columns
-:::: column
 ```{r, echo = FALSE}
 # y = number of exercises solved in 1 semester
 # x = percentage of attended lectures
@@ -157,27 +293,29 @@ b1 <- 0.08
 y <- rbinom(length(x), 1, plogis(qlogis(b0) + b1*x))
 
 dat <- data.frame(id = 1:n, studyh = x, passed = y)
-
-dat |> 
-    filor::trim_df() |> 
-    qtab()
+head(dat, 10)
 ```
 
-::::
-:::: column
+## Example 1: passing the exam
+
 ```{r}
 #| code-fold: false
-dat |> 
-  summarise(n = n(),
-            npass = sum(passed),
-            nfail = n - npass,
-            ppass = npass / n)
+#| collapse: true
+
+nrow(dat) # number of participants
+sum(dat$passed) # number of people that have passed the exam
+nrow(dat) - sum(dat$passed) # number of people that have not passed the exam
+mean(dat$passed) # proportion of people that have passed the exam
+
+# study hours and passing the exam
+
+tapply(dat$studyh, dat$passed, mean)
+table(dat$passed, cut(dat$studyh, breaks = 4))
+tapply(dat$passed, cut(dat$studyh, breaks = 4), mean)
 ```
 
-::::
-:::
 
-## Should we use a linear model for these variables?
+## Example 1: passing the exam
 
 Let's plot the data:
 
@@ -191,7 +329,7 @@ exam_plot <- dat |>
 exam_plot
 ```
 
-## Should we use a linear model for these variables?
+## Example 1: passing the exam, fitting a linear model
 
 Let's fit a linear model `passing ~ study_hours` using `lm`:
 
@@ -204,7 +342,7 @@ exam_plot +
 
 **Do you see something strange?**
 
-## Should we use a linear model for these variables?
+## Example 1: passing the exam
 
 A little **spoiler**, the relationship should be probably like this:
 
@@ -215,7 +353,7 @@ exam_plot +
                 method.args = list(family = binomial))
 ```
 
-## Should we use a linear model for these variables?
+## Example 2: number of correct exercises
 
 Another example, the number of solved exercises in a semester as a function of the number of attended lectures ($N = 100$):
 
@@ -229,12 +367,10 @@ y <- rpois(n, exp(0 + 0.05*x))
 
 dat <- data.frame(id = 1:n, nattended = x, nsolved = y)
 
-dat |> 
-    filor::trim_df() |> 
-    qtab()
+head(dat, 10)
 ```
 
-## Should we use a linear model for these variables?
+## Example 2: let's see the distribution
 
 ```{r echo = FALSE}
 dat |> 
@@ -242,7 +378,7 @@ dat |>
     geom_bar()
 ```
 
-## Should we use a linear model for these variables?
+## Example 2: fitting a linear model
 
 ```{r, echo = FALSE}
 exam_plot <- dat |> 
@@ -254,7 +390,7 @@ exam_plot <- dat |>
 exam_plot
 ```
 
-## Should we use a linear model for these variables?
+## Example 2: fitting a linear model
 
 Again, fitting the linear model seems partially appropriate but there are some problems:
 
@@ -284,7 +420,7 @@ exam_plot +
 
 ## Should we use a linear model for these variables?
 
-Also the residuals are quite problematic:
+Also the residuals are quite strange:
 
 ```{r, echo = FALSE}
 fit <- lm(nsolved ~ nattended, data = dat)
@@ -307,7 +443,7 @@ res_fit <- dfit |>
     ylab("Residuals") +
     xlab("Fitted") +
     geom_smooth(se = FALSE, color = "red")
-qqn + res_fit
+qqn / res_fit
 ```
 
 ## Should we use a linear model for these variables?
@@ -338,10 +474,18 @@ As a general rule in ~~life~~ statistics:
 ## We need a new class of models...
 
 - Taking into account the **specific features of our response variable**
-- Working on a **linear scale** when fitting the model and for inference
-- We need a model that is **closer to the true data generation process**
+- Use the concepts of linear models as much as possible
+- We need a model that **better approximates the (hypothetical) true data generation process**
 
 # Generalized Linear Models  {.section}
+
+## Main references
+
+The first book ever:
+
+```{r, echo = FALSE, out.width="30%"}
+knitr::include_graphics("img/mccullagh1989.jpg")
+```
 
 ## Main references
 
@@ -439,29 +583,36 @@ $$
 \eta_i = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \cdots + \beta_p x_{ip}
 $$
 
-This part is invariant to the type of model and is the combination of explanatory variables to predict the expected value $\mu$ (i.e. the mean) of the distribution.
+Or in matrix notation:
+
+$$
+\boldsymbol{\eta} = \mathbf{X}\boldsymbol{\beta}
+$$
+
+Basically it describes how the expected value (i.e., the mean, the first moment) $\mu$ of the chosen distribution (the random component) varies according to the predictors.
+
+::: aside
+In the [notes](../../notes/misc-lm-glm.qmd) we make a distinction between $\mu_i$ and $\eta_i$. For the moment we can think as $\eta_i$ being the same as $\mu_i$ but it will be more clear later.
+:::
+
 
 ## Link Function
 
-<!-- TODO fix with Sara suggestions -->
-
-The **link function** $g(\mu)$ is an **invertible** function that connects the mean $\mu$ of the random component with the *linear combination* of predictors.
-
-$g(\mu) = \beta_0 + \beta_1x_{1i} + ... + \beta_px_{pi}$. The inverse of the link function $g^{-1}$ map the linear predictor ($\eta$) into the original scale.
+The **link function** $g(\cdot)$ is an **invertible** function linking the expected value (i.e., the mean, the first moment) $\mu$ of the random component with the systematic component $\boldsymbol{\eta} = \mathbf{X}\boldsymbol{\beta}$.
 
 $$
-g(\mu_i) = \eta_i = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \cdots + \beta_p x_{ip}
+g(\boldsymbol{\mu}) = \boldsymbol{\eta} = \mathbf{X}\boldsymbol{\beta}
 $$
 
-$$
-\mu_i = g(\eta_i)^{-1} = \eta_i = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \cdots + \beta_p x_{ip}
-$$
+The inverse link function $g^{-1}(\cdot)$ maps $\eta$ into the original scale $\mu$.
 
-Thus, the relationship between $\mu$ and $\eta$ is linear only when the **link function ** is applied i.e. $g(\mu) = \eta$. 
+$$
+\boldsymbol{\mu} = g(\boldsymbol{\eta})^{-1} = g(\boldsymbol{\mathbf{X}\boldsymbol{\beta}})^{-1}
+$$
 
 ## Link function
 
-The simplest **link function** is the **identity link** where $g(\mu) = \mu$ and correspond to the standard linear model. In fact, the linear regression is just a GLM with a **Gaussian random component** and the **identity** link function.
+The simplest **link function** is the **identity link** where $g(\mu) = \mu$ and corresponds to the standard linear model. In fact, the linear regression is just a GLM with a **Gaussian random component** and the **identity** link function.
 
 ```{r}
 #| echo: false
@@ -535,7 +686,7 @@ dat |>
 
 ```
 
-## Binomial in R
+## Binomial in R {.scrollable}
 
 ```{r}
 #| code-fold: false
@@ -562,8 +713,6 @@ pbinom(k, n, p)
 ```
 
 ## Binomial GLM
-
-<!-- TODO fix with Sara suggestions -->
 
 The Bernoulli distributions is used as **random component** when we have a binary dependent variable or the number of successes over the total number of trials:
 
@@ -644,10 +793,11 @@ The mean-variance relationship can be easily seen with a continuous predictor:
 
 ```{r}
 #| echo: false
-x <- rnorm(1000)
-y <- rpois(1000, exp(log(10) + log(1.8)*x))
+#| fig-width: 10
+x <- runif(1000)
+y <- rpois(1000, exp(log(10) + log(5)*x))
 
-qplot(x, y, alpha = 0.5, size = 2)
+qplot(x, y, type = "p", alpha = 0.5, size = 3)
 ```
 
 ## Gamma distribution
@@ -676,6 +826,8 @@ The mean and variance are defined as:
 
 Another important quantity is the **coefficient of variation** defined as $\frac{\sigma}{\mu}$ or $\frac{1}{\sqrt{k}}$ (or $\frac{1}{\sqrt{\alpha}}$).
 
+The Gamma distribution is quite complex, I have some [notes](https://filippogambarota.github.io/notes/understanding-gamma/https://filippogambarota.github.io/notes/understanding-gamma/) with more insigths about the parametrization.
+
 ## Gamma distribution
 
 Again, we can see the mean-variance relationship:
@@ -685,7 +837,7 @@ ggamma(shape = c(5, 5), scale = c(10, 20), show = "ss")
 ```
 
 
-## Gamma parametrization
+## Gamma parametrization {.scrollable}
 
 To convert between different parametrizations, you can use the `gamma_params()` function:
 
@@ -727,4 +879,35 @@ fam$linkinv() # inverse of the link function, from eta to probability
 
 We are going to see the specific arguments, but this tricks works for any family and links, even if you do not remember the specific function or formula.
 
+## Intutive way of writing models
+
+@Dunn2018-ww uses a nice way of presenting models that could be useful. Basically He specifies the random component distribution and then he specified the parameter(s) where we are including the systematic component.
+
+For example, a Generalized Linear Model with the Gaussian family and identity link could be written as:
+
+$$
+\begin{aligned}
+y_i &\sim \mathrm{N}(\mu_i, \sigma^2) \quad && \text{Random component} \\
+\mu_i &= g^{-1}(\eta_i) \quad && \text{Inverse link} \\
+\eta_i &= g(\beta_0 + \beta_1 x_{1i} + \beta_2x_{2i}) \quad && \text{Systematic component, link} \\
+\end{aligned}
+$$
+
+The $i$ subscript indicates that that element varies for each observation $i$ according to the linear predictor $\eta_i$ after taking the inverse of the link function.
+
+## Assumptions
+
+- **Lack of outliers**: All responses were generated from the same process, so that the same model is appropriate for all the observations.
+- **Link function**: The correct link function $g(\cdot)$ is used.
+- **Linearity**: All important explanatory variables are included, and each explanatory variable is included in the linear predictor on the correct scale.^[This is not linearity of predictors but of coefficients. $x^2$ is allowed and $\beta_1^2$ not]
+- **Variance function**: The correct variance function $\mbxo{var}(\mu)$ is used. This is the mean-variance relationship
+- **Dispersion parameter**: The dispersion parameter is constant. This is a subtle but important distinction. The variance is not constant in GLMs but the dispersion parameter is. In Gaussian linear models the disperions is the same as the variance.
+- **Independence**: The responses $y_i$ are independent of each other. This is something related to the data collection and data structure
+- **Distribution**: The responses $y_i$ come from the speciﬁed distribution.
+
+::: aside
+From @Dunn2018-ww [pp. 297-298]
+:::
+
 ## References {.refs}
+

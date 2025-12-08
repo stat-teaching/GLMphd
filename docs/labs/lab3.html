@@ -66,6 +66,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
+<link href="../files/favicon.png" rel="icon" type="image/png">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -128,16 +129,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../index.html"> 
-<span class="menu-text">Home</span></a>
-  </li>  
-  <li class="nav-item">
     <a class="nav-link" href="../slides.html"> 
-<span class="menu-text">Slides</span></a>
+<span class="menu-text">slides</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../labs.html"> 
-<span class="menu-text">Labs</span></a>
+<span class="menu-text">labs</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../notes.html"> 
+<span class="menu-text">notes</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
@@ -186,7 +187,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <div class="quarto-title-meta-heading">Affiliation</div>
   
     <div class="quarto-title-meta-contents">
-    <p class="author">Filippo Gambarota <a href="mailto:filippo.gambarota@unipd.it" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> </p>
+    <p class="author">Filippo Gambarota <a href="mailto:filippo.gambarota@unipd.it" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> <a href="https://orcid.org/0000-0002-6666-1747" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
   </div>
   <div class="quarto-title-meta-contents">
         <p class="affiliation">
@@ -983,23 +984,23 @@ glm(formula = drop ~ academic * parenting + age, family = binomial(link = "logit
 
 Coefficients:
                                     Estimate Std. Error z value Pr(&gt;|z|)   
-(Intercept)                         -2.13525    1.18409  -1.803  0.07134 . 
-academichigh                        -0.36755    0.49826  -0.738  0.46072   
-parentingpermissive                 -0.93360    0.35826  -2.606  0.00916 **
-parentingauthoritative              -1.21584    0.66221  -1.836  0.06635 . 
-parentingauthoritarian              -0.90124    0.43013  -2.095  0.03615 * 
-age                                  0.10758    0.07618   1.412  0.15791   
-academichigh:parentingpermissive    -2.49675    1.15915  -2.154  0.03124 * 
-academichigh:parentingauthoritative -1.12228    0.94987  -1.182  0.23740   
-academichigh:parentingauthoritarian -0.07370    0.73001  -0.101  0.91958   
+(Intercept)                          1.19881    1.13204   1.059  0.28961   
+academichigh                        -0.45091    0.49986  -0.902  0.36701   
+parentingpermissive                 -0.92815    0.35841  -2.590  0.00961 **
+parentingauthoritative              -1.28675    0.66325  -1.940  0.05237 . 
+parentingauthoritarian              -0.96067    0.43296  -2.219  0.02650 * 
+age                                 -0.11010    0.07252  -1.518  0.12897   
+academichigh:parentingpermissive    -2.48949    1.15930  -2.147  0.03176 * 
+academichigh:parentingauthoritative -1.02817    0.95065  -1.082  0.27946   
+academichigh:parentingauthoritarian  0.01136    0.73324   0.015  0.98764   
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 (Dispersion parameter for binomial family taken to be 1)
 
     Null deviance: 449.49  on 499  degrees of freedom
-Residual deviance: 382.57  on 491  degrees of freedom
-AIC: 400.57
+Residual deviance: 382.26  on 491  degrees of freedom
+AIC: 400.26
 
 Number of Fisher Scoring iterations: 6</code></pre>
 </div>
@@ -1047,8 +1048,8 @@ Number of Fisher Scoring iterations: 6</code></pre>
 1 0.00 0 10 10 0.0
 2 0.01 0 10 10 0.0
 3 0.02 0 10 10 0.0
-4 0.03 1 10  9 0.1
-5 0.04 0 10 10 0.0
+4 0.03 0 10 10 0.0
+5 0.04 1 10  9 0.1
 6 0.05 0 10 10 0.0</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb117"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb117-1"><a href="#cb117-1" aria-hidden="true" tabindex="-1"></a>fit2 <span class="ot">&lt;-</span> <span class="fu">glm</span>(<span class="fu">cbind</span>(y, f) <span class="sc">~</span> x, <span class="at">data =</span> dat_agg, <span class="at">family =</span> <span class="fu">binomial</span>())</span>

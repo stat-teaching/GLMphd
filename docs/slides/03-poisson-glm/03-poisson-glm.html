@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head>
+<link href="../../files/favicon.png" rel="icon" type="image/png">
 <script src="../../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../../site_libs/quarto-html/tabby.min.js"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
@@ -7,9 +8,6 @@
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-ea1d7ac60288e0f1efdbc993fd8432ae.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="../../site_libs/quarto-contrib/jquery-3.6.3/jquery-3.6.3.min.js"></script>
-<script src="../../site_libs/quarto-contrib/code-fullscreen-1.0.0/code-fullscreen.js" defer="true"></script>
-<link href="../../site_libs/quarto-contrib/code-fullscreen-1.0.0/code-fullscreen.css" rel="stylesheet">
 <script src="../../site_libs/quarto-contrib/nutshell-1.0.0/nutshell.min.js"></script><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <meta charset="utf-8">
@@ -122,6 +120,7 @@
       margin-left: 2em;
     }  </style>
 <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-17444cc896c82453f4d942fa9ebb519e.css">
+<link rel="stylesheet" href="../style.css">
 <link href="../../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
 <link href="../../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
 <link href="../../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -222,7 +221,7 @@
   <p class="subtitle">Psychological Sciences</p>
   <p class="author">Filippo Gambarota</p>
   <p class="institute">University of Padova</p>
-  <p class="date"><em>Last modified: 26-01-2025</em></p>
+  <p class="date"><em>Last modified: 08-12-2025</em></p>
 </section><section id="poisson-glm" class="slide level2"><h2>Poisson GLM</h2>
 <p>Everything that we discussed for the binomial GLM is also relevant for the Poisson GLM. We are gonna focus on specificity of the Poisson model in particular:</p>
 <ul>
@@ -238,15 +237,16 @@
 <p>The Poisson distribution is defined as:</p>
 <p><span class="math display">\[
 p(y; \lambda) = \frac{\lambda^y e^{-\lambda}}{y!}
-\]</span> Where the mean is <span class="math inline">\(\lambda\)</span> and the variance is <span class="math inline">\(\lambda\)</span></p>
+\]</span></p>
+<p>Where the mean is <span class="math inline">\(\lambda\)</span> and the variance is <span class="math inline">\(\lambda\)</span></p>
 </section><section id="poisson-distribution-2" class="slide level2"><h2>Poisson distribution</h2>
 
-<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-4-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="576"></section><section id="poisson-distribution-3" class="slide level2"><h2>Poisson distribution</h2>
+<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-2-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="672"></section><section id="poisson-distribution-3" class="slide level2"><h2>Poisson distribution</h2>
 <p>As the mean increases also the variance increase and the distributions is approximately normal:</p>
 
-<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-5-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="576"></section><section id="poisson-distribution-4" class="slide level2"><h2>Poisson distribution</h2>
+<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-3-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="672"></section><section id="poisson-distribution-4" class="slide level2"><h2>Poisson distribution</h2>
 
-<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-6-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="576"></section><section id="link-function" class="slide level2"><h2>Link function</h2>
+<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-4-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="672"></section><section id="link-function" class="slide level2"><h2>Link function</h2>
 <p>The common (and default in R) link function (<span class="math inline">\(g(\lambda)\)</span>) for the Poisson distribution is the <strong>log</strong> link function and the inverse of link function is the exponential.</p>
 <p><span class="math display">\[\begin{align*}
 log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip} \\
@@ -258,23 +258,23 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
 <p>Let’s start by a simple example trying to explain the number of errors of math exercises by students (N = 100) as a function of the number of hours of study.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="yqnimxfoot" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#yqnimxfoot table {
+<div id="fgyhskrqpa" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#fgyhskrqpa table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#yqnimxfoot thead, #yqnimxfoot tbody, #yqnimxfoot tfoot, #yqnimxfoot tr, #yqnimxfoot td, #yqnimxfoot th {
+#fgyhskrqpa thead, #fgyhskrqpa tbody, #fgyhskrqpa tfoot, #fgyhskrqpa tr, #fgyhskrqpa td, #fgyhskrqpa th {
   border-style: none;
 }
 
-#yqnimxfoot p {
+#fgyhskrqpa p {
   margin: 0;
   padding: 0;
 }
 
-#yqnimxfoot .gt_table {
+#fgyhskrqpa .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -300,12 +300,12 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   border-left-color: #D3D3D3;
 }
 
-#yqnimxfoot .gt_caption {
+#fgyhskrqpa .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#yqnimxfoot .gt_title {
+#fgyhskrqpa .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -317,7 +317,7 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   border-bottom-width: 0;
 }
 
-#yqnimxfoot .gt_subtitle {
+#fgyhskrqpa .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -329,7 +329,7 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   border-top-width: 0;
 }
 
-#yqnimxfoot .gt_heading {
+#fgyhskrqpa .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -341,13 +341,13 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   border-right-color: #D3D3D3;
 }
 
-#yqnimxfoot .gt_bottom_border {
+#fgyhskrqpa .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#yqnimxfoot .gt_col_headings {
+#fgyhskrqpa .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -362,7 +362,7 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   border-right-color: #D3D3D3;
 }
 
-#yqnimxfoot .gt_col_heading {
+#fgyhskrqpa .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -382,7 +382,7 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   overflow-x: hidden;
 }
 
-#yqnimxfoot .gt_column_spanner_outer {
+#fgyhskrqpa .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -394,15 +394,15 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   padding-right: 4px;
 }
 
-#yqnimxfoot .gt_column_spanner_outer:first-child {
+#fgyhskrqpa .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#yqnimxfoot .gt_column_spanner_outer:last-child {
+#fgyhskrqpa .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#yqnimxfoot .gt_column_spanner {
+#fgyhskrqpa .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -414,11 +414,11 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   width: 100%;
 }
 
-#yqnimxfoot .gt_spanner_row {
+#fgyhskrqpa .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#yqnimxfoot .gt_group_heading {
+#fgyhskrqpa .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -444,7 +444,7 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   text-align: left;
 }
 
-#yqnimxfoot .gt_empty_group_heading {
+#fgyhskrqpa .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -459,15 +459,15 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   vertical-align: middle;
 }
 
-#yqnimxfoot .gt_from_md > :first-child {
+#fgyhskrqpa .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#yqnimxfoot .gt_from_md > :last-child {
+#fgyhskrqpa .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#yqnimxfoot .gt_row {
+#fgyhskrqpa .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -486,7 +486,7 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   overflow-x: hidden;
 }
 
-#yqnimxfoot .gt_stub {
+#fgyhskrqpa .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -499,7 +499,7 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   padding-right: 5px;
 }
 
-#yqnimxfoot .gt_stub_row_group {
+#fgyhskrqpa .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -513,15 +513,15 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   vertical-align: top;
 }
 
-#yqnimxfoot .gt_row_group_first td {
+#fgyhskrqpa .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#yqnimxfoot .gt_row_group_first th {
+#fgyhskrqpa .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#yqnimxfoot .gt_summary_row {
+#fgyhskrqpa .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -531,16 +531,16 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   padding-right: 5px;
 }
 
-#yqnimxfoot .gt_first_summary_row {
+#fgyhskrqpa .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#yqnimxfoot .gt_first_summary_row.thick {
+#fgyhskrqpa .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#yqnimxfoot .gt_last_summary_row {
+#fgyhskrqpa .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -550,7 +550,7 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   border-bottom-color: #D3D3D3;
 }
 
-#yqnimxfoot .gt_grand_summary_row {
+#fgyhskrqpa .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -560,7 +560,7 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   padding-right: 5px;
 }
 
-#yqnimxfoot .gt_first_grand_summary_row {
+#fgyhskrqpa .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -570,7 +570,7 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   border-top-color: #D3D3D3;
 }
 
-#yqnimxfoot .gt_last_grand_summary_row_top {
+#fgyhskrqpa .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -580,11 +580,11 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   border-bottom-color: #D3D3D3;
 }
 
-#yqnimxfoot .gt_striped {
+#fgyhskrqpa .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#yqnimxfoot .gt_table_body {
+#fgyhskrqpa .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -593,7 +593,7 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   border-bottom-color: #D3D3D3;
 }
 
-#yqnimxfoot .gt_footnotes {
+#fgyhskrqpa .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -607,7 +607,7 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   border-right-color: #D3D3D3;
 }
 
-#yqnimxfoot .gt_footnote {
+#fgyhskrqpa .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -616,7 +616,7 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   padding-right: 5px;
 }
 
-#yqnimxfoot .gt_sourcenotes {
+#fgyhskrqpa .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -630,7 +630,7 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   border-right-color: #D3D3D3;
 }
 
-#yqnimxfoot .gt_sourcenote {
+#fgyhskrqpa .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -638,64 +638,73 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   padding-right: 5px;
 }
 
-#yqnimxfoot .gt_left {
+#fgyhskrqpa .gt_left {
   text-align: left;
 }
 
-#yqnimxfoot .gt_center {
+#fgyhskrqpa .gt_center {
   text-align: center;
 }
 
-#yqnimxfoot .gt_right {
+#fgyhskrqpa .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#yqnimxfoot .gt_font_normal {
+#fgyhskrqpa .gt_font_normal {
   font-weight: normal;
 }
 
-#yqnimxfoot .gt_font_bold {
+#fgyhskrqpa .gt_font_bold {
   font-weight: bold;
 }
 
-#yqnimxfoot .gt_font_italic {
+#fgyhskrqpa .gt_font_italic {
   font-style: italic;
 }
 
-#yqnimxfoot .gt_super {
+#fgyhskrqpa .gt_super {
   font-size: 65%;
 }
 
-#yqnimxfoot .gt_footnote_marks {
+#fgyhskrqpa .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#yqnimxfoot .gt_asterisk {
+#fgyhskrqpa .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#yqnimxfoot .gt_indent_1 {
+#fgyhskrqpa .gt_indent_1 {
   text-indent: 5px;
 }
 
-#yqnimxfoot .gt_indent_2 {
+#fgyhskrqpa .gt_indent_2 {
   text-indent: 10px;
 }
 
-#yqnimxfoot .gt_indent_3 {
+#fgyhskrqpa .gt_indent_3 {
   text-indent: 15px;
 }
 
-#yqnimxfoot .gt_indent_4 {
+#fgyhskrqpa .gt_indent_4 {
   text-indent: 20px;
 }
 
-#yqnimxfoot .gt_indent_5 {
+#fgyhskrqpa .gt_indent_5 {
   text-indent: 25px;
+}
+
+#fgyhskrqpa .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#fgyhskrqpa div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
 }
 </style>
 <table class="gt_table caption-top" data-quarto-bootstrap="false">
@@ -703,52 +712,62 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
 <th id="id" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">id</th>
 <th id="studyh" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">studyh</th>
 <th id="solved" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">solved</th>
+<th id="mu" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">mu</th>
 </tr></thead>
 <tbody class="gt_table_body">
 <tr class="odd">
 <td class="gt_row gt_center" headers="id">1</td>
-<td class="gt_row gt_center" headers="studyh">14</td>
-<td class="gt_row gt_center" headers="solved">15</td>
+<td class="gt_row gt_center" headers="studyh">2</td>
+<td class="gt_row gt_center" headers="solved">16</td>
+<td class="gt_row gt_center" headers="mu">10.408</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_center" headers="id">2</td>
-<td class="gt_row gt_center" headers="studyh">11</td>
-<td class="gt_row gt_center" headers="solved">13</td>
+<td class="gt_row gt_center" headers="studyh">16</td>
+<td class="gt_row gt_center" headers="solved">16</td>
+<td class="gt_row gt_center" headers="mu">13.771</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_center" headers="id">3</td>
-<td class="gt_row gt_center" headers="studyh">91</td>
-<td class="gt_row gt_center" headers="solved">60</td>
+<td class="gt_row gt_center" headers="studyh">39</td>
+<td class="gt_row gt_center" headers="solved">15</td>
+<td class="gt_row gt_center" headers="mu">21.815</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_center" headers="id">4</td>
-<td class="gt_row gt_center" headers="studyh">55</td>
+<td class="gt_row gt_center" headers="studyh">73</td>
 <td class="gt_row gt_center" headers="solved">36</td>
+<td class="gt_row gt_center" headers="mu">43.06</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_center" headers="id">...</td>
 <td class="gt_row gt_center" headers="studyh">...</td>
 <td class="gt_row gt_center" headers="solved">...</td>
+<td class="gt_row gt_center" headers="mu">...</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_center" headers="id">97</td>
-<td class="gt_row gt_center" headers="studyh">49</td>
-<td class="gt_row gt_center" headers="solved">30</td>
+<td class="gt_row gt_center" headers="studyh">25</td>
+<td class="gt_row gt_center" headers="solved">19</td>
+<td class="gt_row gt_center" headers="mu">16.487</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_center" headers="id">98</td>
-<td class="gt_row gt_center" headers="studyh">3</td>
-<td class="gt_row gt_center" headers="solved">6</td>
+<td class="gt_row gt_center" headers="studyh">37</td>
+<td class="gt_row gt_center" headers="solved">13</td>
+<td class="gt_row gt_center" headers="mu">20.959</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_center" headers="id">99</td>
-<td class="gt_row gt_center" headers="studyh">52</td>
-<td class="gt_row gt_center" headers="solved">28</td>
+<td class="gt_row gt_center" headers="studyh">15</td>
+<td class="gt_row gt_center" headers="solved">13</td>
+<td class="gt_row gt_center" headers="mu">13.499</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_center" headers="id">100</td>
-<td class="gt_row gt_center" headers="studyh">90</td>
-<td class="gt_row gt_center" headers="solved">68</td>
+<td class="gt_row gt_center" headers="studyh">1</td>
+<td class="gt_row gt_center" headers="solved">14</td>
+<td class="gt_row gt_center" headers="mu">10.202</td>
 </tr>
 </tbody>
 </table>
@@ -761,7 +780,7 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
 <li class="fragment">The both the mean and variance increase as a function of the predictor</li>
 </ul>
 
-<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-8-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="576"></section><section id="model-fitting" class="slide level2"><h2>Model fitting</h2>
+<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-6-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="672"></section><section id="model-fitting" class="slide level2"><h2>Model fitting</h2>
 <p>We can fit the model using the <code>glm</code> function in R setting the appropriate <strong>random component</strong> (<code>family</code>) and the <strong>link function</strong> (<code>link</code>):</p>
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">solved</span> <span class="op">~</span> <span class="va">studyh</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">poisson</a></span><span class="op">(</span>link <span class="op">=</span> <span class="st">"log"</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
@@ -774,79 +793,79 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
 #&gt;     data = dat)
 #&gt; 
 #&gt; Coefficients:
-#&gt;             Estimate Std. Error z value Pr(&gt;|z|)    
-#&gt; (Intercept)  2.29825    0.04603   49.92   &lt;2e-16 ***
-#&gt; studyh       0.02066    0.00065   31.78   &lt;2e-16 ***
+#&gt;              Estimate Std. Error z value Pr(&gt;|z|)    
+#&gt; (Intercept) 2.3057510  0.0471587   48.89   &lt;2e-16 ***
+#&gt; studyh      0.0200018  0.0007092   28.20   &lt;2e-16 ***
 #&gt; ---
 #&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #&gt; 
 #&gt; (Dispersion parameter for poisson family taken to be 1)
 #&gt; 
-#&gt;     Null deviance: 1226.469  on 99  degrees of freedom
-#&gt; Residual deviance:   95.636  on 98  degrees of freedom
-#&gt; AIC: 610.72
+#&gt;     Null deviance: 949.652  on 99  degrees of freedom
+#&gt; Residual deviance:  93.777  on 98  degrees of freedom
+#&gt; AIC: 604.2
 #&gt; 
 #&gt; Number of Fisher Scoring iterations: 4</code></pre>
 </div>
 </div>
 </section><section id="parameters-intepretation-1" class="slide level2"><h2>Parameters intepretation</h2>
 <ul>
-<li class="fragment">The <code>(Intercept)</code> <span class="math inline">\(2.298\)</span> is the log of the expected number of solved exercises for a student with 0 hours of studying. Taking the exponential we obtain the estimation on the response scale <span class="math inline">\(9.957\)</span>
+<li class="fragment">The <code>(Intercept)</code> <span class="math inline">\(2.306\)</span> is the log of the expected number of solved exercises for a student with 0 hours of studying. Taking the exponential we obtain the estimation on the response scale <span class="math inline">\(10.032\)</span>
 </li>
-<li class="fragment">the <code>studyh</code> <span class="math inline">\(0.021\)</span> is the increase in the expected increase of (log) solved exercises for a unit increase in hours of studying. Taking the exponential we obtain the ratio of increase of the number of solved exercises <span class="math inline">\(1.021\)</span>
+<li class="fragment">the <code>studyh</code> <span class="math inline">\(0.020\)</span> is the increase in the expected increase of (log) solved exercises for a unit increase in hours of studying. Taking the exponential we obtain the ratio of increase of the number of solved exercises <span class="math inline">\(1.020\)</span>
 </li>
 </ul></section><section id="parameters-intepretation-2" class="slide level2"><h2>Parameters intepretation</h2>
 <p>Again, as in the binomial model, the effects are linear on the log scale but non-linear on the response scale.</p>
 
-<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-11-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="576"></section><section id="parameters-intepretation-3" class="slide level2"><h2>Parameters intepretation</h2>
+<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-9-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="672"></section><section id="parameters-intepretation-3" class="slide level2"><h2>Parameters intepretation</h2>
 <p>The non-linearity can be easily seen using the <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> function:</p>
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">linear</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit</span>, newdata <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>studyh <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">11</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="va">linear</span><span class="op">)</span> <span class="co"># same as the beta0</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt;          2 
-#&gt; 0.02065628</code></pre>
+#&gt; 0.02000177</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">nonlinear</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="va">linear</span><span class="op">)</span> <span class="co"># or predict(..., type = "response")</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="va">nonlinear</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt;         2 
-#&gt; 0.2554891</code></pre>
+#&gt; 0.2475487</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># ratio of increase when using the response scale</span></span>
 <span><span class="va">nonlinear</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">/</span><span class="va">nonlinear</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt;        2 
-#&gt; 1.020871</code></pre>
+#&gt; 1.020203</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># equivalent to exp(beta1)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt;   studyh 
-#&gt; 1.020871</code></pre>
+#&gt; 1.020203</code></pre>
 </div>
 </div>
 </section><section id="parameters-intepretation---categorical-variable" class="slide level2"><h2>Parameters intepretation - Categorical variable</h2>
 <p>Let’s make a similar example with the number of solved exercises comparing students who attended online classes and students attending in person. The <code>class_c</code> is the dummy version of <code>class</code> (0 = online, 1 = inperson).</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="ccefcspdhb" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#ccefcspdhb table {
+<div id="apnxsjosio" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#apnxsjosio table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#ccefcspdhb thead, #ccefcspdhb tbody, #ccefcspdhb tfoot, #ccefcspdhb tr, #ccefcspdhb td, #ccefcspdhb th {
+#apnxsjosio thead, #apnxsjosio tbody, #apnxsjosio tfoot, #apnxsjosio tr, #apnxsjosio td, #apnxsjosio th {
   border-style: none;
 }
 
-#ccefcspdhb p {
+#apnxsjosio p {
   margin: 0;
   padding: 0;
 }
 
-#ccefcspdhb .gt_table {
+#apnxsjosio .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -872,12 +891,12 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   border-left-color: #D3D3D3;
 }
 
-#ccefcspdhb .gt_caption {
+#apnxsjosio .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#ccefcspdhb .gt_title {
+#apnxsjosio .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -889,7 +908,7 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   border-bottom-width: 0;
 }
 
-#ccefcspdhb .gt_subtitle {
+#apnxsjosio .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -901,7 +920,7 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   border-top-width: 0;
 }
 
-#ccefcspdhb .gt_heading {
+#apnxsjosio .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -913,13 +932,13 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   border-right-color: #D3D3D3;
 }
 
-#ccefcspdhb .gt_bottom_border {
+#apnxsjosio .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ccefcspdhb .gt_col_headings {
+#apnxsjosio .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -934,7 +953,7 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   border-right-color: #D3D3D3;
 }
 
-#ccefcspdhb .gt_col_heading {
+#apnxsjosio .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -954,7 +973,7 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   overflow-x: hidden;
 }
 
-#ccefcspdhb .gt_column_spanner_outer {
+#apnxsjosio .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -966,15 +985,15 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   padding-right: 4px;
 }
 
-#ccefcspdhb .gt_column_spanner_outer:first-child {
+#apnxsjosio .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ccefcspdhb .gt_column_spanner_outer:last-child {
+#apnxsjosio .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ccefcspdhb .gt_column_spanner {
+#apnxsjosio .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -986,11 +1005,11 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   width: 100%;
 }
 
-#ccefcspdhb .gt_spanner_row {
+#apnxsjosio .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#ccefcspdhb .gt_group_heading {
+#apnxsjosio .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1016,7 +1035,7 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   text-align: left;
 }
 
-#ccefcspdhb .gt_empty_group_heading {
+#apnxsjosio .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1031,15 +1050,15 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   vertical-align: middle;
 }
 
-#ccefcspdhb .gt_from_md > :first-child {
+#apnxsjosio .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ccefcspdhb .gt_from_md > :last-child {
+#apnxsjosio .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ccefcspdhb .gt_row {
+#apnxsjosio .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1058,7 +1077,7 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   overflow-x: hidden;
 }
 
-#ccefcspdhb .gt_stub {
+#apnxsjosio .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1071,7 +1090,7 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   padding-right: 5px;
 }
 
-#ccefcspdhb .gt_stub_row_group {
+#apnxsjosio .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1085,15 +1104,15 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   vertical-align: top;
 }
 
-#ccefcspdhb .gt_row_group_first td {
+#apnxsjosio .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ccefcspdhb .gt_row_group_first th {
+#apnxsjosio .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#ccefcspdhb .gt_summary_row {
+#apnxsjosio .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1103,16 +1122,16 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   padding-right: 5px;
 }
 
-#ccefcspdhb .gt_first_summary_row {
+#apnxsjosio .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#ccefcspdhb .gt_first_summary_row.thick {
+#apnxsjosio .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ccefcspdhb .gt_last_summary_row {
+#apnxsjosio .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1122,7 +1141,7 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   border-bottom-color: #D3D3D3;
 }
 
-#ccefcspdhb .gt_grand_summary_row {
+#apnxsjosio .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1132,7 +1151,7 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   padding-right: 5px;
 }
 
-#ccefcspdhb .gt_first_grand_summary_row {
+#apnxsjosio .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1142,7 +1161,7 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   border-top-color: #D3D3D3;
 }
 
-#ccefcspdhb .gt_last_grand_summary_row_top {
+#apnxsjosio .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1152,11 +1171,11 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   border-bottom-color: #D3D3D3;
 }
 
-#ccefcspdhb .gt_striped {
+#apnxsjosio .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ccefcspdhb .gt_table_body {
+#apnxsjosio .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1165,7 +1184,7 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   border-bottom-color: #D3D3D3;
 }
 
-#ccefcspdhb .gt_footnotes {
+#apnxsjosio .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1179,7 +1198,7 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   border-right-color: #D3D3D3;
 }
 
-#ccefcspdhb .gt_footnote {
+#apnxsjosio .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1188,7 +1207,7 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   padding-right: 5px;
 }
 
-#ccefcspdhb .gt_sourcenotes {
+#apnxsjosio .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1202,7 +1221,7 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   border-right-color: #D3D3D3;
 }
 
-#ccefcspdhb .gt_sourcenote {
+#apnxsjosio .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1210,64 +1229,73 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
   padding-right: 5px;
 }
 
-#ccefcspdhb .gt_left {
+#apnxsjosio .gt_left {
   text-align: left;
 }
 
-#ccefcspdhb .gt_center {
+#apnxsjosio .gt_center {
   text-align: center;
 }
 
-#ccefcspdhb .gt_right {
+#apnxsjosio .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ccefcspdhb .gt_font_normal {
+#apnxsjosio .gt_font_normal {
   font-weight: normal;
 }
 
-#ccefcspdhb .gt_font_bold {
+#apnxsjosio .gt_font_bold {
   font-weight: bold;
 }
 
-#ccefcspdhb .gt_font_italic {
+#apnxsjosio .gt_font_italic {
   font-style: italic;
 }
 
-#ccefcspdhb .gt_super {
+#apnxsjosio .gt_super {
   font-size: 65%;
 }
 
-#ccefcspdhb .gt_footnote_marks {
+#apnxsjosio .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#ccefcspdhb .gt_asterisk {
+#apnxsjosio .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ccefcspdhb .gt_indent_1 {
+#apnxsjosio .gt_indent_1 {
   text-indent: 5px;
 }
 
-#ccefcspdhb .gt_indent_2 {
+#apnxsjosio .gt_indent_2 {
   text-indent: 10px;
 }
 
-#ccefcspdhb .gt_indent_3 {
+#apnxsjosio .gt_indent_3 {
   text-indent: 15px;
 }
 
-#ccefcspdhb .gt_indent_4 {
+#apnxsjosio .gt_indent_4 {
   text-indent: 20px;
 }
 
-#ccefcspdhb .gt_indent_5 {
+#apnxsjosio .gt_indent_5 {
   text-indent: 25px;
+}
+
+#apnxsjosio .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#apnxsjosio div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
 }
 </style>
 <table class="gt_table caption-top" data-quarto-bootstrap="false">
@@ -1276,61 +1304,71 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
 <th id="class" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">class</th>
 <th id="class_c" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">class_c</th>
 <th id="solved" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">solved</th>
+<th id="mu" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">mu</th>
 </tr></thead>
 <tbody class="gt_table_body">
 <tr class="odd">
 <td class="gt_row gt_center" headers="id">1</td>
 <td class="gt_row gt_center" headers="class">online</td>
 <td class="gt_row gt_center" headers="class_c">0</td>
-<td class="gt_row gt_center" headers="solved">8</td>
+<td class="gt_row gt_center" headers="solved">13</td>
+<td class="gt_row gt_center" headers="mu">10</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_center" headers="id">2</td>
-<td class="gt_row gt_center" headers="class">inperson</td>
-<td class="gt_row gt_center" headers="class_c">1</td>
-<td class="gt_row gt_center" headers="solved">12</td>
+<td class="gt_row gt_center" headers="class">online</td>
+<td class="gt_row gt_center" headers="class_c">0</td>
+<td class="gt_row gt_center" headers="solved">9</td>
+<td class="gt_row gt_center" headers="mu">10</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_center" headers="id">3</td>
 <td class="gt_row gt_center" headers="class">online</td>
 <td class="gt_row gt_center" headers="class_c">0</td>
 <td class="gt_row gt_center" headers="solved">10</td>
+<td class="gt_row gt_center" headers="mu">10</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_center" headers="id">4</td>
-<td class="gt_row gt_center" headers="class">inperson</td>
-<td class="gt_row gt_center" headers="class_c">1</td>
-<td class="gt_row gt_center" headers="solved">10</td>
+<td class="gt_row gt_center" headers="class">online</td>
+<td class="gt_row gt_center" headers="class_c">0</td>
+<td class="gt_row gt_center" headers="solved">7</td>
+<td class="gt_row gt_center" headers="mu">10</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_center" headers="id">...</td>
 <td class="gt_row gt_center" headers="class">...</td>
 <td class="gt_row gt_center" headers="class_c">...</td>
 <td class="gt_row gt_center" headers="solved">...</td>
+<td class="gt_row gt_center" headers="mu">...</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_center" headers="id">97</td>
-<td class="gt_row gt_center" headers="class">online</td>
-<td class="gt_row gt_center" headers="class_c">0</td>
-<td class="gt_row gt_center" headers="solved">15</td>
+<td class="gt_row gt_center" headers="class">inperson</td>
+<td class="gt_row gt_center" headers="class_c">1</td>
+<td class="gt_row gt_center" headers="solved">8</td>
+<td class="gt_row gt_center" headers="mu">15</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_center" headers="id">98</td>
 <td class="gt_row gt_center" headers="class">inperson</td>
 <td class="gt_row gt_center" headers="class_c">1</td>
 <td class="gt_row gt_center" headers="solved">11</td>
+<td class="gt_row gt_center" headers="mu">15</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_center" headers="id">99</td>
-<td class="gt_row gt_center" headers="class">online</td>
-<td class="gt_row gt_center" headers="class_c">0</td>
+<td class="gt_row gt_center" headers="class">inperson</td>
+<td class="gt_row gt_center" headers="class_c">1</td>
 <td class="gt_row gt_center" headers="solved">9</td>
+<td class="gt_row gt_center" headers="mu">15</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_center" headers="id">100</td>
 <td class="gt_row gt_center" headers="class">inperson</td>
 <td class="gt_row gt_center" headers="class_c">1</td>
-<td class="gt_row gt_center" headers="solved">17</td>
+<td class="gt_row gt_center" headers="solved">11</td>
+<td class="gt_row gt_center" headers="mu">15</td>
 </tr>
 </tbody>
 </table>
@@ -1339,7 +1377,7 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
 </div>
 </section><section id="parameters-intepretation---categorical-variable-1" class="slide level2"><h2>Parameters intepretation - Categorical variable</h2>
 
-<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-14-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="576"></section><section id="parameters-intepretation---categorical-variable-2" class="slide level2"><h2>Parameters intepretation - Categorical variable</h2>
+<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-12-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="672"></section><section id="parameters-intepretation---categorical-variable-2" class="slide level2"><h2>Parameters intepretation - Categorical variable</h2>
 <p>R by default set the categorical variables using <strong>dummy-coding</strong>. In this case we set the reference category to <code>online</code>.</p>
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">solved</span> <span class="op">~</span> <span class="va">class</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">poisson</a></span><span class="op">(</span>link <span class="op">=</span> <span class="st">"log"</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
@@ -1353,15 +1391,15 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
 #&gt; Coefficients:
 #&gt;               Estimate Std. Error z value Pr(&gt;|z|)    
 #&gt; (Intercept)    2.26592    0.04555  49.747  &lt; 2e-16 ***
-#&gt; classinperson  0.39574    0.05892   6.717 1.86e-11 ***
+#&gt; classinperson  0.42056    0.05863   7.174  7.3e-13 ***
 #&gt; ---
 #&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #&gt; 
 #&gt; (Dispersion parameter for poisson family taken to be 1)
 #&gt; 
-#&gt;     Null deviance: 140.610  on 99  degrees of freedom
-#&gt; Residual deviance:  94.609  on 98  degrees of freedom
-#&gt; AIC: 525.84
+#&gt;     Null deviance: 145.201  on 99  degrees of freedom
+#&gt; Residual deviance:  92.597  on 98  degrees of freedom
+#&gt; AIC: 525.51
 #&gt; 
 #&gt; Number of Fisher Scoring iterations: 4</code></pre>
 </div>
@@ -1369,7 +1407,7 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
 </section><section id="parameters-intepretation---categorical-variable-3" class="slide level2"><h2>Parameters intepretation - Categorical variable</h2>
 <ul>
 <li class="fragment">Similarly to the previous example, the intercept is the expected number of solved exercises when the <code>class</code> is 0. Thus the expected number of solved exercises for online students.</li>
-<li class="fragment">the <code>classinperson</code> is the difference in log solved exercises between online and in person classes. In the response scale is the expected increase in the ratio of solved exercises. People doing in person classes solve 148.55% of the exercises of people doing online classes</li>
+<li class="fragment">the <code>classinperson</code> is the difference in log solved exercises between online and in person classes. In the response scale is the expected increase in the ratio of solved exercises. People doing in person classes solve 152.28% of the exercises of people doing online classes</li>
 </ul>
 <div class="fragment">
 <div class="cell" data-layout-align="center">
@@ -1381,7 +1419,7 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span><span class="op">[</span><span class="st">"classinperson"</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span><span class="op">[</span><span class="st">"classinperson"</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt; classinperson classinperson 
-#&gt;     0.3957361     1.4854772</code></pre>
+#&gt;     0.4205649     1.5228216</code></pre>
 </div>
 </div>
 </div>
@@ -1394,14 +1432,13 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
 \hat \phi = \frac{\sum_{i = 1}^n \frac{(y_i - \hat y_i)^2}{\hat y_i}}{n - p - 1}
 \end{align*}\]</span></p>
 <p>Where the numerator is the sum of squared Pearson residuals, <span class="math inline">\(n\)</span> is the number of observations and <span class="math inline">\(k\)</span> the number of predictors. For standard Binomial and Poisson models <span class="math inline">\(\phi = 1\)</span>.</p>
-<!-- ref("Applied Regression Analysis and Generalized Linear Models, Fox (2016)", chapter = "15", page = "432") -->
 </section><section id="overdispersion-2" class="slide level2"><h2>Overdispersion</h2>
 <p>If the model is correctly specified for binomial and poisson models the ratio is equal to 1, of the ratio is <span class="math inline">\(&gt; 1\)</span> there is evidence for overdispersion. In practical terms, if the residual deviance is higher than the residuals degrees of freedom, there is evidence for overdispersion.</p>
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">P</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/residuals.html">residuals</a></span><span class="op">(</span><span class="va">fit</span>, type <span class="op">=</span> <span class="st">"pearson"</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></span>
 <span><span class="va">P</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/stats/df.residual.html">df.residual</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span> <span class="co"># nrow(fit$dat) - length(fit_p$coefficients)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#&gt; [1] 0.9465021</code></pre>
+<pre><code>#&gt; [1] 0.9208845</code></pre>
 </div>
 </div>
 </section><section id="testing-overdispersion" class="slide level2"><h2>Testing overdispersion</h2>
@@ -1411,26 +1448,27 @@ log(\lambda_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots + \beta_px_{ip
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt; # Overdispersion test
 #&gt; 
-#&gt;        dispersion ratio =  0.947
-#&gt;   Pearson's Chi-Squared = 92.757
-#&gt;                 p-value =  0.631</code></pre>
+#&gt;        dispersion ratio =  0.921
+#&gt;   Pearson's Chi-Squared = 90.247
+#&gt;                 p-value =  0.699</code></pre>
 </div>
 </div>
-<!-- ref("Regression and Multilevel Models, (Gelman and Hill, 2007)", 6, "114-115") -->
 </section><section id="overdispersion-plot" class="slide level2"><h2>Overdispersion plot</h2>
 <p>Pearson residuals are defined as:</p>
-<p><span class="math display">\[\begin{align*}
+<p><span class="math display">\[
+\begin{align*}
 r_p = \frac{y_i - \hat y_i}{\sqrt{V(\hat y_i)}} \\
 V(\hat y_i) = \sqrt{\hat y_i}
-\end{align*}\]</span></p>
+\end{align*}
+\]</span></p>
 <p>Remember that the mean and the variance are the same in Poisson models. If the model is correct, the standardized residuals should be normally distributed with mean 0 and variance 1.</p>
 </section><section id="overdispersion-plot-1" class="slide level2"><h2>Overdispersion plot</h2>
 
 <!-- ref("Regression and Multilevel Models, (Gelman \\& Hill, 2007)", 6, 114) -->
-<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-20-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="576"></section><section id="variance-mean-relationship" class="slide level2"><h2>Variance-mean relationship</h2>
+<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-18-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="672"></section><section id="variance-mean-relationship" class="slide level2"><h2>Variance-mean relationship</h2>
 <p>The overdispersion can be expressed also in terms of variance-mean ratio. In fact, when the ratio is 1, there is no evidence of overdispersion.</p>
 
-<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-21-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section><section id="causes-of-overdispersion" class="slide level2"><h2>Causes of overdispersion</h2>
+<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-19-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section><section id="causes-of-overdispersion" class="slide level2"><h2>Causes of overdispersion</h2>
 <p>There could be multiple causes for overdispersion:</p>
 <ul>
 <li class="fragment">the <strong>phenomenon itself</strong> cannot be modelled with a Poisson distribution</li>
@@ -1441,44 +1479,44 @@ V(\hat y_i) = \sqrt{\hat y_i}
 </ul></section><section id="outliers-or-anomalous-data" class="slide level2"><h2>Outliers or anomalous data</h2>
 <p>This (simulated) dataset contains <span class="math inline">\(n = 30\)</span> observations coming from a poisson model in the form <span class="math inline">\(y = 1 + 2x\)</span> and <span class="math inline">\(n = 7\)</span> observations coming from a model <span class="math inline">\(y = 1 + 10x\)</span>.</p>
 
-<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-22-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="576"></section><section id="outliers-or-anomalous-data-1" class="slide level2"><h2>Outliers or anomalous data</h2>
+<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-20-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="672"></section><section id="outliers-or-anomalous-data-1" class="slide level2"><h2>Outliers or anomalous data</h2>
 <p>Clearly the sum of squared pearson residuals is inflated by these values producing more variance compared to what should be expected.</p>
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">datout</span><span class="op">$</span><span class="va">y</span><span class="op">)</span>, var <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span><span class="op">(</span><span class="va">datout</span><span class="op">$</span><span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="co"># mean and variance should be similar</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#&gt;     mean      var 
-#&gt; 2.756757 6.689189</code></pre>
+<pre><code>#&gt;      mean       var 
+#&gt;  13.91892 484.46547</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">performance</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/performance/reference/check_overdispersion.html">check_overdispersion</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt; # Overdispersion test
 #&gt; 
-#&gt;        dispersion ratio =  1.515
-#&gt;   Pearson's Chi-Squared = 53.019
-#&gt;                 p-value =  0.026</code></pre>
+#&gt;        dispersion ratio =  12.523
+#&gt;   Pearson's Chi-Squared = 438.300
+#&gt;                 p-value = &lt; 0.001</code></pre>
 </div>
 </div>
 </section><section id="missing-important-variables-in-the-model" class="slide level2"><h2>Missing important variables in the model</h2>
 <p>Let’s imagine to analyze again the dataset with the number of solved exercises. We have the effect of the <code>studyh</code> variable. In addition we have the effect of the <code>class</code> variable, without interaction.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="hpqpruoaru" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#hpqpruoaru table {
+<div id="zqhpqpruoa" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#zqhpqpruoa table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#hpqpruoaru thead, #hpqpruoaru tbody, #hpqpruoaru tfoot, #hpqpruoaru tr, #hpqpruoaru td, #hpqpruoaru th {
+#zqhpqpruoa thead, #zqhpqpruoa tbody, #zqhpqpruoa tfoot, #zqhpqpruoa tr, #zqhpqpruoa td, #zqhpqpruoa th {
   border-style: none;
 }
 
-#hpqpruoaru p {
+#zqhpqpruoa p {
   margin: 0;
   padding: 0;
 }
 
-#hpqpruoaru .gt_table {
+#zqhpqpruoa .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1504,12 +1542,12 @@ V(\hat y_i) = \sqrt{\hat y_i}
   border-left-color: #D3D3D3;
 }
 
-#hpqpruoaru .gt_caption {
+#zqhpqpruoa .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#hpqpruoaru .gt_title {
+#zqhpqpruoa .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1521,7 +1559,7 @@ V(\hat y_i) = \sqrt{\hat y_i}
   border-bottom-width: 0;
 }
 
-#hpqpruoaru .gt_subtitle {
+#zqhpqpruoa .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1533,7 +1571,7 @@ V(\hat y_i) = \sqrt{\hat y_i}
   border-top-width: 0;
 }
 
-#hpqpruoaru .gt_heading {
+#zqhpqpruoa .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1545,13 +1583,13 @@ V(\hat y_i) = \sqrt{\hat y_i}
   border-right-color: #D3D3D3;
 }
 
-#hpqpruoaru .gt_bottom_border {
+#zqhpqpruoa .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#hpqpruoaru .gt_col_headings {
+#zqhpqpruoa .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1566,7 +1604,7 @@ V(\hat y_i) = \sqrt{\hat y_i}
   border-right-color: #D3D3D3;
 }
 
-#hpqpruoaru .gt_col_heading {
+#zqhpqpruoa .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1586,7 +1624,7 @@ V(\hat y_i) = \sqrt{\hat y_i}
   overflow-x: hidden;
 }
 
-#hpqpruoaru .gt_column_spanner_outer {
+#zqhpqpruoa .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1598,15 +1636,15 @@ V(\hat y_i) = \sqrt{\hat y_i}
   padding-right: 4px;
 }
 
-#hpqpruoaru .gt_column_spanner_outer:first-child {
+#zqhpqpruoa .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#hpqpruoaru .gt_column_spanner_outer:last-child {
+#zqhpqpruoa .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#hpqpruoaru .gt_column_spanner {
+#zqhpqpruoa .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1618,11 +1656,11 @@ V(\hat y_i) = \sqrt{\hat y_i}
   width: 100%;
 }
 
-#hpqpruoaru .gt_spanner_row {
+#zqhpqpruoa .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#hpqpruoaru .gt_group_heading {
+#zqhpqpruoa .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1648,7 +1686,7 @@ V(\hat y_i) = \sqrt{\hat y_i}
   text-align: left;
 }
 
-#hpqpruoaru .gt_empty_group_heading {
+#zqhpqpruoa .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1663,15 +1701,15 @@ V(\hat y_i) = \sqrt{\hat y_i}
   vertical-align: middle;
 }
 
-#hpqpruoaru .gt_from_md > :first-child {
+#zqhpqpruoa .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#hpqpruoaru .gt_from_md > :last-child {
+#zqhpqpruoa .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#hpqpruoaru .gt_row {
+#zqhpqpruoa .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1690,7 +1728,7 @@ V(\hat y_i) = \sqrt{\hat y_i}
   overflow-x: hidden;
 }
 
-#hpqpruoaru .gt_stub {
+#zqhpqpruoa .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1703,7 +1741,7 @@ V(\hat y_i) = \sqrt{\hat y_i}
   padding-right: 5px;
 }
 
-#hpqpruoaru .gt_stub_row_group {
+#zqhpqpruoa .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1717,15 +1755,15 @@ V(\hat y_i) = \sqrt{\hat y_i}
   vertical-align: top;
 }
 
-#hpqpruoaru .gt_row_group_first td {
+#zqhpqpruoa .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#hpqpruoaru .gt_row_group_first th {
+#zqhpqpruoa .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#hpqpruoaru .gt_summary_row {
+#zqhpqpruoa .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1735,16 +1773,16 @@ V(\hat y_i) = \sqrt{\hat y_i}
   padding-right: 5px;
 }
 
-#hpqpruoaru .gt_first_summary_row {
+#zqhpqpruoa .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#hpqpruoaru .gt_first_summary_row.thick {
+#zqhpqpruoa .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#hpqpruoaru .gt_last_summary_row {
+#zqhpqpruoa .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1754,7 +1792,7 @@ V(\hat y_i) = \sqrt{\hat y_i}
   border-bottom-color: #D3D3D3;
 }
 
-#hpqpruoaru .gt_grand_summary_row {
+#zqhpqpruoa .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1764,7 +1802,7 @@ V(\hat y_i) = \sqrt{\hat y_i}
   padding-right: 5px;
 }
 
-#hpqpruoaru .gt_first_grand_summary_row {
+#zqhpqpruoa .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1774,7 +1812,7 @@ V(\hat y_i) = \sqrt{\hat y_i}
   border-top-color: #D3D3D3;
 }
 
-#hpqpruoaru .gt_last_grand_summary_row_top {
+#zqhpqpruoa .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1784,11 +1822,11 @@ V(\hat y_i) = \sqrt{\hat y_i}
   border-bottom-color: #D3D3D3;
 }
 
-#hpqpruoaru .gt_striped {
+#zqhpqpruoa .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#hpqpruoaru .gt_table_body {
+#zqhpqpruoa .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1797,7 +1835,7 @@ V(\hat y_i) = \sqrt{\hat y_i}
   border-bottom-color: #D3D3D3;
 }
 
-#hpqpruoaru .gt_footnotes {
+#zqhpqpruoa .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1811,7 +1849,7 @@ V(\hat y_i) = \sqrt{\hat y_i}
   border-right-color: #D3D3D3;
 }
 
-#hpqpruoaru .gt_footnote {
+#zqhpqpruoa .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1820,7 +1858,7 @@ V(\hat y_i) = \sqrt{\hat y_i}
   padding-right: 5px;
 }
 
-#hpqpruoaru .gt_sourcenotes {
+#zqhpqpruoa .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1834,7 +1872,7 @@ V(\hat y_i) = \sqrt{\hat y_i}
   border-right-color: #D3D3D3;
 }
 
-#hpqpruoaru .gt_sourcenote {
+#zqhpqpruoa .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1842,64 +1880,73 @@ V(\hat y_i) = \sqrt{\hat y_i}
   padding-right: 5px;
 }
 
-#hpqpruoaru .gt_left {
+#zqhpqpruoa .gt_left {
   text-align: left;
 }
 
-#hpqpruoaru .gt_center {
+#zqhpqpruoa .gt_center {
   text-align: center;
 }
 
-#hpqpruoaru .gt_right {
+#zqhpqpruoa .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#hpqpruoaru .gt_font_normal {
+#zqhpqpruoa .gt_font_normal {
   font-weight: normal;
 }
 
-#hpqpruoaru .gt_font_bold {
+#zqhpqpruoa .gt_font_bold {
   font-weight: bold;
 }
 
-#hpqpruoaru .gt_font_italic {
+#zqhpqpruoa .gt_font_italic {
   font-style: italic;
 }
 
-#hpqpruoaru .gt_super {
+#zqhpqpruoa .gt_super {
   font-size: 65%;
 }
 
-#hpqpruoaru .gt_footnote_marks {
+#zqhpqpruoa .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#hpqpruoaru .gt_asterisk {
+#zqhpqpruoa .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#hpqpruoaru .gt_indent_1 {
+#zqhpqpruoa .gt_indent_1 {
   text-indent: 5px;
 }
 
-#hpqpruoaru .gt_indent_2 {
+#zqhpqpruoa .gt_indent_2 {
   text-indent: 10px;
 }
 
-#hpqpruoaru .gt_indent_3 {
+#zqhpqpruoa .gt_indent_3 {
   text-indent: 15px;
 }
 
-#hpqpruoaru .gt_indent_4 {
+#zqhpqpruoa .gt_indent_4 {
   text-indent: 20px;
 }
 
-#hpqpruoaru .gt_indent_5 {
+#zqhpqpruoa .gt_indent_5 {
   text-indent: 25px;
+}
+
+#zqhpqpruoa .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#zqhpqpruoa div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
 }
 </style>
 <table class="gt_table caption-top" data-quarto-bootstrap="false">
@@ -1908,8 +1955,9 @@ V(\hat y_i) = \sqrt{\hat y_i}
 <th id="class" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">class</th>
 <th id="studyh" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">studyh</th>
 <th id="class_c" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">class_c</th>
-<th id="lp" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">lp</th>
 <th id="solved" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">solved</th>
+<th id="lp" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">lp</th>
+<th id="mu" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">mu</th>
 </tr></thead>
 <tbody class="gt_table_body">
 <tr class="odd">
@@ -1917,72 +1965,81 @@ V(\hat y_i) = \sqrt{\hat y_i}
 <td class="gt_row gt_center" headers="class">online</td>
 <td class="gt_row gt_center" headers="studyh">82</td>
 <td class="gt_row gt_center" headers="class_c">0</td>
-<td class="gt_row gt_center" headers="lp">22.613</td>
 <td class="gt_row gt_center" headers="solved">24</td>
+<td class="gt_row gt_center" headers="lp">3.119</td>
+<td class="gt_row gt_center" headers="mu">22.613</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_center" headers="id">2</td>
-<td class="gt_row gt_center" headers="class">inperson</td>
+<td class="gt_row gt_center" headers="class">online</td>
 <td class="gt_row gt_center" headers="studyh">65</td>
-<td class="gt_row gt_center" headers="class_c">1</td>
-<td class="gt_row gt_center" headers="lp">47.734</td>
-<td class="gt_row gt_center" headers="solved">50</td>
+<td class="gt_row gt_center" headers="class_c">0</td>
+<td class="gt_row gt_center" headers="solved">20</td>
+<td class="gt_row gt_center" headers="lp">2.949</td>
+<td class="gt_row gt_center" headers="mu">19.094</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_center" headers="id">3</td>
 <td class="gt_row gt_center" headers="class">online</td>
 <td class="gt_row gt_center" headers="studyh">12</td>
 <td class="gt_row gt_center" headers="class_c">0</td>
-<td class="gt_row gt_center" headers="lp">11.268</td>
 <td class="gt_row gt_center" headers="solved">15</td>
+<td class="gt_row gt_center" headers="lp">2.422</td>
+<td class="gt_row gt_center" headers="mu">11.268</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_center" headers="id">4</td>
-<td class="gt_row gt_center" headers="class">inperson</td>
+<td class="gt_row gt_center" headers="class">online</td>
 <td class="gt_row gt_center" headers="studyh">54</td>
-<td class="gt_row gt_center" headers="class_c">1</td>
-<td class="gt_row gt_center" headers="lp">42.785</td>
-<td class="gt_row gt_center" headers="solved">50</td>
+<td class="gt_row gt_center" headers="class_c">0</td>
+<td class="gt_row gt_center" headers="solved">22</td>
+<td class="gt_row gt_center" headers="lp">2.84</td>
+<td class="gt_row gt_center" headers="mu">17.114</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_center" headers="id">...</td>
 <td class="gt_row gt_center" headers="class">...</td>
 <td class="gt_row gt_center" headers="studyh">...</td>
 <td class="gt_row gt_center" headers="class_c">...</td>
-<td class="gt_row gt_center" headers="lp">...</td>
 <td class="gt_row gt_center" headers="solved">...</td>
+<td class="gt_row gt_center" headers="lp">...</td>
+<td class="gt_row gt_center" headers="mu">...</td>
 </tr>
 <tr class="even">
-<td class="gt_row gt_center" headers="id">37</td>
-<td class="gt_row gt_center" headers="class">online</td>
+<td class="gt_row gt_center" headers="id">17</td>
+<td class="gt_row gt_center" headers="class">inperson</td>
 <td class="gt_row gt_center" headers="studyh">85</td>
-<td class="gt_row gt_center" headers="class_c">0</td>
-<td class="gt_row gt_center" headers="lp">23.298</td>
-<td class="gt_row gt_center" headers="solved">35</td>
+<td class="gt_row gt_center" headers="class_c">1</td>
+<td class="gt_row gt_center" headers="solved">55</td>
+<td class="gt_row gt_center" headers="lp">4.065</td>
+<td class="gt_row gt_center" headers="mu">58.245</td>
 </tr>
 <tr class="odd">
-<td class="gt_row gt_center" headers="id">38</td>
+<td class="gt_row gt_center" headers="id">18</td>
 <td class="gt_row gt_center" headers="class">inperson</td>
 <td class="gt_row gt_center" headers="studyh">55</td>
 <td class="gt_row gt_center" headers="class_c">1</td>
-<td class="gt_row gt_center" headers="lp">43.213</td>
-<td class="gt_row gt_center" headers="solved">43</td>
+<td class="gt_row gt_center" headers="solved">41</td>
+<td class="gt_row gt_center" headers="lp">3.766</td>
+<td class="gt_row gt_center" headers="mu">43.213</td>
 </tr>
 <tr class="even">
-<td class="gt_row gt_center" headers="id">39</td>
-<td class="gt_row gt_center" headers="class">online</td>
+<td class="gt_row gt_center" headers="id">19</td>
+<td class="gt_row gt_center" headers="class">inperson</td>
 <td class="gt_row gt_center" headers="studyh">80</td>
-<td class="gt_row gt_center" headers="class_c">0</td>
-<td class="gt_row gt_center" headers="lp">22.167</td>
-<td class="gt_row gt_center" headers="solved">26</td>
+<td class="gt_row gt_center" headers="class_c">1</td>
+<td class="gt_row gt_center" headers="solved">55</td>
+<td class="gt_row gt_center" headers="lp">4.015</td>
+<td class="gt_row gt_center" headers="mu">55.418</td>
 </tr>
 <tr class="odd">
-<td class="gt_row gt_center" headers="id">40</td>
+<td class="gt_row gt_center" headers="id">20</td>
 <td class="gt_row gt_center" headers="class">inperson</td>
 <td class="gt_row gt_center" headers="studyh">77</td>
 <td class="gt_row gt_center" headers="class_c">1</td>
-<td class="gt_row gt_center" headers="lp">53.788</td>
-<td class="gt_row gt_center" headers="solved">54</td>
+<td class="gt_row gt_center" headers="solved">60</td>
+<td class="gt_row gt_center" headers="lp">3.985</td>
+<td class="gt_row gt_center" headers="mu">53.788</td>
 </tr>
 </tbody>
 </table>
@@ -1992,7 +2049,7 @@ V(\hat y_i) = \sqrt{\hat y_i}
 </section><section id="missing-important-variables-in-the-model-1" class="slide level2"><h2>Missing important variables in the model</h2>
 <p>We can also have a look at the data:</p>
 
-<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-25-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="576"></section><section id="missing-important-variables-in-the-model-2" class="slide level2"><h2>Missing important variables in the model</h2>
+<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-23-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="672"></section><section id="missing-important-variables-in-the-model-2" class="slide level2"><h2>Missing important variables in the model</h2>
 <p>Now let’s fit the model considering only <code>studyh</code> and ignoring the group:</p>
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">solved</span> <span class="op">~</span> <span class="va">studyh</span>, data <span class="op">=</span> <span class="va">dat</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">poisson</a></span><span class="op">(</span>link <span class="op">=</span> <span class="st">"log"</span><span class="op">)</span><span class="op">)</span></span>
@@ -2005,16 +2062,16 @@ V(\hat y_i) = \sqrt{\hat y_i}
 #&gt; 
 #&gt; Coefficients:
 #&gt;             Estimate Std. Error z value Pr(&gt;|z|)    
-#&gt; (Intercept) 2.692791   0.068831   39.12   &lt;2e-16 ***
-#&gt; studyh      0.013624   0.001063   12.82   &lt;2e-16 ***
+#&gt; (Intercept) 2.934629   0.064919  45.204   &lt;2e-16 ***
+#&gt; studyh      0.008647   0.001050   8.233   &lt;2e-16 ***
 #&gt; ---
 #&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #&gt; 
 #&gt; (Dispersion parameter for poisson family taken to be 1)
 #&gt; 
-#&gt;     Null deviance: 417.99  on 39  degrees of freedom
-#&gt; Residual deviance: 243.99  on 38  degrees of freedom
-#&gt; AIC: 451.39
+#&gt;     Null deviance: 318.87  on 39  degrees of freedom
+#&gt; Residual deviance: 249.24  on 38  degrees of freedom
+#&gt; AIC: 456.43
 #&gt; 
 #&gt; Number of Fisher Scoring iterations: 4</code></pre>
 </div>
@@ -2022,7 +2079,7 @@ V(\hat y_i) = \sqrt{\hat y_i}
 </section><section id="missing-important-variables-in-the-model-3" class="slide level2"><h2>Missing important variables in the model</h2>
 <p>Essentially, we are fitting an average relationship across groups but the model ignore that the two groups differs, thus the observed variance is definitely higher because we need two separate means to explain the <code>class</code> effect.</p>
 
-<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-27-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="576"></section><section id="missing-important-variables-in-the-model-4" class="slide level2"><h2>Missing important variables in the model</h2>
+<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-25-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="672"></section><section id="missing-important-variables-in-the-model-4" class="slide level2"><h2>Missing important variables in the model</h2>
 <p>By fitting the appropriate model, the overdispersion is no longer a problem:</p>
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">solved</span> <span class="op">~</span> <span class="va">studyh</span> <span class="op">+</span> <span class="va">class</span>, data <span class="op">=</span> <span class="va">dat</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">poisson</a></span><span class="op">(</span>link <span class="op">=</span> <span class="st">"log"</span><span class="op">)</span><span class="op">)</span></span>
@@ -2035,17 +2092,17 @@ V(\hat y_i) = \sqrt{\hat y_i}
 #&gt; 
 #&gt; Coefficients:
 #&gt;               Estimate Std. Error z value Pr(&gt;|z|)    
-#&gt; (Intercept)   2.275159   0.078239   29.08   &lt;2e-16 ***
-#&gt; studyh        0.010895   0.001068   10.21   &lt;2e-16 ***
-#&gt; classinperson 0.907365   0.065373   13.88   &lt;2e-16 ***
+#&gt; (Intercept)   2.300685   0.083557  27.534   &lt;2e-16 ***
+#&gt; studyh        0.010160   0.001087   9.351   &lt;2e-16 ***
+#&gt; classinperson 0.916343   0.064125  14.290   &lt;2e-16 ***
 #&gt; ---
 #&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #&gt; 
 #&gt; (Dispersion parameter for poisson family taken to be 1)
 #&gt; 
-#&gt;     Null deviance: 417.993  on 39  degrees of freedom
-#&gt; Residual deviance:  29.022  on 37  degrees of freedom
-#&gt; AIC: 238.41
+#&gt;     Null deviance: 318.872  on 39  degrees of freedom
+#&gt; Residual deviance:  24.814  on 37  degrees of freedom
+#&gt; AIC: 234
 #&gt; 
 #&gt; Number of Fisher Scoring iterations: 4</code></pre>
 </div>
@@ -2056,8 +2113,8 @@ V(\hat y_i) = \sqrt{\hat y_i}
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt; # Overdispersion test
 #&gt; 
-#&gt;        dispersion ratio =   6.115
-#&gt;   Pearson's Chi-Squared = 232.369
+#&gt;        dispersion ratio =   6.371
+#&gt;   Pearson's Chi-Squared = 242.096
 #&gt;                 p-value = &lt; 0.001</code></pre>
 </div>
 </div>
@@ -2066,46 +2123,46 @@ V(\hat y_i) = \sqrt{\hat y_i}
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt; # Overdispersion test
 #&gt; 
-#&gt;        dispersion ratio =  0.777
-#&gt;   Pearson's Chi-Squared = 28.738
-#&gt;                 p-value =  0.832</code></pre>
+#&gt;        dispersion ratio =  0.663
+#&gt;   Pearson's Chi-Squared = 24.540
+#&gt;                 p-value =  0.942</code></pre>
 </div>
 </div>
 </section><section id="missing-important-variables-in-the-model-6" class="slide level2"><h2>Missing important variables in the model</h2>
 <p>Also the residuals plots clearly improved after including all relevant predictors:</p>
 
-<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-31-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="576"></section><section id="why-worring-about-overdispersion" class="slide level2"><h2>Why worring about overdispersion?</h2>
+<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-29-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="672"></section><section id="why-worring-about-overdispersion" class="slide level2"><h2>Why worring about overdispersion?</h2>
 <p>Before analyzing the two main strategies to deal with overdispersion, it is important to understand why it is very problematic.</p>
 <ul>
 <li class="fragment">Despite the estimated parameters (<span class="math inline">\(\beta\)</span>) are not affected by overdispersion, standard errors are underestimated. The underestimation increases as the severity of the overdispersion increases.</li>
 <li class="fragment">Underestimated standard errors produces (biased) higher <span class="math inline">\(z\)</span> scores inflating the type-1 error (i.e., lower p values)</li>
 </ul></section><section id="why-worring-about-overdispersion-1" class="slide level2"><h2>Why worring about overdispersion?</h2>
-<p>The estimated overdispersion of <code>fit</code> is ~ 6.4208936. The <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> function in R has a <code>dispersion</code> argument to check how model parameters are affected.</p>
+<p>The estimated overdispersion of <code>fit</code> is ~ 6.5590481. The <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> function in R has a <code>dispersion</code> argument to check how model parameters are affected.</p>
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">phi</span> <span class="op">&lt;-</span> <span class="va">fit</span><span class="op">$</span><span class="va">deviance</span> <span class="op">/</span> <span class="va">fit</span><span class="op">$</span><span class="va">df.residual</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit</span>, dispersion <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">$</span><span class="va">coefficients</span> <span class="co"># the default</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#&gt;               Estimate  Std. Error  z value     Pr(&gt;|z|)
-#&gt; (Intercept) 2.69279058 0.068830558 39.12202 0.000000e+00
-#&gt; studyh      0.01362422 0.001062724 12.82009 1.265575e-37</code></pre>
+<pre><code>#&gt;                Estimate Std. Error   z value     Pr(&gt;|z|)
+#&gt; (Intercept) 2.934629055 0.06491921 45.204326 0.000000e+00
+#&gt; studyh      0.008647398 0.00105036  8.232798 1.828902e-16</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb35"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit</span>, dispersion <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">$</span><span class="va">coefficients</span> <span class="co"># assuming phi = 2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#&gt;               Estimate  Std. Error   z value      Pr(&gt;|z|)
-#&gt; (Intercept) 2.69279058 0.097341109 27.663447 1.923115e-168
-#&gt; studyh      0.01362422 0.001502919  9.065171  1.244091e-19</code></pre>
+<pre><code>#&gt;                Estimate  Std. Error   z value      Pr(&gt;|z|)
+#&gt; (Intercept) 2.934629055 0.091809625 31.964285 3.420915e-224
+#&gt; studyh      0.008647398 0.001485433  5.821467  5.833319e-09</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb37"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit</span>, dispersion <span class="op">=</span> <span class="va">phi</span><span class="op">)</span><span class="op">$</span><span class="va">coefficients</span> <span class="co"># the appropriate</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#&gt;               Estimate  Std. Error   z value     Pr(&gt;|z|)
-#&gt; (Intercept) 2.69279058 0.174413070 15.439156 8.926080e-54
-#&gt; studyh      0.01362422 0.002692888  5.059333 4.207258e-07</code></pre>
+<pre><code>#&gt;                Estimate  Std. Error   z value     Pr(&gt;|z|)
+#&gt; (Intercept) 2.934629055 0.166262240 17.650605 1.006727e-69
+#&gt; studyh      0.008647398 0.002690038  3.214601 1.306260e-03</code></pre>
 </div>
 </div>
 </section><section id="why-worring-about-overdispersion-2" class="slide level2"><h2>Why worring about overdispersion?</h2>
 <p>By using multiple values for <span class="math inline">\(\phi\)</span> we can see the impact on the standard error. <span class="math inline">\(\phi = 1\)</span> is what is assumed by the Poisson model.</p>
 
-<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-33-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="576"></section></section><section><section id="dealing-with-overdispersion" class="title-slide slide level1 section center"><h1>Dealing with overdispersion</h1>
+<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-31-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="672"></section></section><section><section id="dealing-with-overdispersion" class="title-slide slide level1 section center"><h1>Dealing with overdispersion</h1>
 
 </section><section id="dealing-with-overdispersion-1" class="slide level2"><h2>Dealing with overdispersion</h2>
 <p>If all the variables are included and there are no outliers, the phenomenon itself contains more variability compared to what predicted by the Poisson. There are two main approaches to deal with the situation:</p>
@@ -2129,15 +2186,15 @@ V(\hat y_i) = \sqrt{\hat y_i}
 #&gt; 
 #&gt; Coefficients:
 #&gt;             Estimate Std. Error t value Pr(&gt;|t|)    
-#&gt; (Intercept) 2.692791   0.170209  15.821  &lt; 2e-16 ***
-#&gt; studyh      0.013624   0.002628   5.184 7.46e-06 ***
+#&gt; (Intercept) 2.934629   0.163862  17.909  &lt; 2e-16 ***
+#&gt; studyh      0.008647   0.002651   3.262  0.00234 ** 
 #&gt; ---
 #&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #&gt; 
-#&gt; (Dispersion parameter for quasipoisson family taken to be 6.115055)
+#&gt; (Dispersion parameter for quasipoisson family taken to be 6.37105)
 #&gt; 
-#&gt;     Null deviance: 417.99  on 39  degrees of freedom
-#&gt; Residual deviance: 243.99  on 38  degrees of freedom
+#&gt;     Null deviance: 318.87  on 39  degrees of freedom
+#&gt; Residual deviance: 249.24  on 38  degrees of freedom
 #&gt; AIC: NA
 #&gt; 
 #&gt; Number of Fisher Scoring iterations: 4</code></pre>
@@ -2152,7 +2209,7 @@ V(\hat y_i) = \sqrt{\hat y_i}
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
-<figure><p><img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-35-1.svg" class="quarto-figure quarto-figure-center" width="576"></p>
+<figure><p><img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-33-1.svg" class="quarto-figure quarto-figure-center" width="672"></p>
 </figure>
 </div>
 </div>
@@ -2189,43 +2246,43 @@ p(y; \mu, \theta) = \frac{\Gamma(y + \theta)}{\Gamma(\theta)\Gamma(y + 1)}\left(
 <aside><ol class="aside-footnotes"><li id="fn2"><p>There are multiple parametrizations of the negative-binomial distribution. The one used by <code>MASS</code> is in terms of poisson-gamma mixture see https://mc-stan.org/docs/2_20/functions-reference/nbalt.html</p></li></ol></aside></section><section id="negative-binomial-model-2" class="slide level2"><h2>Negative-binomial model</h2>
 <p>Compared to the Poisson model, the negative binomial allows for overdispersion estimating the parameter <span class="math inline">\(\theta\)</span> and compared to the quasi-poisson model the variance is not a linear increase of the mean (<span class="math inline">\(V(\mu) = \theta\mu\)</span>) but have a quadratic relationship <span class="math inline">\(V(\mu) = \mu + \mu^2/\theta\)</span></p>
 
-<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-37-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="576"></section><section id="negative-binomial-model-3" class="slide level2"><h2>Negative-binomial model</h2>
+<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-35-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="672"></section><section id="negative-binomial-model-3" class="slide level2"><h2>Negative-binomial model</h2>
 <p>We can use the <code>MASS</code> package to implement the negative binomial distribution using the <code><a href="https://rdrr.io/pkg/MASS/man/rnegbin.html">MASS::rnegbin()</a></code>:</p>
 
-<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-38-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="576"></section><section id="negative-binomial-model-4" class="slide level2"><h2>Negative-binomial model</h2>
+<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-36-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="672"></section><section id="negative-binomial-model-4" class="slide level2"><h2>Negative-binomial model</h2>
 <p>The <span class="math inline">\(\theta\)</span> parameter is the estimated dispersion. To note, is not the same as <span class="math inline">\(\phi\)</span> in the quasi-poisson model. As <span class="math inline">\(\theta\)</span> increase, the overdispersion is reduced and the model is similar to a standard Poisson model.</p>
 
-<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-39-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="576"></section><section id="negative-binomial-model-5" class="slide level2"><h2>Negative-binomial model</h2>
+<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-37-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="672"></section><section id="negative-binomial-model-5" class="slide level2"><h2>Negative-binomial model</h2>
 <p>For fitting a negative-binomial model we cannot use the <code>glm</code> function but we need to use the <code><a href="https://rdrr.io/pkg/MASS/man/glm.nb.html">MASS::glm.nb()</a></code> function. The syntax is almost the same but we do not need to specify the family because this function only fit negative-binomial models. Let’s simulate some data coming from a negative binomial distribution with <span class="math inline">\(\theta = 10\)</span></p>
 <div class="cell" data-layout-align="center">
 <details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb45"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">theta</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
 <span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">100</span></span>
 <span><span class="va">b0</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
 <span><span class="va">b1</span> <span class="op">&lt;-</span> <span class="fl">5</span></span>
-<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu">sim_design</span><span class="op">(</span><span class="va">n</span>, nx <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu">sim_design</span><span class="op">(</span><span class="va">n</span>, covariates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu">new_cov</span><span class="op">(</span>fun <span class="op">=</span> <span class="va">runif</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">dat</span><span class="op">$</span><span class="va">lp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span><span class="op">(</span><span class="va">dat</span>, <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">b0</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">b1</span><span class="op">)</span><span class="op">*</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">dat</span><span class="op">$</span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span><span class="op">(</span><span class="va">dat</span>, <span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/rnegbin.html">rnegbin</a></span><span class="op">(</span><span class="va">n</span>, <span class="va">lp</span>, <span class="va">theta</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div id="rhoqkiyghr" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#rhoqkiyghr table {
+<div id="gbrhoqkiyg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#gbrhoqkiyg table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#rhoqkiyghr thead, #rhoqkiyghr tbody, #rhoqkiyghr tfoot, #rhoqkiyghr tr, #rhoqkiyghr td, #rhoqkiyghr th {
+#gbrhoqkiyg thead, #gbrhoqkiyg tbody, #gbrhoqkiyg tfoot, #gbrhoqkiyg tr, #gbrhoqkiyg td, #gbrhoqkiyg th {
   border-style: none;
 }
 
-#rhoqkiyghr p {
+#gbrhoqkiyg p {
   margin: 0;
   padding: 0;
 }
 
-#rhoqkiyghr .gt_table {
+#gbrhoqkiyg .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -2251,12 +2308,12 @@ p(y; \mu, \theta) = \frac{\Gamma(y + \theta)}{\Gamma(\theta)\Gamma(y + 1)}\left(
   border-left-color: #D3D3D3;
 }
 
-#rhoqkiyghr .gt_caption {
+#gbrhoqkiyg .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#rhoqkiyghr .gt_title {
+#gbrhoqkiyg .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2268,7 +2325,7 @@ p(y; \mu, \theta) = \frac{\Gamma(y + \theta)}{\Gamma(\theta)\Gamma(y + 1)}\left(
   border-bottom-width: 0;
 }
 
-#rhoqkiyghr .gt_subtitle {
+#gbrhoqkiyg .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2280,7 +2337,7 @@ p(y; \mu, \theta) = \frac{\Gamma(y + \theta)}{\Gamma(\theta)\Gamma(y + 1)}\left(
   border-top-width: 0;
 }
 
-#rhoqkiyghr .gt_heading {
+#gbrhoqkiyg .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2292,13 +2349,13 @@ p(y; \mu, \theta) = \frac{\Gamma(y + \theta)}{\Gamma(\theta)\Gamma(y + 1)}\left(
   border-right-color: #D3D3D3;
 }
 
-#rhoqkiyghr .gt_bottom_border {
+#gbrhoqkiyg .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#rhoqkiyghr .gt_col_headings {
+#gbrhoqkiyg .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2313,7 +2370,7 @@ p(y; \mu, \theta) = \frac{\Gamma(y + \theta)}{\Gamma(\theta)\Gamma(y + 1)}\left(
   border-right-color: #D3D3D3;
 }
 
-#rhoqkiyghr .gt_col_heading {
+#gbrhoqkiyg .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2333,7 +2390,7 @@ p(y; \mu, \theta) = \frac{\Gamma(y + \theta)}{\Gamma(\theta)\Gamma(y + 1)}\left(
   overflow-x: hidden;
 }
 
-#rhoqkiyghr .gt_column_spanner_outer {
+#gbrhoqkiyg .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2345,15 +2402,15 @@ p(y; \mu, \theta) = \frac{\Gamma(y + \theta)}{\Gamma(\theta)\Gamma(y + 1)}\left(
   padding-right: 4px;
 }
 
-#rhoqkiyghr .gt_column_spanner_outer:first-child {
+#gbrhoqkiyg .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#rhoqkiyghr .gt_column_spanner_outer:last-child {
+#gbrhoqkiyg .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#rhoqkiyghr .gt_column_spanner {
+#gbrhoqkiyg .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2365,11 +2422,11 @@ p(y; \mu, \theta) = \frac{\Gamma(y + \theta)}{\Gamma(\theta)\Gamma(y + 1)}\left(
   width: 100%;
 }
 
-#rhoqkiyghr .gt_spanner_row {
+#gbrhoqkiyg .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#rhoqkiyghr .gt_group_heading {
+#gbrhoqkiyg .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2395,7 +2452,7 @@ p(y; \mu, \theta) = \frac{\Gamma(y + \theta)}{\Gamma(\theta)\Gamma(y + 1)}\left(
   text-align: left;
 }
 
-#rhoqkiyghr .gt_empty_group_heading {
+#gbrhoqkiyg .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2410,15 +2467,15 @@ p(y; \mu, \theta) = \frac{\Gamma(y + \theta)}{\Gamma(\theta)\Gamma(y + 1)}\left(
   vertical-align: middle;
 }
 
-#rhoqkiyghr .gt_from_md > :first-child {
+#gbrhoqkiyg .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#rhoqkiyghr .gt_from_md > :last-child {
+#gbrhoqkiyg .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#rhoqkiyghr .gt_row {
+#gbrhoqkiyg .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2437,7 +2494,7 @@ p(y; \mu, \theta) = \frac{\Gamma(y + \theta)}{\Gamma(\theta)\Gamma(y + 1)}\left(
   overflow-x: hidden;
 }
 
-#rhoqkiyghr .gt_stub {
+#gbrhoqkiyg .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2450,7 +2507,7 @@ p(y; \mu, \theta) = \frac{\Gamma(y + \theta)}{\Gamma(\theta)\Gamma(y + 1)}\left(
   padding-right: 5px;
 }
 
-#rhoqkiyghr .gt_stub_row_group {
+#gbrhoqkiyg .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2464,15 +2521,15 @@ p(y; \mu, \theta) = \frac{\Gamma(y + \theta)}{\Gamma(\theta)\Gamma(y + 1)}\left(
   vertical-align: top;
 }
 
-#rhoqkiyghr .gt_row_group_first td {
+#gbrhoqkiyg .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#rhoqkiyghr .gt_row_group_first th {
+#gbrhoqkiyg .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#rhoqkiyghr .gt_summary_row {
+#gbrhoqkiyg .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2482,16 +2539,16 @@ p(y; \mu, \theta) = \frac{\Gamma(y + \theta)}{\Gamma(\theta)\Gamma(y + 1)}\left(
   padding-right: 5px;
 }
 
-#rhoqkiyghr .gt_first_summary_row {
+#gbrhoqkiyg .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#rhoqkiyghr .gt_first_summary_row.thick {
+#gbrhoqkiyg .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#rhoqkiyghr .gt_last_summary_row {
+#gbrhoqkiyg .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2501,7 +2558,7 @@ p(y; \mu, \theta) = \frac{\Gamma(y + \theta)}{\Gamma(\theta)\Gamma(y + 1)}\left(
   border-bottom-color: #D3D3D3;
 }
 
-#rhoqkiyghr .gt_grand_summary_row {
+#gbrhoqkiyg .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2511,7 +2568,7 @@ p(y; \mu, \theta) = \frac{\Gamma(y + \theta)}{\Gamma(\theta)\Gamma(y + 1)}\left(
   padding-right: 5px;
 }
 
-#rhoqkiyghr .gt_first_grand_summary_row {
+#gbrhoqkiyg .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2521,7 +2578,7 @@ p(y; \mu, \theta) = \frac{\Gamma(y + \theta)}{\Gamma(\theta)\Gamma(y + 1)}\left(
   border-top-color: #D3D3D3;
 }
 
-#rhoqkiyghr .gt_last_grand_summary_row_top {
+#gbrhoqkiyg .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2531,11 +2588,11 @@ p(y; \mu, \theta) = \frac{\Gamma(y + \theta)}{\Gamma(\theta)\Gamma(y + 1)}\left(
   border-bottom-color: #D3D3D3;
 }
 
-#rhoqkiyghr .gt_striped {
+#gbrhoqkiyg .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#rhoqkiyghr .gt_table_body {
+#gbrhoqkiyg .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2544,7 +2601,7 @@ p(y; \mu, \theta) = \frac{\Gamma(y + \theta)}{\Gamma(\theta)\Gamma(y + 1)}\left(
   border-bottom-color: #D3D3D3;
 }
 
-#rhoqkiyghr .gt_footnotes {
+#gbrhoqkiyg .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2558,7 +2615,7 @@ p(y; \mu, \theta) = \frac{\Gamma(y + \theta)}{\Gamma(\theta)\Gamma(y + 1)}\left(
   border-right-color: #D3D3D3;
 }
 
-#rhoqkiyghr .gt_footnote {
+#gbrhoqkiyg .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2567,7 +2624,7 @@ p(y; \mu, \theta) = \frac{\Gamma(y + \theta)}{\Gamma(\theta)\Gamma(y + 1)}\left(
   padding-right: 5px;
 }
 
-#rhoqkiyghr .gt_sourcenotes {
+#gbrhoqkiyg .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2581,7 +2638,7 @@ p(y; \mu, \theta) = \frac{\Gamma(y + \theta)}{\Gamma(\theta)\Gamma(y + 1)}\left(
   border-right-color: #D3D3D3;
 }
 
-#rhoqkiyghr .gt_sourcenote {
+#gbrhoqkiyg .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2589,64 +2646,73 @@ p(y; \mu, \theta) = \frac{\Gamma(y + \theta)}{\Gamma(\theta)\Gamma(y + 1)}\left(
   padding-right: 5px;
 }
 
-#rhoqkiyghr .gt_left {
+#gbrhoqkiyg .gt_left {
   text-align: left;
 }
 
-#rhoqkiyghr .gt_center {
+#gbrhoqkiyg .gt_center {
   text-align: center;
 }
 
-#rhoqkiyghr .gt_right {
+#gbrhoqkiyg .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#rhoqkiyghr .gt_font_normal {
+#gbrhoqkiyg .gt_font_normal {
   font-weight: normal;
 }
 
-#rhoqkiyghr .gt_font_bold {
+#gbrhoqkiyg .gt_font_bold {
   font-weight: bold;
 }
 
-#rhoqkiyghr .gt_font_italic {
+#gbrhoqkiyg .gt_font_italic {
   font-style: italic;
 }
 
-#rhoqkiyghr .gt_super {
+#gbrhoqkiyg .gt_super {
   font-size: 65%;
 }
 
-#rhoqkiyghr .gt_footnote_marks {
+#gbrhoqkiyg .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#rhoqkiyghr .gt_asterisk {
+#gbrhoqkiyg .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#rhoqkiyghr .gt_indent_1 {
+#gbrhoqkiyg .gt_indent_1 {
   text-indent: 5px;
 }
 
-#rhoqkiyghr .gt_indent_2 {
+#gbrhoqkiyg .gt_indent_2 {
   text-indent: 10px;
 }
 
-#rhoqkiyghr .gt_indent_3 {
+#gbrhoqkiyg .gt_indent_3 {
   text-indent: 15px;
 }
 
-#rhoqkiyghr .gt_indent_4 {
+#gbrhoqkiyg .gt_indent_4 {
   text-indent: 20px;
 }
 
-#rhoqkiyghr .gt_indent_5 {
+#gbrhoqkiyg .gt_indent_5 {
   text-indent: 25px;
+}
+
+#gbrhoqkiyg .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#gbrhoqkiyg div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
 }
 </style>
 <table class="gt_table caption-top" data-quarto-bootstrap="false">
@@ -2658,13 +2724,13 @@ p(y; \mu, \theta) = \frac{\Gamma(y + \theta)}{\Gamma(\theta)\Gamma(y + 1)}\left(
 <tbody class="gt_table_body">
 <tr class="odd">
 <td class="gt_row gt_center" headers="id">1</td>
-<td class="gt_row gt_center" headers="x">0.427</td>
-<td class="gt_row gt_center" headers="y">11</td>
+<td class="gt_row gt_center" headers="x">0.22</td>
+<td class="gt_row gt_center" headers="y">8</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_center" headers="id">2</td>
-<td class="gt_row gt_center" headers="x">0.365</td>
-<td class="gt_row gt_center" headers="y">13</td>
+<td class="gt_row gt_center" headers="x">0.427</td>
+<td class="gt_row gt_center" headers="y">21</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_center" headers="id">...</td>
@@ -2673,13 +2739,13 @@ p(y; \mu, \theta) = \frac{\Gamma(y + \theta)}{\Gamma(\theta)\Gamma(y + 1)}\left(
 </tr>
 <tr class="even">
 <td class="gt_row gt_center" headers="id">99</td>
-<td class="gt_row gt_center" headers="x">0.966</td>
-<td class="gt_row gt_center" headers="y">41</td>
+<td class="gt_row gt_center" headers="x">0.619</td>
+<td class="gt_row gt_center" headers="y">37</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_center" headers="id">100</td>
-<td class="gt_row gt_center" headers="x">0.154</td>
-<td class="gt_row gt_center" headers="y">12</td>
+<td class="gt_row gt_center" headers="x">0.966</td>
+<td class="gt_row gt_center" headers="y">41</td>
 </tr>
 </tbody>
 </table>
@@ -2688,7 +2754,7 @@ p(y; \mu, \theta) = \frac{\Gamma(y + \theta)}{\Gamma(\theta)\Gamma(y + 1)}\left(
 </div>
 </section><section id="negative-binomial-model-6" class="slide level2"><h2>Negative-binomial model</h2>
 
-<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-42-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="576"></section><section id="negative-binomial-model-7" class="slide level2"><h2>Negative-binomial model</h2>
+<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-40-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="672"></section><section id="negative-binomial-model-7" class="slide level2"><h2>Negative-binomial model</h2>
 <p>Then we can fit the model:</p>
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb46"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit_nb</span> <span class="op">&lt;-</span> <span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/glm.nb.html">glm.nb</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
@@ -2696,38 +2762,38 @@ p(y; \mu, \theta) = \frac{\Gamma(y + \theta)}{\Gamma(\theta)\Gamma(y + 1)}\left(
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt; Call:
-#&gt; MASS::glm.nb(formula = y ~ x, data = dat, init.theta = 11.32327809, 
+#&gt; MASS::glm.nb(formula = y ~ x, data = dat, init.theta = 8.541023041, 
 #&gt;     link = log)
 #&gt; 
 #&gt; Coefficients:
 #&gt;             Estimate Std. Error z value Pr(&gt;|z|)    
-#&gt; (Intercept)  2.17693    0.08282   26.28   &lt;2e-16 ***
-#&gt; x            1.82119    0.13811   13.19   &lt;2e-16 ***
+#&gt; (Intercept)  2.23866    0.08891   25.18   &lt;2e-16 ***
+#&gt; x            1.65690    0.15039   11.02   &lt;2e-16 ***
 #&gt; ---
 #&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #&gt; 
-#&gt; (Dispersion parameter for Negative Binomial(11.3233) family taken to be 1)
+#&gt; (Dispersion parameter for Negative Binomial(8.541) family taken to be 1)
 #&gt; 
-#&gt;     Null deviance: 273.823  on 99  degrees of freedom
-#&gt; Residual deviance:  98.035  on 98  degrees of freedom
-#&gt; AIC: 696.14
+#&gt;     Null deviance: 230.82  on 99  degrees of freedom
+#&gt; Residual deviance: 104.20  on 98  degrees of freedom
+#&gt; AIC: 714.14
 #&gt; 
 #&gt; Number of Fisher Scoring iterations: 1
 #&gt; 
 #&gt; 
-#&gt;               Theta:  11.32 
-#&gt;           Std. Err.:  2.38 
+#&gt;               Theta:  8.54 
+#&gt;           Std. Err.:  1.73 
 #&gt; 
-#&gt;  2 x log-likelihood:  -690.143</code></pre>
+#&gt;  2 x log-likelihood:  -708.135</code></pre>
 </div>
 </div>
 </section><section id="negative-binomial-model-8" class="slide level2"><h2>Negative-binomial model</h2>
 <p>Here we compare the expected variance (<span class="math inline">\(\pm 2\sqrt{V(y_i)}\)</span>) of the Negative binomial and Poisson models:</p>
 
-<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-44-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="576"></section><section id="negative-binomial-model-9" class="slide level2"><h2>Negative-binomial model</h2>
+<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-42-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="672"></section><section id="negative-binomial-model-9" class="slide level2"><h2>Negative-binomial model</h2>
 <p>Here we compare the expected variance (<span class="math inline">\(\pm 2\sqrt{V(y_i)}\)</span>) of the three models:</p>
 
-<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-45-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="576"></section><section id="negative-binomial-model-10" class="slide level2"><h2>Negative-binomial model</h2>
+<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-43-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="672"></section><section id="negative-binomial-model-10" class="slide level2"><h2>Negative-binomial model</h2>
 <p>We can compare the coefficients fitting the Poisson, the Quasi-Poisson and the Negative-binomial model:</p>
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb48"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit_p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span>, data <span class="op">=</span> <span class="va">dat</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">poisson</a></span><span class="op">(</span>link <span class="op">=</span> <span class="st">"log"</span><span class="op">)</span><span class="op">)</span></span>
@@ -2735,17 +2801,17 @@ p(y; \mu, \theta) = \frac{\Gamma(y + \theta)}{\Gamma(\theta)\Gamma(y + 1)}\left(
 <span><span class="fu">car</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/car/man/compareCoefs.html">compareCoefs</a></span><span class="op">(</span><span class="va">fit_nb</span>, <span class="va">fit_p</span>, <span class="va">fit_qp</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt; Calls:
-#&gt; 1: MASS::glm.nb(formula = y ~ x, data = dat, init.theta = 11.32327809, link 
+#&gt; 1: MASS::glm.nb(formula = y ~ x, data = dat, init.theta = 8.541023041, link 
 #&gt;   = log)
 #&gt; 2: glm(formula = y ~ x, family = poisson(link = "log"), data = dat)
 #&gt; 3: glm(formula = y ~ x, family = quasipoisson(link = "log"), data = dat)
 #&gt; 
 #&gt;             Model 1 Model 2 Model 3
-#&gt; (Intercept)  2.1769  2.2043  2.2043
-#&gt; SE           0.0828  0.0534  0.0970
+#&gt; (Intercept)  2.2387  2.2192  2.2192
+#&gt; SE           0.0889  0.0535  0.1054
 #&gt;                                    
-#&gt; x            1.8212  1.7723  1.7723
-#&gt; SE           0.1381  0.0802  0.1456
+#&gt; x            1.6569  1.6924  1.6924
+#&gt; SE           0.1504  0.0807  0.1591
 #&gt; </code></pre>
 </div>
 </div>
@@ -2765,15 +2831,15 @@ p(y; \mu, \theta) = \frac{\Gamma(y + \theta)}{\Gamma(\theta)\Gamma(y + 1)}\left(
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb50"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#&gt; # A tibble: 6 × 6
-#&gt;      id class    studyh class_c    lp solved
-#&gt;   &lt;int&gt; &lt;fct&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;int&gt;
-#&gt; 1     1 online       82       0  22.6     24
-#&gt; 2     2 inperson     65       1  47.7     50
-#&gt; 3     3 online       12       0  11.3     15
-#&gt; 4     4 inperson     54       1  42.8     50
-#&gt; 5     5 online       18       0  12.0     10
-#&gt; 6     6 inperson     64       1  47.3     41</code></pre>
+<pre><code>#&gt; # A tibble: 6 × 7
+#&gt;      id class  studyh class_c solved    lp    mu
+#&gt;   &lt;int&gt; &lt;fct&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;
+#&gt; 1     1 online     82       0     24  3.12  22.6
+#&gt; 2     2 online     65       0     20  2.95  19.1
+#&gt; 3     3 online     12       0     15  2.42  11.3
+#&gt; 4     4 online     54       0     22  2.84  17.1
+#&gt; 5     5 online     18       0     10  2.48  12.0
+#&gt; 6     6 online     64       0     15  2.94  18.9</code></pre>
 </div>
 </div>
 <p>Each <code>id</code> performs multiple problems solving a certain number of them (<code>solved</code>). There is an hidden multilevel structure here.</p>
@@ -2789,28 +2855,28 @@ p(y; \mu, \theta) = \frac{\Gamma(y + \theta)}{\Gamma(\theta)\Gamma(y + 1)}\left(
 #&gt; Formula: solved ~ studyh + (1 | id)
 #&gt;    Data: dat
 #&gt; 
-#&gt;      AIC      BIC   logLik deviance df.resid 
-#&gt;    322.8    327.8   -158.4    316.8       37 
+#&gt;       AIC       BIC    logLik -2*log(L)  df.resid 
+#&gt;     292.0     297.1    -143.0     286.0        37 
 #&gt; 
 #&gt; Scaled residuals: 
-#&gt;      Min       1Q   Median       3Q      Max 
-#&gt; -0.92459 -0.44737  0.02909  0.28948  0.56780 
+#&gt;     Min      1Q  Median      3Q     Max 
+#&gt; -1.3656 -0.4110  0.1139  0.2535  0.9839 
 #&gt; 
 #&gt; Random effects:
 #&gt;  Groups Name        Variance Std.Dev.
-#&gt;  id     (Intercept) 0.1946   0.4411  
-#&gt; Number of obs: 40, groups:  id, 40
+#&gt;  id     (Intercept) 0.2146   0.4633  
+#&gt; Number of obs: 40, groups:  id, 20
 #&gt; 
 #&gt; Fixed effects:
 #&gt;             Estimate Std. Error z value Pr(&gt;|z|)    
-#&gt; (Intercept) 2.609225   0.156018  16.724  &lt; 2e-16 ***
-#&gt; studyh      0.013478   0.002701   4.991 6.01e-07 ***
+#&gt; (Intercept) 2.661339   0.145917  18.239  &lt; 2e-16 ***
+#&gt; studyh      0.012216   0.001864   6.554 5.61e-11 ***
 #&gt; ---
 #&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #&gt; 
 #&gt; Correlation of Fixed Effects:
 #&gt;        (Intr)
-#&gt; studyh -0.869
+#&gt; studyh -0.668
 #&gt; optimizer (Nelder_Mead) convergence code: 0 (OK)
 #&gt; Model is nearly unidentifiable: very large eigenvalue
 #&gt;  - Rescale variables?</code></pre>
@@ -2825,20 +2891,20 @@ p(y; \mu, \theta) = \frac{\Gamma(y + \theta)}{\Gamma(\theta)\Gamma(y + 1)}\left(
 <span><span class="fu">performance</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/performance/reference/check_overdispersion.html">check_overdispersion</a></span><span class="op">(</span><span class="va">fit_p</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Overdispersion test</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;        dispersion ratio =   6.115</span></span>
-<span><span class="co">#&gt;   Pearson's Chi-Squared = 232.369</span></span>
+<span><span class="co">#&gt;        dispersion ratio =   6.371</span></span>
+<span><span class="co">#&gt;   Pearson's Chi-Squared = 242.096</span></span>
 <span><span class="co">#&gt;                 p-value = &lt; 0.001</span></span>
 <span><span class="fu">performance</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/performance/reference/check_overdispersion.html">check_overdispersion</a></span><span class="op">(</span><span class="va">fit_nb</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Overdispersion test</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  dispersion ratio = 0.878</span></span>
-<span><span class="co">#&gt;           p-value = 0.856</span></span>
+<span><span class="co">#&gt;  dispersion ratio = 0.983</span></span>
+<span><span class="co">#&gt;           p-value =  0.96</span></span>
 <span><span class="fu">performance</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/performance/reference/check_overdispersion.html">check_overdispersion</a></span><span class="op">(</span><span class="va">fit_m</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Overdispersion test</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;        dispersion ratio = 0.195</span></span>
-<span><span class="co">#&gt;   Pearson's Chi-Squared = 7.228</span></span>
-<span><span class="co">#&gt;                 p-value =     1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="co">#&gt;        dispersion ratio =  0.374</span></span>
+<span><span class="co">#&gt;   Pearson's Chi-Squared = 13.838</span></span>
+<span><span class="co">#&gt;                 p-value =      1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section><section id="simulate-nb-data-extra" class="slide level2"><h2>Simulate NB data <code>#extra</code><sup>1</sup>
 </h2>
@@ -2848,10 +2914,10 @@ p(y; \mu, \theta) = \frac{\Gamma(y + \theta)}{\Gamma(\theta)\Gamma(y + 1)}\left(
 <div class="cell-output cell-output-stderr">
 <pre><code>#&gt; y ~ NegBin(mu = 10, theta = 1.67), var = 70.00, vmr = 7.00</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb57"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">nprint</span><span class="op">(</span>mu <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span>, v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span>, vmr <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb57"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>mu <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span>, v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span>, vmr <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#&gt;     mu      v    vmr 
-#&gt;  9.958 69.569  6.986</code></pre>
+<pre><code>#&gt;        mu         v       vmr 
+#&gt;  9.957960 69.567748  6.986145</code></pre>
 </div>
 </div>
 <aside><ol class="aside-footnotes"><li id="fn3"><p>Using <code>vmr = 1</code> it will use the <code><a href="https://rdrr.io/r/stats/Poisson.html">rpois()</a></code> function</p></li></ol></aside></section><section id="simulate-nb-data-extra-1" class="slide level2"><h2>Simulate NB data <code>#extra</code>
@@ -2867,11 +2933,11 @@ p(y; \mu, \theta) = \frac{\Gamma(y + \theta)}{\Gamma(\theta)\Gamma(y + 1)}\left(
 <p>The Deviance based pseudo-<span class="math inline">\(R^2\)</span> is computed from the ratio between the residual deviance and the null deviance<sup>1</sup>:</p>
 <p><span class="math display">\[
 R^2 = 1 - \frac{D_{current}}{D_{null}}
-\]</span> <!-- ref("Applied Regression Analysis and Generalized Linear Models, Fox (2016)", "14.1", "383") --></p>
+\]</span></p>
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb60"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fl">1</span> <span class="op">-</span> <span class="va">fit_p</span><span class="op">$</span><span class="va">deviance</span><span class="op">/</span><span class="va">fit_p</span><span class="op">$</span><span class="va">null.deviance</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#&gt; [1] 0.4162731</code></pre>
+<pre><code>#&gt; [1] 0.2183568</code></pre>
 </div>
 </div>
 <aside><ol class="aside-footnotes"><li id="fn4"><p>https://en.wikipedia.org/wiki/Pseudo-R-squared</p></li></ol></aside></section><section id="mcfaddens-pseudo-r2" class="slide level2"><h2>McFadden’s pseudo-<span class="math inline">\(R^2\)</span>
@@ -2885,8 +2951,8 @@ R^2 = 1 - \frac{\log(\mathcal{L_{current}})}{\log(\mathcal{L_{null}})}
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb62"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">performance</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/performance/reference/r2_mcfadden.html">r2_mcfadden</a></span><span class="op">(</span><span class="va">fit_p</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt; # R2 for Generalized Linear Regression
-#&gt;        R2: 0.280
-#&gt;   adj. R2: 0.277</code></pre>
+#&gt;        R2: 0.133
+#&gt;   adj. R2: 0.130</code></pre>
 </div>
 </div>
 </section><section id="nagelkerkes-pseudo-r2" class="slide level2"><h2>Nagelkerke’s pseudo-<span class="math inline">\(R^2\)</span>
@@ -2900,7 +2966,7 @@ R^2 = 1 - \left(\frac{\mathcal{L_{null}}}{\mathcal{L_{current}}}\right)^{\frac{2
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb64"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">performance</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/performance/reference/r2_nagelkerke.html">r2_nagelkerke</a></span><span class="op">(</span><span class="va">fit_p</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt; Nagelkerke's R2 
-#&gt;       0.9871216</code></pre>
+#&gt;       0.8248861</code></pre>
 </div>
 </div>
 </section></section><section><section id="extra" class="title-slide slide level1 section center"><h1>Extra</h1>
@@ -2909,8 +2975,8 @@ R^2 = 1 - \left(\frac{\mathcal{L_{null}}}{\mathcal{L_{current}}}\right)^{\frac{2
 </h2>
 <p>Let’s simulate a GLM where there is a main effect but no interaction:</p>
 <div class="cell" data-layout-align="center">
-<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb66"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu">sim_design</span><span class="op">(</span><span class="fl">200</span>, nx <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">200</span><span class="op">)</span><span class="op">)</span>, cx <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>g <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"b"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu">sim_data</span><span class="op">(</span><span class="va">dat</span>, <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="fl">1.5</span><span class="op">)</span> <span class="op">*</span> <span class="va">x</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">*</span> <span class="va">g_c</span> <span class="op">+</span> <span class="fl">0</span> <span class="op">*</span> <span class="va">g_c</span> <span class="op">*</span> <span class="va">x</span><span class="op">)</span>, model <span class="op">=</span> <span class="st">"poisson"</span><span class="op">)</span></span>
+<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb66"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu">sim_design</span><span class="op">(</span><span class="fl">100</span>, between <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>g <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"b"</span><span class="op">)</span><span class="op">)</span>, covariates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu">new_cov</span><span class="op">(</span><span class="va">rnorm</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu">sim_data</span><span class="op">(</span><span class="va">dat</span>, <span class="op">~</span> <span class="va">x</span> <span class="op">*</span> <span class="va">g</span>, beta <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="fl">1.5</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>, <span class="fl">0</span><span class="op">)</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">poisson</a></span><span class="op">(</span><span class="op">)</span>, which.mu <span class="op">=</span> <span class="st">"lambda"</span><span class="op">)</span></span>
 <span><span class="va">dat</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span>, color <span class="op">=</span> <span class="va">g</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
@@ -2918,7 +2984,7 @@ R^2 = 1 - \left(\frac{\mathcal{L_{null}}}{\mathcal{L_{current}}}\right)^{\frac{2
 <span>              method.args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">poisson</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
-<figure><p><img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-56-1.svg" class="quarto-figure quarto-figure-center" width="576"></p>
+<figure><p><img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-54-1.svg" class="quarto-figure quarto-figure-center" style="width:80.0%"></p>
 </figure>
 </div>
 </div>
@@ -2941,21 +3007,21 @@ R^2 = 1 - \left(\frac{\mathcal{L_{null}}}{\mathcal{L_{current}}}\right)^{\frac{2
 #&gt; lm(formula = y ~ x * g, data = dat)
 #&gt; 
 #&gt; Residuals:
-#&gt;      Min       1Q   Median       3Q      Max 
-#&gt; -10.9594  -2.7974  -0.3394   2.4466  14.8487 
+#&gt;     Min      1Q  Median      3Q     Max 
+#&gt; -9.2287 -3.2912 -0.0047  2.7386 13.6256 
 #&gt; 
 #&gt; Coefficients:
 #&gt;             Estimate Std. Error t value Pr(&gt;|t|)    
-#&gt; (Intercept)  11.0610     0.2941  37.603   &lt;2e-16 ***
-#&gt; x             3.9829     0.2979  13.371   &lt;2e-16 ***
-#&gt; g2            9.9577     0.4163  23.921   &lt;2e-16 ***
-#&gt; x:g2          4.0287     0.4347   9.269   &lt;2e-16 ***
+#&gt; (Intercept)  10.5406     0.4355   24.20  &lt; 2e-16 ***
+#&gt; x             4.8217     0.4627   10.42  &lt; 2e-16 ***
+#&gt; gb           10.4027     0.6263   16.61  &lt; 2e-16 ***
+#&gt; x:gb          2.8134     0.6528    4.31 2.58e-05 ***
 #&gt; ---
 #&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #&gt; 
-#&gt; Residual standard error: 4.116 on 396 degrees of freedom
-#&gt; Multiple R-squared:  0.7717, Adjusted R-squared:   0.77 
-#&gt; F-statistic: 446.3 on 3 and 396 DF,  p-value: &lt; 2.2e-16</code></pre>
+#&gt; Residual standard error: 4.352 on 196 degrees of freedom
+#&gt; Multiple R-squared:  0.7482, Adjusted R-squared:  0.7443 
+#&gt; F-statistic: 194.1 on 3 and 196 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 </div>
@@ -2970,18 +3036,18 @@ R^2 = 1 - \left(\frac{\mathcal{L_{null}}}{\mathcal{L_{current}}}\right)^{\frac{2
 #&gt; 
 #&gt; Coefficients:
 #&gt;             Estimate Std. Error z value Pr(&gt;|z|)    
-#&gt; (Intercept)  2.33573    0.02238 104.350   &lt;2e-16 ***
-#&gt; x            0.38286    0.02254  16.986   &lt;2e-16 ***
-#&gt; g2           0.64219    0.02765  23.226   &lt;2e-16 ***
-#&gt; x:g2         0.02549    0.02850   0.894    0.371    
+#&gt; (Intercept)  2.26212    0.03335  67.835   &lt;2e-16 ***
+#&gt; x            0.45404    0.03237  14.026   &lt;2e-16 ***
+#&gt; gb           0.71285    0.04056  17.576   &lt;2e-16 ***
+#&gt; x:gb        -0.03243    0.04117  -0.788    0.431    
 #&gt; ---
 #&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #&gt; 
 #&gt; (Dispersion parameter for poisson family taken to be 1)
 #&gt; 
-#&gt;     Null deviance: 1816.48  on 399  degrees of freedom
-#&gt; Residual deviance:  385.92  on 396  degrees of freedom
-#&gt; AIC: 2157.8
+#&gt;     Null deviance: 973.20  on 199  degrees of freedom
+#&gt; Residual deviance: 235.29  on 196  degrees of freedom
+#&gt; AIC: 1114.3
 #&gt; 
 #&gt; Number of Fisher Scoring iterations: 4</code></pre>
 </div>
@@ -2992,9 +3058,9 @@ R^2 = 1 - \left(\frac{\mathcal{L_{null}}}{\mathcal{L_{current}}}\right)^{\frac{2
 </section><section id="interaction-poisson-vs-linear-2" class="slide level2"><h2>Interaction, Poisson vs Linear</h2>
 <p>The linear model is estimating a completely misleading interaction due to the mean-variance relationship of the Poisson distribution.</p>
 
-<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-59-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="576"></section><section id="interaction-poisson-vs-linear-3" class="slide level2"><h2>Interaction, Poisson vs Linear</h2>
+<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-57-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="672"></section><section id="interaction-poisson-vs-linear-3" class="slide level2"><h2>Interaction, Poisson vs Linear</h2>
 
-<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-60-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section><section id="for-a-more-extensive-example" class="slide level2"><h2>For a more extensive example…</h2>
+<img data-src="03-poisson-glm_files/figure-revealjs/unnamed-chunk-58-1.svg" class="quarto-figure quarto-figure-center r-stretch" width="960"></section><section id="for-a-more-extensive-example" class="slide level2"><h2>For a more extensive example…</h2>
 <p>In this presentation we showed how serious could be the situation when fitting the wrong distribution and link function and estimating an interaction term.</p>
 <p><a href="https://filippogambarota.github.io/files/slides/2024-aip-sviluppo.pdf">https://filippogambarota.github.io/files/slides/2024-aip-sviluppo.pdf</a></p>
 </section><section id="references" class="slide level2 smaller scrollable"><h2>References</h2>
@@ -3002,16 +3068,16 @@ R^2 = 1 - \left(\frac{\mathcal{L_{null}}}{\mathcal{L_{current}}}\right)^{\frac{2
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
 <div id="ref-Cox1989-ql" class="csl-entry" role="listitem">
-Cox, D. R., &amp; Snell, E. J. (1989). <em>Analysis of binary data, second edition</em>. CRC Press. <a href="https://play.google.com/store/books/details?id=0R8J71LCLXsC">https://play.google.com/store/books/details?id=0R8J71LCLXsC</a>
+Cox, D. R., &amp; Snell, E. J. (1989). <em><span class="nocase">Analysis of Binary Data, Second Edition</span></em>. CRC Press.
 </div>
 <div id="ref-McFadden1987-qq" class="csl-entry" role="listitem">
-McFadden, D. (1987). Regression-based specification tests for the multinomial logit model. <em>Journal of Econometrics</em>, <em>34</em>, 63–82. <a href="https://doi.org/10.1016/0304-4076(87)90067-4">https://doi.org/10.1016/0304-4076(87)90067-4</a>
+McFadden, D. (1987). <span class="nocase">Regression-based specification tests for the multinomial logit model</span>. <em>Journal of Econometrics</em>, <em>34</em>, 63–82. <a href="https://doi.org/10.1016/0304-4076(87)90067-4">https://doi.org/10.1016/0304-4076(87)90067-4</a>
 </div>
 <div id="ref-Nagelkerke1991-gr" class="csl-entry" role="listitem">
-Nagelkerke, N. J. D. (1991). A note on a general definition of the coefficient of determination. <em>Biometrika</em>, <em>78</em>, 691–692. <a href="https://doi.org/10.1093/biomet/78.3.691">https://doi.org/10.1093/biomet/78.3.691</a>
+Nagelkerke, N. J. D. (1991). <span class="nocase">A note on a general definition of the coefficient of determination</span>. <em>Biometrika</em>, <em>78</em>, 691–692. <a href="https://doi.org/10.1093/biomet/78.3.691">https://doi.org/10.1093/biomet/78.3.691</a>
 </div>
 <div id="ref-Ver_Hoef2007-jc" class="csl-entry" role="listitem">
-Ver Hoef, J. M., &amp; Boveng, P. L. (2007). Quasi-poisson vs. Negative binomial regression: How should we model overdispersed count data? <em>Ecology</em>, <em>88</em>, 2766–2772. <a href="https://doi.org/10.1890/07-0043.1">https://doi.org/10.1890/07-0043.1</a>
+Ver Hoef, J. M., &amp; Boveng, P. L. (2007). <span class="nocase">Quasi-Poisson vs. negative binomial regression: how should we model overdispersed count data?</span> <em>Ecology</em>, <em>88</em>, 2766–2772. <a href="https://doi.org/10.1890/07-0043.1">https://doi.org/10.1890/07-0043.1</a>
 </div>
 </div>
 </section></section><!-- FINAL SLIDE --><!-- END FINAL SLIDE -->

@@ -64,6 +64,7 @@ The linear combination of parameters can be applied on the link function space:
 $$
 g(\lambda) = log(\lambda) = \eta =  \beta_0 + \beta_1G + \beta_2X + \beta_3G \times X
 $$
+
 Then applying the inverse of the link function we can see the actual values:
 
 $$
@@ -256,7 +257,7 @@ summary(fit)
 Let's simulate the power for these main effects using a vector of $n$. The idea is to generate data, fit the model, extract the p-value and repeat for a lot of times.
 
 ```{r}
-#| cache: true
+
 set.seed(2023)
 ns <- c(20, 30, 50, 100, 300, 500, 1000)
 nsim <- 1000 # higher is better, just for example, better 10000
@@ -349,7 +350,6 @@ sim
 Each row is a single simulation condition:
 
 ```{r}
-#| cache: true
 set.seed(2023)
 res <- mapply(do_sim, sim$ns, sim$b0, sim$b1, sim$b2, sim$nsim, SIMPLIFY = FALSE)
 ```
@@ -424,7 +424,6 @@ dd |>
 Now, let's see the type1 error for a fixed n by using a linear model instead of GLM and fixing $\beta_3 = 0$
 
 ```{r}
-#| cache: true
 set.seed(2023)
 nsim <- 5000
 n <- 500

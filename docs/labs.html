@@ -31,6 +31,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
+<link href="./files/favicon.png" rel="icon" type="image/png">
 <script src="site_libs/quarto-listing/list.min.js"></script>
 <script src="site_libs/quarto-listing/quarto-listing.js"></script>
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
@@ -81,7 +82,7 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-title','listing-subtitle','listing-date',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-title-sort'] }],
+      valueNames: ['listing-title','listing-date',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-title-sort'] }],
       
       searchColumns: ["listing-date","listing-title","listing-author"],
     };
@@ -153,16 +154,16 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./index.html"> 
-<span class="menu-text">Home</span></a>
-  </li>  
-  <li class="nav-item">
     <a class="nav-link" href="./slides.html"> 
-<span class="menu-text">Slides</span></a>
+<span class="menu-text">slides</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link active" href="./labs.html" aria-current="page"> 
-<span class="menu-text">Labs</span></a>
+<span class="menu-text">labs</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./notes.html"> 
+<span class="menu-text">notes</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
@@ -199,7 +200,7 @@ window.Quarto = {
   <div class="quarto-title-meta-heading">Affiliation</div>
   
     <div class="quarto-title-meta-contents">
-    <p class="author">Filippo Gambarota <a href="mailto:filippo.gambarota@unipd.it" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> </p>
+    <p class="author">Filippo Gambarota <a href="mailto:filippo.gambarota@unipd.it" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> <a href="https://orcid.org/0000-0002-6666-1747" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
   </div>
   <div class="quarto-title-meta-contents">
         <p class="affiliation">
@@ -257,10 +258,6 @@ window.Quarto = {
 </th>
 
 <th>
-Subtitle
-</th>
-
-<th>
 <a class="sort" data-sort="listing-date-sort" onclick="if (this.classList.contains('sort-asc')) { this.classList.add('sort-desc'); this.classList.remove('sort-asc') } else { this.classList.add('sort-asc'); this.classList.remove('sort-desc')} return false;">Date</a>
 </th>
 
@@ -268,15 +265,12 @@ Subtitle
 </thead>
 <tbody class="list">
 
-<tr data-index="0" data-listing-date-sort="1737718455000" data-listing-file-modified-sort="1737718455960" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="13" data-listing-word-count-sort="2510" data-listing-title-sort="Lab 1" data-listing-filename-sort="lab1.qmd">
+<tr data-index="0" data-listing-date-sort="1757063354000" data-listing-file-modified-sort="1757063354136" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="13" data-listing-word-count-sort="2510" data-listing-title-sort="Lab 1" data-listing-filename-sort="lab1.qmd">
 <td>
 <a href="./labs/lab1.html" class="title listing-title">Lab 1</a>
 </td>
 <td>
-<span class="listing-subtitle">&nbsp;</span>
-</td>
-<td>
-<span class="listing-date">Jan 24, 2025</span>
+<span class="listing-date">Sep 5, 2025</span>
 </td>
 
 </tr>
@@ -284,9 +278,6 @@ Subtitle
 <tr data-index="1" data-listing-date-sort="1737718021000" data-listing-file-modified-sort="1737718021151" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="229" data-listing-title-sort="Lab 2" data-listing-filename-sort="lab2.qmd">
 <td>
 <a href="./labs/lab2.html" class="title listing-title">Lab 2</a>
-</td>
-<td>
-<span class="listing-subtitle">&nbsp;</span>
 </td>
 <td>
 <span class="listing-date">Jan 24, 2025</span>
@@ -299,62 +290,47 @@ Subtitle
 <a href="./labs/lab3.html" class="title listing-title">Lab 3</a>
 </td>
 <td>
-<span class="listing-subtitle">&nbsp;</span>
-</td>
-<td>
 <span class="listing-date">Jan 24, 2025</span>
 </td>
 
 </tr>
 
-<tr data-index="3" data-listing-date-sort="1737718032000" data-listing-file-modified-sort="1737718032867" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1087" data-listing-title-sort="Lab 4" data-listing-filename-sort="lab4.qmd">
+<tr data-index="3" data-listing-date-sort="1765213441000" data-listing-file-modified-sort="1765213441009" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1087" data-listing-title-sort="Lab 4" data-listing-filename-sort="lab4.qmd">
 <td>
 <a href="./labs/lab4.html" class="title listing-title">Lab 4</a>
 </td>
 <td>
-<span class="listing-subtitle">&nbsp;</span>
-</td>
-<td>
-<span class="listing-date">Jan 24, 2025</span>
+<span class="listing-date">Dec 8, 2025</span>
 </td>
 
 </tr>
 
-<tr data-index="4" data-listing-date-sort="1737718036000" data-listing-file-modified-sort="1737718036165" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1056" data-listing-title-sort="Lab 5" data-listing-filename-sort="lab5.qmd">
+<tr data-index="4" data-listing-date-sort="1765212718000" data-listing-file-modified-sort="1765212718589" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1054" data-listing-title-sort="Lab 5" data-listing-filename-sort="lab5.qmd">
 <td>
 <a href="./labs/lab5.html" class="title listing-title">Lab 5</a>
 </td>
 <td>
-<span class="listing-subtitle">&nbsp;</span>
-</td>
-<td>
-<span class="listing-date">Jan 24, 2025</span>
+<span class="listing-date">Dec 8, 2025</span>
 </td>
 
 </tr>
 
-<tr data-index="5" data-listing-date-sort="1737718038000" data-listing-file-modified-sort="1737718038865" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="341" data-listing-title-sort="Lab 6" data-listing-filename-sort="lab6.qmd">
+<tr data-index="5" data-listing-date-sort="1765212841000" data-listing-file-modified-sort="1765212841002" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="342" data-listing-title-sort="Lab 6" data-listing-filename-sort="lab6.qmd">
 <td>
 <a href="./labs/lab6.html" class="title listing-title">Lab 6</a>
 </td>
 <td>
-<span class="listing-subtitle">&nbsp;</span>
-</td>
-<td>
-<span class="listing-date">Jan 24, 2025</span>
+<span class="listing-date">Dec 8, 2025</span>
 </td>
 
 </tr>
 
-<tr data-index="6" data-listing-date-sort="1737718047000" data-listing-file-modified-sort="1737718047370" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="11" data-listing-word-count-sort="2193" data-listing-title-sort="Lab 7" data-listing-filename-sort="lab7.qmd">
+<tr data-index="6" data-listing-date-sort="1765214758000" data-listing-file-modified-sort="1765214758493" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="11" data-listing-word-count-sort="2187" data-listing-title-sort="Lab 7" data-listing-filename-sort="lab7.qmd">
 <td>
 <a href="./labs/lab7.html" class="title listing-title">Lab 7</a>
 </td>
 <td>
-<span class="listing-subtitle">&nbsp;</span>
-</td>
-<td>
-<span class="listing-date">Jan 24, 2025</span>
+<span class="listing-date">Dec 8, 2025</span>
 </td>
 
 </tr>

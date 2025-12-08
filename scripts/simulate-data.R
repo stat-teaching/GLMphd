@@ -214,7 +214,7 @@ save(nwords, file = "data/nwords.rda")
 
 # # psych
 
-# psych <- sim_psych(20, 1000)
-# psych <- dplyr::select(psych, id, cond, contrast, y)
+psych <- sim_psych(20, 1000)
+psych <- dplyr::select(psych, id, cond, contrast, y)
 
-# save(psych, file = "data/psych.rda")
+save(psych, file = "data/psych.rda")

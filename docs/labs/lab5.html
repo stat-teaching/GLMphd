@@ -66,6 +66,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
+<link href="../files/favicon.png" rel="icon" type="image/png">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -128,16 +129,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../index.html"> 
-<span class="menu-text">Home</span></a>
-  </li>  
-  <li class="nav-item">
     <a class="nav-link" href="../slides.html"> 
-<span class="menu-text">Slides</span></a>
+<span class="menu-text">slides</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../labs.html"> 
-<span class="menu-text">Labs</span></a>
+<span class="menu-text">labs</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../notes.html"> 
+<span class="menu-text">notes</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
@@ -184,7 +185,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <div class="quarto-title-meta-heading">Affiliation</div>
   
     <div class="quarto-title-meta-contents">
-    <p class="author">Filippo Gambarota <a href="mailto:filippo.gambarota@unipd.it" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> </p>
+    <p class="author">Filippo Gambarota <a href="mailto:filippo.gambarota@unipd.it" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> <a href="https://orcid.org/0000-0002-6666-1747" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
   </div>
   <div class="quarto-title-meta-contents">
         <p class="affiliation">
@@ -199,7 +200,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">1, 24, 2025</p>
+      <p class="date">12, 8, 2025</p>
     </div>
   </div>
   
@@ -256,26 +257,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="importing-data-and-overall-check" class="level1">
 <h1>1. Importing data and overall check</h1>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/nwords.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">here</span>(<span class="st">"data/nwords.rda"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(dat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>'data.frame':   150 obs. of  6 variables:
  $ id         : int  1 2 3 4 5 6 7 8 9 10 ...
- $ timebonding: num  23 18 20 23 11 5 15 18 29 22 ...
- $ caregiving : num  7 8 7 11 8 5 4 5 14 9 ...
+ $ timebonding: num  19 16 32 15 33 10 27 29 26 14 ...
+ $ caregiving : num  8 8 12 7 9 7 8 11 9 6 ...
  $ ses        : Factor w/ 3 levels "low","middle",..: 1 1 1 1 1 1 1 1 1 1 ...
   ..- attr(*, "contrasts")= num [1:3, 1:2] 0 1 0 0 0 1
   .. ..- attr(*, "dimnames")=List of 2
   .. .. ..$ : chr [1:3] "low" "middle" "high"
   .. .. ..$ : chr [1:2] "2" "3"
- $ babysitter : Factor w/ 2 levels "no","yes": 1 1 1 2 1 2 1 2 1 1 ...
+ $ babysitter : Factor w/ 2 levels "no","yes": 1 1 1 1 1 1 1 1 1 1 ...
   ..- attr(*, "contrasts")= num [1:2, 1] 0 1
   .. ..- attr(*, "dimnames")=List of 2
   .. .. ..$ : chr [1:2] "no" "yes"
   .. .. ..$ : chr "2"
- $ nwords     : int  24 20 16 38 14 17 17 35 30 13 ...</code></pre>
+ $ nwords     : int  18 28 46 24 27 13 16 14 27 20 ...</code></pre>
 </div>
 </div>
 <p>Check for <code>NA</code> values:</p>
@@ -317,19 +318,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output cell-output-stdout">
 <pre><code>$timebonding
   mean     sd 
-14.807  8.736 
+14.980  8.755 
 
 $caregiving
  mean    sd 
-5.420 2.841 
+5.587 2.560 
 
 $timebonding0
  mean    sd 
-0.000 8.736 
+0.000 8.755 
 
 $caregiving0
- mean    sd 
-0.000 2.841 </code></pre>
+mean   sd 
+0.00 2.56 </code></pre>
 </div>
 </div>
 </section>
@@ -338,20 +339,20 @@ $caregiving0
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(dat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>       id          timebonding      caregiving        ses     babysitter
- Min.   :  1.00   Min.   : 0.00   Min.   : 0.00   low   :45   no :83    
- 1st Qu.: 38.25   1st Qu.: 8.00   1st Qu.: 4.00   middle:75   yes:67    
- Median : 75.50   Median :14.00   Median : 5.00   high  :30             
- Mean   : 75.50   Mean   :14.81   Mean   : 5.42                         
- 3rd Qu.:112.75   3rd Qu.:21.00   3rd Qu.: 7.00                         
- Max.   :150.00   Max.   :37.00   Max.   :14.00                         
-     nwords       timebonding0       caregiving0   
- Min.   : 2.00   Min.   :-14.8067   Min.   :-5.42  
- 1st Qu.:10.00   1st Qu.: -6.8067   1st Qu.:-1.42  
- Median :17.00   Median : -0.8067   Median :-0.42  
- Mean   :19.96   Mean   :  0.0000   Mean   : 0.00  
- 3rd Qu.:27.00   3rd Qu.:  6.1933   3rd Qu.: 1.58  
- Max.   :54.00   Max.   : 22.1933   Max.   : 8.58  </code></pre>
+<pre><code>       id          timebonding      caregiving         ses     babysitter
+ Min.   :  1.00   Min.   : 0.00   Min.   : 0.000   low   :45   no :103   
+ 1st Qu.: 38.25   1st Qu.: 8.00   1st Qu.: 4.000   middle:75   yes: 47   
+ Median : 75.50   Median :15.50   Median : 5.000   high  :30             
+ Mean   : 75.50   Mean   :14.98   Mean   : 5.587                         
+ 3rd Qu.:112.75   3rd Qu.:21.75   3rd Qu.: 7.000                         
+ Max.   :150.00   Max.   :36.00   Max.   :13.000                         
+     nwords       timebonding0     caregiving0     
+ Min.   : 0.00   Min.   :-14.98   Min.   :-5.5867  
+ 1st Qu.: 9.00   1st Qu.: -6.98   1st Qu.:-1.5867  
+ Median :16.00   Median :  0.52   Median :-0.5867  
+ Mean   :18.75   Mean   :  0.00   Mean   : 0.0000  
+ 3rd Qu.:25.00   3rd Qu.:  6.77   3rd Qu.: 1.4133  
+ Max.   :58.00   Max.   : 21.02   Max.   : 7.4133  </code></pre>
 </div>
 </div>
 <p>Let’s do some plotting of predictors:</p>
@@ -560,23 +561,23 @@ glm(formula = nwords ~ timebonding + caregiving + babysitter +
     ses, family = poisson(link = "log"), data = dat)
 
 Coefficients:
-              Estimate Std. Error z value Pr(&gt;|z|)    
-(Intercept)    2.38233    0.08162  29.187  &lt; 2e-16 ***
-timebonding    0.02468    0.00298   8.283  &lt; 2e-16 ***
-caregiving     0.04572    0.01139   4.014 5.97e-05 ***
-babysitteryes -0.05342    0.04051  -1.319    0.187    
-sesmiddle     -0.03297    0.04910  -0.672    0.502    
-seshigh       -0.11921    0.08057  -1.480    0.139    
+               Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)    2.143168   0.086143  24.879  &lt; 2e-16 ***
+timebonding    0.033816   0.003239  10.439  &lt; 2e-16 ***
+caregiving     0.042120   0.012418   3.392 0.000694 ***
+babysitteryes  0.022314   0.048813   0.457 0.647577    
+sesmiddle     -0.007068   0.049779  -0.142 0.887094    
+seshigh       -0.221124   0.079552  -2.780 0.005442 ** 
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 (Dispersion parameter for poisson family taken to be 1)
 
-    Null deviance: 1074.54  on 149  degrees of freedom
-Residual deviance:  703.21  on 144  degrees of freedom
-AIC: 1411.1
+    Null deviance: 1085.21  on 149  degrees of freedom
+Residual deviance:  612.78  on 144  degrees of freedom
+AIC: 1307.4
 
-Number of Fisher Scoring iterations: 4</code></pre>
+Number of Fisher Scoring iterations: 5</code></pre>
 </div>
 </div>
 <p>And always plotting before anything else:</p>
@@ -601,11 +602,11 @@ Number of Fisher Scoring iterations: 4</code></pre>
 </div>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>            Test stat Pr(&gt;|Test stat|)   
-timebonding    8.4288         0.003693 **
-caregiving     6.5550         0.010459 * 
-babysitter                               
-ses                                      
+<pre><code>            Test stat Pr(&gt;|Test stat|)  
+timebonding    5.5386          0.01860 *
+caregiving     4.9330          0.02635 *
+babysitter                              
+ses                                     
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
@@ -676,28 +677,28 @@ glm(formula = nwords ~ timebonding * ses + caregiving * ses +
 
 Coefficients:
                            Estimate Std. Error z value Pr(&gt;|z|)    
-(Intercept)                2.449904   0.130572  18.763  &lt; 2e-16 ***
-timebonding                0.025282   0.005037   5.020 5.18e-07 ***
-sesmiddle                 -0.118244   0.147663  -0.801   0.4233    
-seshigh                   -0.731529   0.172366  -4.244 2.20e-05 ***
-caregiving                 0.036904   0.019566   1.886   0.0593 .  
-babysitteryes              0.208781   0.106645   1.958   0.0503 .  
-timebonding:sesmiddle      0.012661   0.006201   2.042   0.0412 *  
-timebonding:seshigh        0.057886   0.012124   4.775 1.80e-06 ***
-sesmiddle:caregiving      -0.026875   0.024638  -1.091   0.2754    
-seshigh:caregiving        -0.027161   0.039418  -0.689   0.4908    
-timebonding:babysitteryes -0.029552   0.006247  -4.731 2.24e-06 ***
-caregiving:babysitteryes   0.039355   0.019464   2.022   0.0432 *  
+(Intercept)                2.525633   0.133700  18.890  &lt; 2e-16 ***
+timebonding                0.019826   0.005177   3.830 0.000128 ***
+sesmiddle                 -0.613019   0.159444  -3.845 0.000121 ***
+seshigh                   -0.343371   0.211727  -1.622 0.104853    
+caregiving                 0.032736   0.019744   1.658 0.097307 .  
+babysitteryes             -0.056880   0.149660  -0.380 0.703898    
+timebonding:sesmiddle      0.021714   0.007058   3.077 0.002093 ** 
+timebonding:seshigh        0.020462   0.012628   1.620 0.105147    
+sesmiddle:caregiving       0.025867   0.027244   0.949 0.342389    
+seshigh:caregiving        -0.066959   0.055576  -1.205 0.228270    
+timebonding:babysitteryes  0.003147   0.008862   0.355 0.722495    
+caregiving:babysitteryes  -0.000731   0.038348  -0.019 0.984792    
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 (Dispersion parameter for poisson family taken to be 1)
 
-    Null deviance: 1074.54  on 149  degrees of freedom
-Residual deviance:  654.95  on 138  degrees of freedom
-AIC: 1374.8
+    Null deviance: 1085.21  on 149  degrees of freedom
+Residual deviance:  582.35  on 138  degrees of freedom
+AIC: 1289
 
-Number of Fisher Scoring iterations: 4</code></pre>
+Number of Fisher Scoring iterations: 5</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -719,8 +720,8 @@ Number of Fisher Scoring iterations: 4</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code># Overdispersion test
 
-       dispersion ratio =   4.710
-  Pearson's Chi-Squared = 649.938
+       dispersion ratio =   4.352
+  Pearson's Chi-Squared = 600.567
                 p-value = &lt; 0.001</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>fit3 <span class="ot">&lt;-</span> MASS<span class="sc">::</span><span class="fu">glm.nb</span>(nwords <span class="sc">~</span> timebonding<span class="sc">*</span>ses <span class="sc">+</span> caregiving<span class="sc">*</span>ses <span class="sc">+</span> timebonding<span class="sc">*</span>babysitter <span class="sc">+</span> caregiving<span class="sc">*</span>babysitter, <span class="at">data =</span> dat)</span>
@@ -731,37 +732,37 @@ Number of Fisher Scoring iterations: 4</code></pre>
 Call:
 MASS::glm.nb(formula = nwords ~ timebonding * ses + caregiving * 
     ses + timebonding * babysitter + caregiving * babysitter, 
-    data = dat, init.theta = 5.511283984, link = log)
+    data = dat, init.theta = 6.186322679, link = log)
 
 Coefficients:
-                          Estimate Std. Error z value Pr(&gt;|z|)    
-(Intercept)                2.42447    0.30858   7.857 3.94e-15 ***
-timebonding                0.02188    0.01220   1.793   0.0729 .  
-sesmiddle                 -0.12795    0.33725  -0.379   0.7044    
-seshigh                   -0.65153    0.35611  -1.830   0.0673 .  
-caregiving                 0.04869    0.04756   1.024   0.3060    
-babysitteryes              0.20747    0.20566   1.009   0.3131    
-timebonding:sesmiddle      0.01417    0.01450   0.978   0.3282    
-timebonding:seshigh        0.05378    0.02394   2.246   0.0247 *  
-sesmiddle:caregiving      -0.02627    0.05691  -0.462   0.6444    
-seshigh:caregiving        -0.03298    0.08127  -0.406   0.6849    
-timebonding:babysitteryes -0.02536    0.01392  -1.822   0.0684 .  
-caregiving:babysitteryes   0.02732    0.04305   0.635   0.5257    
+                           Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)                2.471985   0.292300   8.457   &lt;2e-16 ***
+timebonding                0.023927   0.011268   2.123   0.0337 *  
+sesmiddle                 -0.659979   0.338304  -1.951   0.0511 .  
+seshigh                   -0.432890   0.414592  -1.044   0.2964    
+caregiving                 0.028743   0.045294   0.635   0.5257    
+babysitteryes              0.073044   0.275110   0.266   0.7906    
+timebonding:sesmiddle      0.020069   0.015103   1.329   0.1839    
+timebonding:seshigh        0.023178   0.023580   0.983   0.3256    
+sesmiddle:caregiving       0.040990   0.059430   0.690   0.4904    
+seshigh:caregiving        -0.054526   0.104723  -0.521   0.6026    
+timebonding:babysitteryes -0.007602   0.017341  -0.438   0.6611    
+caregiving:babysitteryes   0.009204   0.075962   0.121   0.9036    
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-(Dispersion parameter for Negative Binomial(5.5113) family taken to be 1)
+(Dispersion parameter for Negative Binomial(6.1863) family taken to be 1)
 
-    Null deviance: 249.03  on 149  degrees of freedom
-Residual deviance: 154.97  on 138  degrees of freedom
-AIC: 1093
+    Null deviance: 287.77  on 149  degrees of freedom
+Residual deviance: 157.42  on 138  degrees of freedom
+AIC: 1061.6
 
 Number of Fisher Scoring iterations: 1
 
-              Theta:  5.511 
-          Std. Err.:  0.835 
+              Theta:  6.186 
+          Std. Err.:  0.987 
 
- 2 x log-likelihood:  -1066.951 </code></pre>
+ 2 x log-likelihood:  -1035.604 </code></pre>
 </div>
 </div>
 <p>Now overdispersion is taken into account and standard errors are larger:</p>
@@ -774,45 +775,45 @@ Number of Fisher Scoring iterations: 1
   "log"), data = dat)
 2: MASS::glm.nb(formula = nwords ~ timebonding * ses + caregiving * ses + 
   timebonding * babysitter + caregiving * babysitter, data = dat, init.theta =
-   5.511283984, link = log)
+   6.186322679, link = log)
 
-                           Model 1  Model 2
-(Intercept)                  2.450    2.424
-SE                           0.131    0.309
-                                           
-timebonding                0.02528  0.02188
-SE                         0.00504  0.01220
-                                           
-sesmiddle                   -0.118   -0.128
-SE                           0.148    0.337
-                                           
-seshigh                     -0.732   -0.652
-SE                           0.172    0.356
-                                           
-caregiving                  0.0369   0.0487
-SE                          0.0196   0.0476
-                                           
-babysitteryes                0.209    0.207
-SE                           0.107    0.206
-                                           
-timebonding:sesmiddle       0.0127   0.0142
-SE                          0.0062   0.0145
-                                           
-timebonding:seshigh         0.0579   0.0538
-SE                          0.0121   0.0239
-                                           
-sesmiddle:caregiving       -0.0269  -0.0263
-SE                          0.0246   0.0569
-                                           
-seshigh:caregiving         -0.0272  -0.0330
-SE                          0.0394   0.0813
-                                           
-timebonding:babysitteryes -0.02955 -0.02536
-SE                         0.00625  0.01392
-                                           
-caregiving:babysitteryes    0.0394   0.0273
-SE                          0.0195   0.0431
-                                           </code></pre>
+                            Model 1   Model 2
+(Intercept)                   2.526     2.472
+SE                            0.134     0.292
+                                             
+timebonding                 0.01983   0.02393
+SE                          0.00518   0.01127
+                                             
+sesmiddle                    -0.613    -0.660
+SE                            0.159     0.338
+                                             
+seshigh                      -0.343    -0.433
+SE                            0.212     0.415
+                                             
+caregiving                   0.0327    0.0287
+SE                           0.0197    0.0453
+                                             
+babysitteryes               -0.0569    0.0730
+SE                           0.1497    0.2751
+                                             
+timebonding:sesmiddle       0.02171   0.02007
+SE                          0.00706   0.01510
+                                             
+timebonding:seshigh          0.0205    0.0232
+SE                           0.0126    0.0236
+                                             
+sesmiddle:caregiving         0.0259    0.0410
+SE                           0.0272    0.0594
+                                             
+seshigh:caregiving          -0.0670   -0.0545
+SE                           0.0556    0.1047
+                                             
+timebonding:babysitteryes   0.00315  -0.00760
+SE                          0.00886   0.01734
+                                             
+caregiving:babysitteryes  -0.000731  0.009204
+SE                         0.038348  0.075962
+                                             </code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co"># test statistics for the poisson model</span></span>
 <span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -821,19 +822,19 @@ SE                          0.0195   0.0431
 <span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">negative_binomial =</span> fit3<span class="sc">$</span>coefficients<span class="sc">/</span><span class="fu">sqrt</span>(<span class="fu">diag</span>(<span class="fu">vcov</span>(fit3)))</span>
 <span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                             poisson negative_binomial
-(Intercept)               18.7628976         7.8567464
-timebonding                5.0195056         1.7932210
-sesmiddle                 -0.8007732        -0.3794009
-seshigh                   -4.2440539        -1.8295760
-caregiving                 1.8861966         1.0237380
-babysitteryes              1.9577133         1.0087898
-timebonding:sesmiddle      2.0417940         0.9777883
-timebonding:seshigh        4.7746326         2.2463830
-sesmiddle:caregiving      -1.0907766        -0.4615336
-seshigh:caregiving        -0.6890598        -0.4057725
-timebonding:babysitteryes -4.7305937        -1.8221897
-caregiving:babysitteryes   2.0219802         0.6345467</code></pre>
+<pre><code>                              poisson negative_binomial
+(Intercept)               18.89022175         8.4570188
+timebonding                3.82970558         2.1234343
+sesmiddle                 -3.84471431        -1.9508488
+seshigh                   -1.62176628        -1.0441345
+caregiving                 1.65805200         0.6345780
+babysitteryes             -0.38006414         0.2655100
+timebonding:sesmiddle      3.07673073         1.3287914
+timebonding:seshigh        1.62039901         0.9829331
+sesmiddle:caregiving       0.94945528         0.6897160
+seshigh:caregiving        -1.20482778        -0.5206646
+timebonding:babysitteryes  0.35512658        -0.4383909
+caregiving:babysitteryes  -0.01906131         0.1211672</code></pre>
 </div>
 </div>
 

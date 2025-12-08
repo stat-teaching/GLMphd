@@ -55,7 +55,7 @@ This dataset `nwords` represent a developmental psychology study investigating t
 # 1. Importing data and overall check
 
 ```{r, eval = FALSE}
-dat <- read.csv("data/nwords.csv")
+load(here("data/nwords.rda"))
 ```
 
 ```{r}

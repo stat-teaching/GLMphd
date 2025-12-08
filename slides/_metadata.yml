@@ -10,7 +10,7 @@ format:
     html-math-method: mathjax
     filters:
       - nutshell
-      - code-fullscreen
+    css: ../style.css
 from: markdown+emoji
 final-slide: false
 df-print: tibble

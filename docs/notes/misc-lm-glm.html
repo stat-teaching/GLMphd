@@ -1,0 +1,1616 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.21">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Filippo Gambarota">
+<meta name="dcterms.date" content="2025-12-08">
+
+<title>Notes on (Generalized) Linear Models – Generalized Linear Models</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../files/favicon.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ea1d7ac60288e0f1efdbc993fd8432ae.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-59197fdd00cae94ec3a21e9916b526e4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Generalized Linear Models</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../slides.html"> 
+<span class="menu-text">slides</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../labs.html"> 
+<span class="menu-text">labs</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../notes.html"> 
+<span class="menu-text">notes</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/stat-teaching/GLMphd"> <i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#statistical-models" id="toc-statistical-models" class="nav-link active" data-scroll-target="#statistical-models">Statistical models</a>
+  <ul class="collapse">
+  <li><a href="#systematic-component" id="toc-systematic-component" class="nav-link" data-scroll-target="#systematic-component">Systematic component</a></li>
+  <li><a href="#random-component" id="toc-random-component" class="nav-link" data-scroll-target="#random-component">Random component</a></li>
+  <li><a href="#link-function" id="toc-link-function" class="nav-link" data-scroll-target="#link-function">Link function</a></li>
+  <li><a href="#what-is-linear-about-generalized-linear-models" id="toc-what-is-linear-about-generalized-linear-models" class="nav-link" data-scroll-target="#what-is-linear-about-generalized-linear-models">What is linear about (generalized) linear models</a></li>
+  <li><a href="#matrix-formulation" id="toc-matrix-formulation" class="nav-link" data-scroll-target="#matrix-formulation">Matrix formulation</a></li>
+  <li><a href="#focus-on-the-standard-linear-model" id="toc-focus-on-the-standard-linear-model" class="nav-link" data-scroll-target="#focus-on-the-standard-linear-model">Focus on the standard linear model</a></li>
+  </ul></li>
+  <li><a href="#extra" id="toc-extra" class="nav-link" data-scroll-target="#extra">Extra</a>
+  <ul class="collapse">
+  <li><a href="#covariance-and-correlation" id="toc-covariance-and-correlation" class="nav-link" data-scroll-target="#covariance-and-correlation">Covariance and Correlation</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Notes on (Generalized) Linear Models</h1>
+<p class="subtitle lead">Mixed notes about <code>lm</code> and <code>glm</code></p>
+</div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author">Filippo Gambarota <a href="mailto:filippo.gambarota@unipd.it" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> <a href="https://orcid.org/0000-0002-6666-1747" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            University of Padova
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">December 8, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="statistical-models" class="level2">
+<h2 class="anchored" data-anchor-id="statistical-models">Statistical models</h2>
+<p>Any statistical model is composed by a <strong>systematic component</strong> and a <strong>random component</strong>.</p>
+<section id="systematic-component" class="level3">
+<h3 class="anchored" data-anchor-id="systematic-component">Systematic component</h3>
+<p>The <strong>systematic component</strong> is a mathematical relationship between a set of <em>variables</em> (usually called predictors or independent variables) <span class="math inline">\(x_p\)</span> (<span class="math inline">\(p = 1, 2, \dots, p\)</span>) and a set of <em>unknown regression parameters</em> <span class="math inline">\(\beta_0, \beta_1, \dots, \beta_p\)</span>. The constant term <span class="math inline">\(\beta_0\)</span> (i.e., the intercept) increases the total number of coefficients <span class="math inline">\(p' = p + 1\)</span>. If the intercept is not included <span class="math inline">\(p' = p\)</span>.</p>
+<p><span class="math inline">\(\mu_i\)</span> is the expected value (i.e., the mean) of the <span class="math inline">\(i\)</span>-th observation with certain values of <span class="math inline">\(x_p\)</span> and a set of coefficients <span class="math inline">\(\beta_j\)</span>. Formally, <span class="math inline">\(\mu_i = \mbox{E}[y_i]\)</span></p>
+<p>For example, assuming to have two predictors <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span>, a systematic component could be:</p>
+<p><span id="eq-lm-base"><span class="math display">\[
+\mu_i = \beta_0 + \beta_1x_{1i} + \beta_2x_{2i}
+\tag{1}\]</span></span></p>
+<p>Basically this equation describes how the expected value of the random variable <span class="math inline">\(Y\)</span> varies when considering two predictors <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span>.</p>
+<p>To generalize, the previous equations can be written in matrix form thus considering any number of observations <span class="math inline">\(n\)</span>, predictors <span class="math inline">\(p\)</span> and model coefficients <span class="math inline">\(j\)</span>:</p>
+<p><span id="eq-lm-mat"><span class="math display">\[
+\mathop{\boldsymbol{\mu}}\underset{n \times 1}{} =
+\mathop{\mathbf{X}}\underset{n \times p'}{} \,
+\mathop{\boldsymbol{\beta}}\underset{p' \times 1}{}
+\tag{2}\]</span></span></p>
+<p>Notice that we already defined <span class="math inline">\(p'\)</span> as the number of coefficients plus the constant term (i.e., the intercept) if present. This means that <span class="math inline">\(\mathop{\mathbf{X}}\underset{n \times p'}{}\)</span> should have dimension <span class="math inline">\(p\)</span> and not <span class="math inline">\(p'\)</span>. This is the reason why when the model includes the intercept we always have an extra column of ones. In later sections about matrix algebra the reason will be more clear. The <span class="math inline">\(\mathop{\mathbf{X}}\underset{n \times p'}{}\)</span> is called the model matrix. For example, let’s see the difference between the dataset and the design matrix in R. Let’s simulate two predictors <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># this is our dataset</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x1 =</span> <span class="fu">rnorm</span>(<span class="dv">10</span>), <span class="at">x2 =</span> <span class="fu">rnorm</span>(<span class="dv">10</span>))</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            x1          x2
+1 -1.250208642 -1.50879085
+2  0.184053811 -0.66475804
+3 -1.322829265  1.12556252
+4  0.510623382  0.45624125
+5 -0.008183281  0.02901572
+6 -0.901865670  0.09945015</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># using the model.matrix() function we can create X. p' = p + 1</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># we need to include the same formula as the model we want to use</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> x1 <span class="sc">+</span> x2, <span class="at">data =</span> dat)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(X)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  (Intercept)           x1          x2
+1           1 -1.250208642 -1.50879085
+2           1  0.184053811 -0.66475804
+3           1 -1.322829265  1.12556252
+4           1  0.510623382  0.45624125
+5           1 -0.008183281  0.02901572
+6           1 -0.901865670  0.09945015</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># same model matrix but without the intercept p' = p</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>X0 <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> <span class="dv">0</span> <span class="sc">+</span> x1 <span class="sc">+</span> x2, <span class="at">data =</span> dat)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(X0)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            x1          x2
+1 -1.250208642 -1.50879085
+2  0.184053811 -0.66475804
+3 -1.322829265  1.12556252
+4  0.510623382  0.45624125
+5 -0.008183281  0.02901572
+6 -0.901865670  0.09945015</code></pre>
+</div>
+</div>
+</section>
+<section id="random-component" class="level3">
+<h3 class="anchored" data-anchor-id="random-component">Random component</h3>
+<p>The <strong>random component</strong> describes the (random) variation around the systematic component. The <strong>random component</strong> usually define the type of model used. In fact, different models can have the same systematic component but different random components.</p>
+<p>We can use the term <span class="math inline">\(\mbox{var}[y_i]\)</span> to define the variability of our response variable. For example, when we can make the assumption that <span class="math inline">\(\mbox{var}[y_i] = \sigma^2\)</span>. Notice that we do not have a subscript <span class="math inline">\(i\)</span> because we are making the assumption that the variance is the same for each observation.</p>
+<p>Another assumption could be that the variation around <span class="math inline">\(\mu_i\)</span> (the expected value considering a certain combination of the random component) is regulated by a Gaussian distribution with a constant variance. In other terms we can write:</p>
+<p><span class="math display">\[
+y_i \sim N(\mu_i, \sigma^2)
+\]</span></p>
+<p>With <span class="math inline">\(\sim\)</span> that means “distributed as” and <span class="math inline">\(N\)</span> in this case indicating a Gaussian distribution.</p>
+<p>This means that each observed value <span class="math inline">\(y_i\)</span> comes from a Gaussian distribution with mean <span class="math inline">\(\mu_i\)</span> (a certain combination of the <em>systematic component</em>) and variance <span class="math inline">\(\sigma^2\)</span> (common for all observations). This is only one of the possible random components but it is very common because it exactly describes what is usually called linear regression.</p>
+<p>Probably you are more familiar with this equation:</p>
+<p><span class="math display">\[
+y_i = \mu_i + \epsilon_i
+\]</span></p>
+<p>With <span class="math inline">\(\mu_i\)</span> as <span class="math inline">\(\beta_0 + \beta_1x_{1i} + \dots + \beta_px_{pi}\)</span> and <span class="math inline">\(\epsilon_i \sim N(0, \sigma^2)\)</span>. This is exactly the same model but here focused on expressing residuals <span class="math inline">\(\epsilon_i = y_i - \mu_i\)</span> with expected value of 0.</p>
+</section>
+<section id="link-function" class="level3">
+<h3 class="anchored" data-anchor-id="link-function">Link function</h3>
+<p>A generalization of the <em>systematic component</em> includes the introduction of the <strong>link function</strong> <span class="math inline">\(g(\cdot)\)</span> The link function is a monotonic and differentiable function mapping the relationship between the <em>systematic component</em> and the <em>random component</em>. We need to differentiate between <span class="math inline">\(\mu_i\)</span> as the expected value of the random variable <span class="math inline">\(Y\)</span> in the original scale and <span class="math inline">\(\eta_i\)</span> as the expected value of the random variable after applying the link function. In other terms:</p>
+<p><span class="math display">\[
+\eta_i = g(\mu_i)
+\]</span></p>
+<p><span class="math display">\[
+\mu_i = g^{-1}(\eta_i)
+\]</span></p>
+<p>There are several link functions such as the logarithm or the logit. A special type of link function is called <em>identity</em> where <span class="math inline">\(\mu_i = \eta_i\)</span>. This is the link function used in the standard linear model. Other link functions are always paired with the <em>inverse</em> link function. For example, if <span class="math inline">\(g(\eta_i) = \mbox{log}(\mu_i)\)</span> then <span class="math inline">\(\mu_i = g(\eta_i)^{-1} = e^{\eta_i}\)</span>. In other terms the exponential is the inverse link function of the logarithm.</p>
+</section>
+<section id="what-is-linear-about-generalized-linear-models" class="level3">
+<h3 class="anchored" data-anchor-id="what-is-linear-about-generalized-linear-models">What is linear about (generalized) linear models</h3>
+<p>The usual term for linear is about the shape of the function. For example, a straight line <span class="math inline">\(\mu_i = \beta_0 + \beta_1x_{1i}\)</span> is considered a linear relationship. On the other side, a quadratic relationship in the form <span class="math inline">\(\mu_i = \beta_0 + \beta_1x_{1i} + \beta_2x^2_{1i}\)</span> is not a linear relationship.</p>
+<div class="cell" data-fig-heigth="7">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="misc-lm-glm_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We know that we can include <span class="math inline">\(x^2\)</span> as predictor in a linear regression. This means that the linear regression can estimate non-linear relationships? In fact, the <strong>linearity</strong> assumed by the (generalized) linear regression is called linearity in the parameters and not in the predictors. In other terms the coefficients of the model are always additive (<span class="math inline">\(\beta_0 + \beta_1\)</span>) while predictors can be squared, divided, multiplied (as in interactions), etc.</p>
+</section>
+<section id="matrix-formulation" class="level3">
+<h3 class="anchored" data-anchor-id="matrix-formulation">Matrix formulation</h3>
+<p>Matrix notation has already been used above and it is very useful to write regression models more compactly. We use bold letters such as <span class="math inline">\(\mathbf{y}\)</span> to indicate a vector or a matrix while <span class="math inline">\(y_i\)</span> indicate a single number (also known as <em>scalar</em>). A matrix is a two-dimensional data structure with <span class="math inline">\(p\)</span> rows and <span class="math inline">\(q\)</span> columns is called a <span class="math inline">\(p \times q\)</span> matrix (the total number of elements is <span class="math inline">\(p \times q\)</span>). A vector is a special type of matrix where one of the two dimensions has length 1.</p>
+<p><span class="math display">\[
+\begin{aligned}
+\mathbf{A} &amp;=
+\begin{bmatrix}
+a_{11} &amp; a_{12} &amp; \cdots &amp; a_{1q} \\
+a_{21} &amp; a_{22} &amp; \cdots &amp; a_{2q} \\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+a_{p1} &amp; a_{p2} &amp; \cdots &amp; a_{pq}
+\end{bmatrix}
+\qquad
+\mathbf{v} &amp;=
+\begin{bmatrix}
+v_{1} \\
+v_{2} \\
+\vdots \\
+v_{p}
+\end{bmatrix}
+\qquad
+\mathbf{w} &amp;=
+\begin{bmatrix}
+w_{1} &amp; w_{2} &amp; \cdots &amp; w_{q}
+\end{bmatrix}
+\end{aligned}
+\]</span></p>
+<p>In R:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>(A <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span> <span class="dv">3</span>, <span class="at">ncol =</span> <span class="dv">3</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1] [,2] [,3]
+[1,]    0    0    0
+[2,]    0    0    0
+[3,]    0    0    0</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>(v <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span> <span class="dv">3</span>, <span class="at">ncol =</span> <span class="dv">1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1]
+[1,]    0
+[2,]    0
+[3,]    0</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>(w <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span> <span class="dv">1</span>, <span class="at">ncol =</span> <span class="dv">3</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1] [,2] [,3]
+[1,]    0    0    0</code></pre>
+</div>
+</div>
+<p>In this context, <span class="math inline">\(\mathbf{v} = \mathbf{w}^{T}\)</span> where <span class="math inline">\(T\)</span> stands for <em>transponse</em> that means switching rows and columns. Note that in R doing <code>x &lt;- c(1, 2, 3, ...)</code> is creating a vector that by definition is a one-dimensional structure that is treated differently compared to a matrix with one of the two dimension fixed to 1.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t</span>(v) <span class="sc">==</span> w <span class="co"># same, only because we have the same data. "same" means in terms of dimensions length</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1] [,2] [,3]
+[1,] TRUE TRUE TRUE</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>(x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0 0 0</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># different class, in R</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "numeric"</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(w)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "matrix" "array" </code></pre>
+</div>
+</div>
+<p>The most important operation of matrix algebra is matrix multiplication. The idea is simple but not quite intutive. Let’s assume to have two <span class="math inline">\(3 \times 3\)</span> matrices and we want to make some operations.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>m1 <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">matrix</span>(<span class="fu">rnorm</span>(<span class="dv">9</span>), <span class="dv">3</span>, <span class="dv">3</span>), <span class="dv">2</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>m2 <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">matrix</span>(<span class="fu">rnorm</span>(<span class="dv">9</span>), <span class="dv">3</span>, <span class="dv">3</span>), <span class="dv">2</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>m1</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1]  [,2]  [,3]
+[1,] 0.40  0.51 -0.45
+[2,] 1.13 -0.19 -1.16
+[3,] 1.36  0.60  0.08</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>m2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      [,1] [,2] [,3]
+[1,]  0.33 1.15 0.16
+[2,] -0.42 0.19 1.78
+[3,] -1.45 0.60 0.00</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># adding, element-wise</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>m1 <span class="sc">+</span> m2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      [,1] [,2]  [,3]
+[1,]  0.73 1.66 -0.29
+[2,]  0.71 0.00  0.62
+[3,] -0.09 1.20  0.08</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># multiplication, element-wise</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>m1 <span class="sc">*</span> m2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        [,1]    [,2]    [,3]
+[1,]  0.1320  0.5865 -0.0720
+[2,] -0.4746 -0.0361 -2.0648
+[3,] -1.9720  0.3600  0.0000</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># adding a scalar</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>m1 <span class="sc">+</span> <span class="dv">10</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      [,1]  [,2]  [,3]
+[1,] 10.40 10.51  9.55
+[2,] 11.13  9.81  8.84
+[3,] 11.36 10.60 10.08</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># multipliying for a scalar</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>m1 <span class="sc">*</span> <span class="dv">2</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1]  [,2]  [,3]
+[1,] 0.80  1.02 -0.90
+[2,] 2.26 -0.38 -2.32
+[3,] 2.72  1.20  0.16</code></pre>
+</div>
+</div>
+<p>But the actual matrix operation is a different thing. To multiply two matrices we need some constrains:</p>
+<ul>
+<li>the number of columns of the left matrix need be the same as the number of rows in the second matrix</li>
+<li>the matrix multiplication is not commutative <span class="math inline">\(\mathbf{M}_1\mathbf{M}_2 \neq \mathbf{M}_2\mathbf{M}_1\)</span></li>
+</ul>
+<p>The actual operation can be summarised as:</p>
+<ol type="1">
+<li>taking the first row of the left matrix</li>
+<li>takes the product element-wise with the first column of the right matrix (also called dot product of two vectors)</li>
+<li>takes the sum of all products</li>
+<li>repeat for each row and each column</li>
+</ol>
+<p>This means that the resulting matrix will have as many rows as the left matrix and as many columns as the right matrix.</p>
+<p>Let’s do it with our matrices:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># manually m1m2</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(m1) <span class="sc">==</span> <span class="fu">ncol</span>(m2) <span class="co"># TRUE, we can multiply</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, <span class="fu">nrow</span>(m1), <span class="fu">ncol</span>(m2)) <span class="co"># 9 elements</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(m1)){</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(m2)){</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>        res[i, j] <span class="ot">&lt;-</span> <span class="fu">sum</span>(m1[i, ] <span class="sc">*</span> m2[, j])</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>res</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       [,1]   [,2]    [,3]
+[1,] 0.5703 0.2869  0.9718
+[2,] 2.1347 0.5674 -0.1574
+[3,] 0.0808 1.7260  1.2856</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># or directly using %*% i.e. the matrix multiplication operator</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>m1 <span class="sc">%*%</span> m2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       [,1]   [,2]    [,3]
+[1,] 0.5703 0.2869  0.9718
+[2,] 2.1347 0.5674 -0.1574
+[3,] 0.0808 1.7260  1.2856</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A dot-product is essentially a matrix multiplication between two vectors one vertical and one horizontal thus a column matrix and a row matrix:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>v1 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">10</span>)</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>v2 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">10</span>)</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>v1; v2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] -1.2454991  0.5421673 -1.1880802  0.5412474 -0.8244836 -0.5211182
+ [7] -0.5099234  0.2591099  0.7133245 -0.5469705</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] -0.6720441 -1.6693522 -1.0000110  0.8684658  0.1851481 -1.2901236
+ [7] -0.4875715 -1.7292324 -0.3849759  0.1112608</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># dot product</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(v1 <span class="sc">*</span> v2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.574859</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># with matrices</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>v1 <span class="sc">%*%</span> v2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         [,1]
+[1,] 1.574859</code></pre>
+</div>
+</div>
+</div>
+</div>
+<section id="matrix-formulation-of-the-systematic-component" class="level4">
+<h4 class="anchored" data-anchor-id="matrix-formulation-of-the-systematic-component">Matrix formulation of the systematic component</h4>
+<p>Why this is useful? What we did in <a href="#eq-lm-base" class="quarto-xref">Equation&nbsp;1</a> is basically summing all the multiplications between each predictor value for each observation <span class="math inline">\(x_{pi}\)</span> and the corresponding coefficient <span class="math inline">\(\beta_p\)</span>. Let’s imagine to have a simple dataset with two predictors <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span> and three coefficients <span class="math inline">\(\beta_0\)</span> (the intercept) and <span class="math inline">\(\beta_1\)</span> (the slope for <span class="math inline">\(x_1\)</span>) and <span class="math inline">\(\beta_2\)</span> (the slope for <span class="math inline">\(x_2\)</span>):</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x1 =</span> <span class="fu">rnorm</span>(<span class="dv">10</span>), <span class="at">x2 =</span> <span class="fu">rnorm</span>(<span class="dv">10</span>))</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>b0 <span class="ot">&lt;-</span> <span class="fl">0.2</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>b1 <span class="ot">&lt;-</span> <span class="fl">0.1</span></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>b2 <span class="ot">&lt;-</span> <span class="fl">0.05</span></span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a><span class="co"># mu = systematic component</span></span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>(mu <span class="ot">&lt;-</span> <span class="fu">with</span>(dat, b0 <span class="sc">+</span> b1 <span class="sc">*</span> x1 <span class="sc">+</span> b2 <span class="sc">*</span> x2))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 0.29264058 0.18530229 0.57560211 0.06721370 0.31887366 0.13906293
+ [7] 0.34571744 0.09041619 0.24862708 0.22772352</code></pre>
+</div>
+</div>
+<p>The same operation can be computed using matrix multiplication. If you recall the matrix formulation of the linear model introduced in <a href="#eq-lm-mat" class="quarto-xref">Equation&nbsp;2</a>, then we can just compute <span class="math inline">\(\mathop{\mathbf{X}}\underset{n \times p'}{}\)</span> multiplied by <span class="math inline">\(\mathop{\boldsymbol{\beta}}\underset{p' \times 1}{}\)</span>. Basically we are doing the crossproduct between each row of <span class="math inline">\(\mathop{\mathbf{X}}\underset{n \times p'}{}\)</span> and each column (there is only one given that is a matrix <span class="math inline">\(p' \times 1\)</span>). This means that we are doing <code>(mu &lt;- with(dat, b0 + b1 * x1 + b2 * x2))</code> this without writing all coefficients and predictors.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># mu = systematic component</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>(B <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(b0, b1, b2), <span class="at">nrow =</span> <span class="dv">3</span>, <span class="at">ncol =</span> <span class="dv">1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1]
+[1,] 0.20
+[2,] 0.10
+[3,] 0.05</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> x1 <span class="sc">+</span> x2, <span class="at">data =</span> dat)</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(X)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  (Intercept)         x1        x2
+1           1  1.1356693 -0.418527
+2           1 -0.7084222  1.122890
+3           1  3.0251737  1.461695
+4           1  0.1335685 -2.922863
+5           1  1.9630679 -1.548663
+6           1 -0.5470302 -0.124681</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co"># notice that also B &lt;- c(b0, b1, b2) works because is a vector and not a matrix</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a><span class="co"># same as (mu &lt;- with(dat, b0 + b1 * x1 + b2 * x2))</span></span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(X <span class="sc">%*%</span> B) <span class="co"># c() just to force to a vector, better printing</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 0.29264058 0.18530229 0.57560211 0.06721370 0.31887366 0.13906293
+ [7] 0.34571744 0.09041619 0.24862708 0.22772352</code></pre>
+</div>
+</div>
+</section>
+<section id="matrix-formulation-of-the-systematic-component-1" class="level4">
+<h4 class="anchored" data-anchor-id="matrix-formulation-of-the-systematic-component-1">Matrix formulation of the systematic component</h4>
+<p>For the random component that we can define as <span class="math inline">\(\mbox{var}(\mathbf{y})\)</span> we also have a matrix formulation. In particular we have a <span class="math inline">\(n \times n\)</span> matrix defining the variance of each observation (the diagonal) and the covariance between observations. Beyond the systematic component <span class="math inline">\(\boldsymbol{\mu}\)</span> we can define the random component as <span class="math inline">\(\mbox{var}[\boldsymbol{\epsilon}]\)</span>.</p>
+<p>To make a concrete example, let’s think about the standard linear model. Two important assumptions are:</p>
+<ul>
+<li>homogeneity of residual variances: thus the variance of errors around predicted values is constant</li>
+<li>observations are independent: there is no correlation between residuals</li>
+</ul>
+<p>Thus, assuming to have <span class="math inline">\(n = 5\)</span> observations <span class="math inline">\(\mbox{var}[\boldsymbol{\epsilon}]\)</span> would be:</p>
+<p><span class="math display">\[
+\mbox{var}[\boldsymbol{\epsilon}] = \begin{bmatrix}
+\sigma^2 &amp; 0        &amp; 0        &amp; 0        &amp; 0 \\
+         &amp; \sigma^2 &amp; 0        &amp; 0        &amp; 0 \\
+         &amp;          &amp; \sigma^2 &amp; 0        &amp; 0 \\
+         &amp;          &amp;          &amp; \sigma^2 &amp; 0 \\
+         &amp;          &amp;          &amp;          &amp; \sigma^2
+\end{bmatrix}
+\]</span></p>
+<p>No correlations between residuals and constant variance. This is an appropriate matrix for a standard linear model. In fact, <span class="math inline">\(\mbox{var}[\boldsymbol{\epsilon}]\)</span> can be written also as <span class="math inline">\(\mbox{var}[\boldsymbol{\epsilon}] = \mathbf{I}\sigma^2\)</span> where <span class="math inline">\(\mathbf{I}\)</span> is called an identity matrix i.e.&nbsp;a matrix with 1 in the diagonal and 0 in off diagonal elements. If you multiply <span class="math inline">\(\mathbf{I}\)</span> by a constant <span class="math inline">\(\sigma^2\)</span> you obtain the previous matrix.</p>
+<p>In matrix form the errors of the standard linear model are written as <span class="math inline">\(\mathop{\boldsymbol{\epsilon}}\underset{n \times 1}{}\)</span> because there are no covariances and the matrix can be simplyfied to a vector. Sometimes we can relax the constant <span class="math inline">\(\sigma^2\)</span> assumption and the diagonal will be composed by different values.</p>
+<p><span id="eq-lm-err-mat"><span class="math display">\[
+\mathop{\boldsymbol{y}}\underset{n \times 1}{} =
+\mathop{\mathbf{X}}\underset{n \times p'}{} \,
+\mathop{\boldsymbol{\beta}}\underset{p' \times 1}{} +
+\mathop{\boldsymbol{\epsilon}}\underset{n \times 1}{}
+\tag{3}\]</span></span></p>
+<p>Notice that we used <span class="math inline">\(y\)</span> and not <span class="math inline">\(\mu\)</span> because we are including errors. The systematic component <span class="math inline">\(\mu\)</span> plus the error term <span class="math inline">\(\epsilon\)</span> gives the observed value.</p>
+<p>There is still no reference to the distribution of errors, only the assumption about constant variance and no covariance. If we assume that errors are distributed as a Gaussian distribution we can write:</p>
+<p><span class="math display">\[
+\boldsymbol{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\epsilon}
+\]</span></p>
+<p><span class="math display">\[
+\boldsymbol{\epsilon} \sim \mbox{N}(\mathbf{0}, \mathbf{I}\sigma^2)
+\]</span></p>
+<p>Or equivalently as:</p>
+<p><span class="math display">\[
+\boldsymbol{y} \sim \mbox{N}(\mathbf{X}\boldsymbol{\beta}, \mathbf{I}\sigma^2)
+\]</span></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Just a minor clarification about <span class="math inline">\(\mbox{N}\)</span>. This is the shortcut for a Gaussian distribution but the idea of a Gaussian distribution is to have a single <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma^2\)</span>. When we include predictors <span class="math inline">\(\mathbf{X}\boldsymbol{\beta}\)</span> we are saying that <span class="math inline">\(\mu\)</span> changes thus there is a different <span class="math inline">\(\mu\)</span> for each combination of <span class="math inline">\(\mathbf{X}\boldsymbol{\beta}\)</span>. The same holds for <span class="math inline">\(\sigma^2\)</span> but here we have a single value by definition.</p>
+<p>On other terms, we are saying that we have a set of Gaussian distributions for each combination of <span class="math inline">\(\mathbf{X}\boldsymbol{\beta}\)</span> with constant <span class="math inline">\(\sigma^2\)</span>.</p>
+<p>This is the same as sying that we have a multivariate Gaussian distribution <span class="math inline">\(\mbox{MNV}\)</span> with a vector of means (i.e., <span class="math inline">\(\mathbf{X}\boldsymbol{\beta}\)</span>) and a variance-covariance matrix as <span class="math inline">\(\mathbf{I}\sigma^2\)</span>. In the next section the plot will clarify this subtle but important concept.</p>
+<p>In R this can be explained with a t-test. A t-test is essentially a linear model with a binary predictor <span class="math inline">\(x\)</span> and a continuous response <span class="math inline">\(y\)</span>.</p>
+<p>The model equation is:</p>
+<p><span class="math display">\[
+y_i = \beta_0 + \beta_1x_{1i} + \epsilon_i
+\]</span></p>
+<p><span class="math inline">\(x_1\)</span> can takes values 0 (for the group 1) and 1 (for the group 2). The errors are normally distributed with <span class="math inline">\(\sigma^2 = 1\)</span>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">10</span> <span class="co"># total sample size</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>(x <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">1</span>, <span class="at">each =</span> N<span class="sc">/</span><span class="dv">2</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 0 0 0 0 0 1 1 1 1 1</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>s2 <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>b0 <span class="ot">&lt;-</span> <span class="fl">0.3</span> <span class="co"># mean of group1</span></span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>b1 <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="co"># difference between group2 and group1</span></span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a><span class="co"># using rnorm (i.e., the "univariate" normal distribution)</span></span>
+<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a>(mu <span class="ot">&lt;-</span> b0 <span class="sc">+</span> b1 <span class="sc">*</span> x) <span class="co"># systematic component</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 0.3 0.3 0.3 0.3 0.3 1.3 1.3 1.3 1.3 1.3</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>(y <span class="ot">&lt;-</span> mu <span class="sc">+</span> <span class="fu">rnorm</span>(N, <span class="dv">0</span>, <span class="fu">sqrt</span>(s2))) <span class="co"># sqrt() because rnorm wants the standard deviation</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1]  1.15567812 -0.33252682  1.31848251  0.93164911 -0.04960785  1.64108108
+ [7]  1.84547855  1.93362730  1.42113514  2.11093702</code></pre>
+</div>
+</div>
+<p>This code is vectorizing the <code>rnorm()</code> operation. In other terms, each element <span class="math inline">\(i\)</span> out of <span class="math inline">\(n\)</span> elements could in principle have different <span class="math inline">\(\mu\)</span> and different <span class="math inline">\(\sigma^2\)</span>. Is like creating a grid of values and looping a <code>rnorm</code> call:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>grid <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> x,</span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">mu =</span> mu,</span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">s2 =</span> s2</span>
+<span id="cb60-5"><a href="#cb60-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb60-6"><a href="#cb60-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-7"><a href="#cb60-7" aria-hidden="true" tabindex="-1"></a>grid</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   x  mu s2
+1  0 0.3  1
+2  0 0.3  1
+3  0 0.3  1
+4  0 0.3  1
+5  0 0.3  1
+6  1 1.3  1
+7  1 1.3  1
+8  1 1.3  1
+9  1 1.3  1
+10 1 1.3  1</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>grid<span class="sc">$</span>y <span class="ot">&lt;-</span> <span class="cn">NA</span> <span class="co"># preallocation</span></span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(grid)){</span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a>  grid<span class="sc">$</span>y[i] <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">1</span>, <span class="at">mean =</span> grid<span class="sc">$</span>mu[i], <span class="at">sd =</span> <span class="fu">sqrt</span>(grid<span class="sc">$</span>s2[i]))</span>
+<span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>This is exactly the same but in R the <code>rnorm</code> is vectorized thus we can directly provide a vector for <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma^2\)</span>.</p>
+<p>In fact, the vectorized <code>rnorm</code> can be considered a sort of special case of a multivariate gaussian distribution where off diagonal element of the variance-covariance matrix are zero thus we simply have the diagonal. In this special case, the diagonal could also be reduced to a single value given that is a constant.</p>
+<p>Let’s see the same simulation but using a proper multivariate gaussian distribution (<code>MASS::mvrnorm()</code>)</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>mu <span class="co"># vector of means</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 0.3 0.3 0.3 0.3 0.3 1.3 1.3 1.3 1.3 1.3</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>(I <span class="ot">&lt;-</span> <span class="fu">diag</span>(N)) <span class="co"># identity matrix</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+ [1,]    1    0    0    0    0    0    0    0    0     0
+ [2,]    0    1    0    0    0    0    0    0    0     0
+ [3,]    0    0    1    0    0    0    0    0    0     0
+ [4,]    0    0    0    1    0    0    0    0    0     0
+ [5,]    0    0    0    0    1    0    0    0    0     0
+ [6,]    0    0    0    0    0    1    0    0    0     0
+ [7,]    0    0    0    0    0    0    1    0    0     0
+ [8,]    0    0    0    0    0    0    0    1    0     0
+ [9,]    0    0    0    0    0    0    0    0    1     0
+[10,]    0    0    0    0    0    0    0    0    0     1</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>(S <span class="ot">&lt;-</span> I <span class="sc">*</span> s2) <span class="co"># variance covariance matrix var[e]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+ [1,]    1    0    0    0    0    0    0    0    0     0
+ [2,]    0    1    0    0    0    0    0    0    0     0
+ [3,]    0    0    1    0    0    0    0    0    0     0
+ [4,]    0    0    0    1    0    0    0    0    0     0
+ [5,]    0    0    0    0    1    0    0    0    0     0
+ [6,]    0    0    0    0    0    1    0    0    0     0
+ [7,]    0    0    0    0    0    0    1    0    0     0
+ [8,]    0    0    0    0    0    0    0    1    0     0
+ [9,]    0    0    0    0    0    0    0    0    1     0
+[10,]    0    0    0    0    0    0    0    0    0     1</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>MASS<span class="sc">::</span><span class="fu">mvrnorm</span>(<span class="dv">1</span>, mu, S)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] -0.1535447  0.2597726 -0.2981341  0.7512087  0.5191285  1.2848850
+ [7]  2.3922090  2.4352960  2.8234427  1.4709440</code></pre>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="focus-on-the-standard-linear-model" class="level3">
+<h3 class="anchored" data-anchor-id="focus-on-the-standard-linear-model">Focus on the standard linear model</h3>
+<p>he <a href="#fig-eta-gaussian" class="quarto-xref">Figure&nbsp;1</a> depicts this crucial assumption of linear models:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>x  <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.2</span>)</span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a>lp <span class="ot">&lt;-</span> <span class="fl">0.1</span> <span class="sc">+</span> <span class="fl">0.2</span> <span class="sc">*</span> x</span>
+<span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-4"><a href="#cb71-4" aria-hidden="true" tabindex="-1"></a>dd <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb71-5"><a href="#cb71-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">x    =</span> x,</span>
+<span id="cb71-6"><a href="#cb71-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">mean =</span> lp,</span>
+<span id="cb71-7"><a href="#cb71-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">sd   =</span> <span class="fl">0.02</span></span>
+<span id="cb71-8"><a href="#cb71-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb71-9"><a href="#cb71-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-10"><a href="#cb71-10" aria-hidden="true" tabindex="-1"></a>dd<span class="sc">$</span>dist <span class="ot">&lt;-</span> <span class="fu">dist_normal</span>(dd<span class="sc">$</span>mean, dd<span class="sc">$</span>sd)</span>
+<span id="cb71-11"><a href="#cb71-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-12"><a href="#cb71-12" aria-hidden="true" tabindex="-1"></a>dd_points <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb71-13"><a href="#cb71-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">runif</span>(<span class="dv">100</span>, <span class="dv">0</span>, <span class="dv">1</span>) </span>
+<span id="cb71-14"><a href="#cb71-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb71-15"><a href="#cb71-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-16"><a href="#cb71-16" aria-hidden="true" tabindex="-1"></a>dd_points<span class="sc">$</span>y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="fl">0.1</span> <span class="sc">+</span> <span class="fl">0.2</span> <span class="sc">*</span> dd_points<span class="sc">$</span>x, <span class="fl">0.05</span>)</span>
+<span id="cb71-17"><a href="#cb71-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-18"><a href="#cb71-18" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dd, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> mean)) <span class="sc">+</span></span>
+<span id="cb71-19"><a href="#cb71-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_slab</span>(<span class="fu">aes</span>(<span class="at">ydist =</span> dist), <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb71-20"><a href="#cb71-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb71-21"><a href="#cb71-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> mean), <span class="at">size =</span> <span class="dv">5</span>, <span class="at">col =</span> <span class="st">"dodgerblue"</span>) <span class="sc">+</span></span>
+<span id="cb71-22"><a href="#cb71-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"x"</span>) <span class="sc">+</span></span>
+<span id="cb71-23"><a href="#cb71-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"y"</span>) <span class="sc">+</span></span>
+<span id="cb71-24"><a href="#cb71-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> dd_points, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y), <span class="at">size =</span> <span class="dv">3</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-eta-gaussian" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-eta-gaussian-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="misc-lm-glm_files/figure-html/fig-eta-gaussian-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-eta-gaussian-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Linear model assumption about residuals
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>If we remove the <code>x</code> effect thus we calculate residuals, we are basically centering each value on the value predicted by the model. In this case we are substracting the blue points from the black points.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dd, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> <span class="dv">0</span>)) <span class="sc">+</span></span>
+<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_slab</span>(<span class="fu">aes</span>(<span class="at">ydist =</span> <span class="fu">dist_normal</span>(<span class="dv">0</span>, <span class="fl">0.02</span>)), <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb72-3"><a href="#cb72-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb72-4"><a href="#cb72-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">5</span>, <span class="at">col =</span> <span class="st">"dodgerblue"</span>)<span class="sc">+</span></span>
+<span id="cb72-5"><a href="#cb72-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"x"</span>) <span class="sc">+</span></span>
+<span id="cb72-6"><a href="#cb72-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"y"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-res-gaussian" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-res-gaussian-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="misc-lm-glm_files/figure-html/fig-res-gaussian-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-res-gaussian-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Linear model assumptions about residuals
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>We have few important points here:</p>
+<ul>
+<li><span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma^2\)</span> are independent in a linear model. Changes in the mean are not reflected or related to changes in <span class="math inline">\(\sigma^2\)</span> that in any case is assumed to be fixed.</li>
+<li>The assumption of normality is on residuals after removing the effect of the covariates and not not on the raw <span class="math inline">\(\mathbf{y}\)</span> vector.</li>
+</ul>
+<p>As a little note, the assumption of constant <span class="math inline">\(\sigma^2\)</span> is something crucial for standard linear models but can be easily relaxed using other types of models. For example, the so-called localtion-models are able to extend the standard linear models including predictors both on <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma^2\)</span>. For example in <a href="#fig-loc-scale-gaussian" class="quarto-xref">Figure&nbsp;3</a> you can see a model with an increasing <span class="math inline">\(\mu\)</span> but also an increasing <span class="math inline">\(\sigma^2\)</span>. This is something would violate the assumptions but using location-scale models (e.g., see the <a href="https://cran.r-project.org/web/packages/lmls/vignettes/lmls.pdf"><code>lmls</code></a> or the <a href="https://www.gamlss.com/"><code>gamlss</code></a> packages for an R implementation) you can model both parameters of the assumed distribution.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>x  <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.2</span>)</span>
+<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a>lp_x <span class="ot">&lt;-</span> <span class="fl">0.1</span> <span class="sc">+</span> <span class="fl">0.2</span> <span class="sc">*</span> x</span>
+<span id="cb73-3"><a href="#cb73-3" aria-hidden="true" tabindex="-1"></a>lp_y <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">log</span>(<span class="fl">0.01</span>) <span class="sc">+</span> <span class="fu">log</span>(<span class="dv">4</span>) <span class="sc">*</span> x)</span>
+<span id="cb73-4"><a href="#cb73-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb73-5"><a href="#cb73-5" aria-hidden="true" tabindex="-1"></a>dd <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb73-6"><a href="#cb73-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">x    =</span> x,</span>
+<span id="cb73-7"><a href="#cb73-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">mean =</span> lp,</span>
+<span id="cb73-8"><a href="#cb73-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">sd   =</span> lp_y</span>
+<span id="cb73-9"><a href="#cb73-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb73-10"><a href="#cb73-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb73-11"><a href="#cb73-11" aria-hidden="true" tabindex="-1"></a>dd<span class="sc">$</span>dist <span class="ot">&lt;-</span> <span class="fu">dist_normal</span>(dd<span class="sc">$</span>mean, dd<span class="sc">$</span>sd)</span>
+<span id="cb73-12"><a href="#cb73-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb73-13"><a href="#cb73-13" aria-hidden="true" tabindex="-1"></a>dd_points <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb73-14"><a href="#cb73-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">runif</span>(<span class="dv">200</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb73-15"><a href="#cb73-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb73-16"><a href="#cb73-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb73-17"><a href="#cb73-17" aria-hidden="true" tabindex="-1"></a>dd_points<span class="sc">$</span>y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">200</span>, <span class="fl">0.1</span> <span class="sc">+</span> <span class="fl">0.2</span> <span class="sc">*</span> dd_points<span class="sc">$</span>x, <span class="fu">exp</span>(<span class="fu">log</span>(<span class="fl">0.01</span>) <span class="sc">+</span> <span class="fu">log</span>(<span class="dv">4</span>) <span class="sc">*</span> dd_points<span class="sc">$</span>x))</span>
+<span id="cb73-18"><a href="#cb73-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb73-19"><a href="#cb73-19" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dd, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> mean)) <span class="sc">+</span></span>
+<span id="cb73-20"><a href="#cb73-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_slab</span>(<span class="fu">aes</span>(<span class="at">ydist =</span> dist), <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb73-21"><a href="#cb73-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb73-22"><a href="#cb73-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> mean), <span class="at">size =</span> <span class="dv">5</span>, <span class="at">col =</span> <span class="st">"dodgerblue"</span>) <span class="sc">+</span></span>
+<span id="cb73-23"><a href="#cb73-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"x"</span>) <span class="sc">+</span></span>
+<span id="cb73-24"><a href="#cb73-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"y"</span>) <span class="sc">+</span></span>
+<span id="cb73-25"><a href="#cb73-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> dd_points, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div id="fig-loc-scale-gaussian" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-loc-scale-gaussian-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="misc-lm-glm_files/figure-html/fig-loc-scale-gaussian-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-loc-scale-gaussian-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Example of increasing <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma^2\)</span> as a function of a predictor <span class="math inline">\(x\)</span>
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="extra" class="level2">
+<h2 class="anchored" data-anchor-id="extra">Extra</h2>
+<section id="covariance-and-correlation" class="level3">
+<h3 class="anchored" data-anchor-id="covariance-and-correlation">Covariance and Correlation</h3>
+<p>We used the term covariance and correlations but what is the actual difference and how to move from one to the other.</p>
+<p>Firstly, these two terms come into place when we want to evalute a bivariate relationship between two variables <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>. At the univariate level, the first important quanitity is the <strong>deviance</strong> or sum-of-squares <span class="math inline">\(\mbox{SS}\)</span>. Goes without saying that <span class="math inline">\(SS_x\)</span> is the sum of the squared distance between <span class="math inline">\(x_i\)</span> and the mean of <span class="math inline">\(x\)</span> (<span class="math inline">\(\bar x\)</span>).</p>
+<p><span class="math display">\[
+SS_x = \sum^{n}_{i = 1} (x_i - \bar x)^2
+\]</span></p>
+<p>This quantity grows as the distance around the mean grows. But what is the average distance? We can divide the sum by the total <span class="math inline">\(n\)</span> to obtain the average distance (squared) from the mean:</p>
+<p><span class="math display">\[
+\frac{\sum^{n}_{i = 1} (x_i - \bar x)^2}{n} = \frac{SS_x}{n}
+\]</span></p>
+<p>This is the variance of <span class="math inline">\(x\)</span>, usually defined using <span class="math inline">\(\sigma^2_x\)</span>. If we take the square root of <span class="math inline">\(\sigma^2_x\)</span> we obtain the standard deviation of <span class="math inline">\(x\)</span>. The standard deviation is directly intepretable as the average distance from the mean. A standard deviation of <span class="math inline">\(\sigma_x = 2\)</span> means that, on average, the elements of <span class="math inline">\(x\)</span> as a distance of 2 (2 needs to be interpreted in the scale of <span class="math inline">\(x\)</span>) from the mean.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">15</span>, <span class="dv">10</span>, <span class="dv">5</span>)</span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(x, <span class="at">id =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(x)) <span class="sc">|&gt;</span> </span>
+<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> id)) <span class="sc">+</span></span>
+<span id="cb74-4"><a href="#cb74-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">xend =</span> <span class="fu">mean</span>(x)), <span class="at">col =</span> <span class="st">"dodgerblue"</span>) <span class="sc">+</span></span>
+<span id="cb74-5"><a href="#cb74-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">mean</span>(x), <span class="at">lwd =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb74-6"><a href="#cb74-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="misc-lm-glm_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In the figure, the vertical line is the mean and the blue segments are the distances from the mean. The average length of the blue segments is the standard deviation.</p>
+<p>What about the relationship between two variables? We can start from the same reasoning. If two variables vary toghether, knowing the value of one variable tell us something about the value of the other variable.</p>
+<p>We can start from the distances from the mean:</p>
+<p><span class="math display">\[
+r_{xi} = x_i - \bar x
+\]</span></p>
+<p><span class="math display">\[
+r_{yi} = y_i - \bar y
+\]</span></p>
+<p>If the sign is positive, this means that <span class="math inline">\(x_i\)</span> is higher than the mean. If the sign is negative this means that <span class="math inline">\(x_i\)</span> is lower than the mean (the same holds for <span class="math inline">\(y\)</span> of course).</p>
+<p>So for each element of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> each pair of signs tell us something about the joint behaviour about their specific mean. For example <span class="math inline">\(x_1 = -5\)</span> and <span class="math inline">\(y_1 = -2\)</span> means that both points are lower than the mean. While <span class="math inline">\(x_1 = 5\)</span> and <span class="math inline">\(y_1 = -1\)</span> means that one is lower and one is higher.</p>
+<p>If we multiply the signs we obtain a nice result. The product of concordant signs <span class="math inline">\([+, +]\)</span> and <span class="math inline">\([-, -]\)</span> will return <span class="math inline">\(+\)</span> while the product of discordant signs <span class="math inline">\([+, -]\)</span> or <span class="math inline">\([-, +]\)</span> will return <span class="math inline">\(-\)</span>. The actual values are not directly intepretable because <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> can have different scales but the signs are very informative. What about multiplying all the signs?</p>
+<p><span class="math display">\[
+r_{xi}r_{yi} = (x_i - \bar x) (y_i - \bar y)
+\]</span></p>
+<p>This gives us a vector of signs of length <span class="math inline">\(n\)</span>. Let’s assume for the moment that <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> are on the same scale thus we can intepret also the value of the residuals. If we sum the signed residuals we obtain an interesting quantity called <strong>co-deviance</strong>.</p>
+<p><span class="math display">\[
+SS_{xy} = \sum^{N}_{i = 1} (x_i - \bar x) (y_i - \bar y)
+\]</span></p>
+<p>This quantity ranges between <span class="math inline">\(-\infty\)</span> and <span class="math inline">\(+\infty\)</span>. The quantity is close to zero when the number of discordant and concordant signs are roughly the same (<span class="math inline">\(-\)</span> and <span class="math inline">\(+\)</span> cancel out). If the signs are mainly concordant, this quantity will be positive and large (depending on the actual values). If the signs are mainly discordant, this quanitity will be negative and large (depending on the actual values).</p>
+<p>As for the variance in the univariate case, if we divide by <span class="math inline">\(n\)</span> we obtain a sort of average combined residual. Let’s call this quantity <span class="math inline">\(\sigma_{xy}\)</span></p>
+<p><span class="math display">\[
+\sigma_{xy} = \frac{(x_i - \bar x) (y_i - \bar y)}{n}
+\]</span></p>
+<p>This is the so-called <strong>covariance</strong>. Previously we assumed that <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> are on the same scale but this is not always true. We should be able standardize the two variables. We could, for example, divide the residual for the standard deviation creating a sort of <span class="math inline">\(z\)</span> score. We can do this for <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>:</p>
+<p><span class="math display">\[
+\left(\frac{(x_i - \bar x)}{\sigma_x}\right) \left(\frac{(y_i - \bar y)}{\sigma_y}\right)
+\]</span></p>
+<p>Grouping the denominator:</p>
+<p><span class="math display">\[
+\frac{\sum^{n}_{i = 1}(x_i - \bar x)(y_i - \bar y)}{\sigma_x\sigma_y}
+\]</span></p>
+<p>Or more compactly:</p>
+<p><span class="math display">\[
+\frac{\sigma_{xy}}{\sigma_x \sigma_y}
+\]</span></p>
+<p>Looks familiar? This is the <strong>correlation coefficient</strong> <span class="math inline">\(\rho\)</span> or in other terms a standardized version of the covariance.</p>
+<p>Let’s finish with a visual intuition. This is the scatter plot of two variables with <span class="math inline">\(\rho = 0\)</span>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a>S <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">1</span>)) <span class="sc">%*%</span> (<span class="fu">diag</span>(<span class="dv">2</span>)) <span class="sc">%*%</span> <span class="fu">diag</span>(<span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">1</span>))</span>
+<span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a>D <span class="ot">&lt;-</span> MASS<span class="sc">::</span><span class="fu">mvrnorm</span>(<span class="dv">500</span>, <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">1</span>), S, <span class="at">empirical =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb75-3"><a href="#cb75-3" aria-hidden="true" tabindex="-1"></a>D <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(D)</span>
+<span id="cb75-4"><a href="#cb75-4" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(D) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>)</span>
+<span id="cb75-5"><a href="#cb75-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb75-6"><a href="#cb75-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(D, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
+<span id="cb75-7"><a href="#cb75-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb75-8"><a href="#cb75-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">mean</span>(D<span class="sc">$</span>x)) <span class="sc">+</span></span>
+<span id="cb75-9"><a href="#cb75-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fu">mean</span>(D<span class="sc">$</span>y))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="misc-lm-glm_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The code will be clear in later section. For now, let’s remove the information about the mean from both variables:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>D<span class="sc">$</span>rx <span class="ot">&lt;-</span> D<span class="sc">$</span>x <span class="sc">-</span> <span class="fu">mean</span>(D<span class="sc">$</span>x)</span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a>D<span class="sc">$</span>ry <span class="ot">&lt;-</span> D<span class="sc">$</span>y <span class="sc">-</span> <span class="fu">mean</span>(D<span class="sc">$</span>y)</span>
+<span id="cb76-3"><a href="#cb76-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-4"><a href="#cb76-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(D, <span class="fu">aes</span>(rx, ry)) <span class="sc">+</span></span>
+<span id="cb76-5"><a href="#cb76-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb76-6"><a href="#cb76-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb76-7"><a href="#cb76-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="misc-lm-glm_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Now they are both centered on 0. We see that the 4 quadrants represent the possible signs combination between product of residuals. Upper left for x negative and y positive, Upper right for x positive and y positive and so on. Let’s color the point based on the concordance-discordance of the product:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a>D<span class="sc">$</span>rxry <span class="ot">&lt;-</span> D<span class="sc">$</span>rx <span class="sc">*</span> D<span class="sc">$</span>ry</span>
+<span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a>D<span class="sc">$</span>sign <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">sign</span>(D<span class="sc">$</span>rxry) <span class="sc">==</span> <span class="dv">1</span>, <span class="st">"concordance ++|--"</span>, <span class="st">"discordance +-|-+"</span>)</span>
+<span id="cb77-3"><a href="#cb77-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb77-4"><a href="#cb77-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(D, <span class="fu">aes</span>(rx, ry)) <span class="sc">+</span></span>
+<span id="cb77-5"><a href="#cb77-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> sign), <span class="at">size =</span> <span class="dv">3</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb77-6"><a href="#cb77-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>, <span class="at">lty =</span> <span class="st">"dotted"</span>) <span class="sc">+</span></span>
+<span id="cb77-7"><a href="#cb77-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">lty =</span> <span class="st">"dotted"</span>) <span class="sc">+</span></span>
+<span id="cb77-8"><a href="#cb77-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.title =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb77-9"><a href="#cb77-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">"bottom"</span>) <span class="sc">+</span></span>
+<span id="cb77-10"><a href="#cb77-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"x - mean(x)"</span>) <span class="sc">+</span></span>
+<span id="cb77-11"><a href="#cb77-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"y - mean(y)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="misc-lm-glm_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>You can see that the number of <code>++|--</code> and <code>+-|-+</code> is very similar. The sum of the products will be close to zero:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">sum</span>(D<span class="sc">$</span>rxry), <span class="dv">5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+</div>
+<p>Let’s see the same plot with a strong positive correlation and a strong negative correlation:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="sc">-</span><span class="fl">0.8</span>, <span class="sc">-</span><span class="fl">0.8</span>, <span class="dv">1</span>), <span class="at">nrow =</span> <span class="dv">2</span>)</span>
+<span id="cb80-2"><a href="#cb80-2" aria-hidden="true" tabindex="-1"></a>S <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">1</span>)) <span class="sc">%*%</span> R <span class="sc">%*%</span> <span class="fu">diag</span>(<span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">1</span>))</span>
+<span id="cb80-3"><a href="#cb80-3" aria-hidden="true" tabindex="-1"></a>Dn <span class="ot">&lt;-</span> MASS<span class="sc">::</span><span class="fu">mvrnorm</span>(<span class="dv">500</span>, <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">1</span>), S, <span class="at">empirical =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb80-4"><a href="#cb80-4" aria-hidden="true" tabindex="-1"></a>Dn <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(Dn)</span>
+<span id="cb80-5"><a href="#cb80-5" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(Dn) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>)</span>
+<span id="cb80-6"><a href="#cb80-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-7"><a href="#cb80-7" aria-hidden="true" tabindex="-1"></a>S <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">1</span>)) <span class="sc">%*%</span> (<span class="fl">0.8</span> <span class="sc">+</span> <span class="fu">diag</span>(<span class="dv">1</span> <span class="sc">-</span> <span class="fl">0.8</span>, <span class="dv">2</span>)) <span class="sc">%*%</span> <span class="fu">diag</span>(<span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">1</span>))</span>
+<span id="cb80-8"><a href="#cb80-8" aria-hidden="true" tabindex="-1"></a>Dp <span class="ot">&lt;-</span> MASS<span class="sc">::</span><span class="fu">mvrnorm</span>(<span class="dv">500</span>, <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">1</span>), S, <span class="at">empirical =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb80-9"><a href="#cb80-9" aria-hidden="true" tabindex="-1"></a>Dp <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(Dp)</span>
+<span id="cb80-10"><a href="#cb80-10" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(Dp) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>)</span>
+<span id="cb80-11"><a href="#cb80-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-12"><a href="#cb80-12" aria-hidden="true" tabindex="-1"></a>Dp<span class="sc">$</span>r <span class="ot">&lt;-</span> <span class="st">"r = 0.8"</span></span>
+<span id="cb80-13"><a href="#cb80-13" aria-hidden="true" tabindex="-1"></a>Dn<span class="sc">$</span>r <span class="ot">&lt;-</span> <span class="st">"r = -0.8"</span></span>
+<span id="cb80-14"><a href="#cb80-14" aria-hidden="true" tabindex="-1"></a>D <span class="ot">&lt;-</span> <span class="fu">rbind</span>(Dn, Dp)</span>
+<span id="cb80-15"><a href="#cb80-15" aria-hidden="true" tabindex="-1"></a>D<span class="sc">$</span>rx <span class="ot">&lt;-</span> D<span class="sc">$</span>x <span class="sc">-</span> <span class="fu">mean</span>(D<span class="sc">$</span>x)</span>
+<span id="cb80-16"><a href="#cb80-16" aria-hidden="true" tabindex="-1"></a>D<span class="sc">$</span>ry <span class="ot">&lt;-</span> D<span class="sc">$</span>y <span class="sc">-</span> <span class="fu">mean</span>(D<span class="sc">$</span>y)</span>
+<span id="cb80-17"><a href="#cb80-17" aria-hidden="true" tabindex="-1"></a>D<span class="sc">$</span>rxry <span class="ot">&lt;-</span> D<span class="sc">$</span>rx <span class="sc">*</span> D<span class="sc">$</span>ry</span>
+<span id="cb80-18"><a href="#cb80-18" aria-hidden="true" tabindex="-1"></a>D<span class="sc">$</span>sign <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">sign</span>(D<span class="sc">$</span>rxry) <span class="sc">==</span> <span class="dv">1</span>, <span class="st">"concordance ++|--"</span>, <span class="st">"discordance +-|-+"</span>)</span>
+<span id="cb80-19"><a href="#cb80-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-20"><a href="#cb80-20" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(D, <span class="fu">aes</span>(rx, ry)) <span class="sc">+</span></span>
+<span id="cb80-21"><a href="#cb80-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> sign), <span class="at">size =</span> <span class="dv">3</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb80-22"><a href="#cb80-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>, <span class="at">lty =</span> <span class="st">"dotted"</span>) <span class="sc">+</span></span>
+<span id="cb80-23"><a href="#cb80-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">lty =</span> <span class="st">"dotted"</span>) <span class="sc">+</span></span>
+<span id="cb80-24"><a href="#cb80-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.title =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb80-25"><a href="#cb80-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">"bottom"</span>) <span class="sc">+</span></span>
+<span id="cb80-26"><a href="#cb80-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"x - mean(x)"</span>) <span class="sc">+</span></span>
+<span id="cb80-27"><a href="#cb80-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"y - mean(y)"</span>) <span class="sc">+</span></span>
+<span id="cb80-28"><a href="#cb80-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>r)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="misc-lm-glm_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>A negative or a positive correlations means respectively an increasing number of discordant or concordant signs.</p>
+<p>Finally, we can move to one information to the other rearranging the equations.</p>
+<p><span class="math display">\[
+\rho_{xy} = \frac{\sigma_{xy}}{\sigma_x\sigma_y}
+\]</span></p>
+<p><span class="math display">\[
+\sigma_{xy} = \sigma_x\sigma_y\rho_{xy}
+\]</span></p>
+<p>The covariance is the product between the two standard deviations and the correlation.</p>
+<p>What about having more than 2 variables? We can basically use a variance-covariance matrix or a correlation matrix.</p>
+<p><span class="math display">\[
+\boldsymbol{\Sigma} =
+\begin{bmatrix}
+\sigma_{11} &amp; \sigma_{12} &amp; \cdots &amp; \sigma_{1p} \\
+\sigma_{21} &amp; \sigma_{22} &amp; \cdots &amp; \sigma_{2p} \\
+\vdots      &amp; \vdots      &amp; \ddots &amp; \vdots      \\
+\sigma_{p1} &amp; \sigma_{p2} &amp; \cdots &amp; \sigma_{pp}
+\end{bmatrix}
+\]</span></p>
+<p>This is a crucial matrix in statistics. The variance covariance matrix is a <span class="math inline">\(p\times p\)</span> (i.e., square matrix) representing the covariance of <span class="math inline">\(p\)</span> variables. The diagonal is the covariance of a variable with itself. While the off-diagonal elements are the covariances of variables in pairs. Clearly the upper and lower triangles are the same because the matrix is symmetric.</p>
+<p>What is the covariance of a variable with itself? Let’s try to understand this from the equation.</p>
+<p><span class="math display">\[
+\sigma_{xx} = \sum^{n}_{i = 1} (x_i - \bar x) (x_i - \bar x)
+\]</span></p>
+<p>We can expand the product as:</p>
+<p><span class="math display">\[
+(x_i - \bar x) (x_i - \bar x) = (x_i - \bar x)^2
+\]</span></p>
+<p>Thus the covariance of a variable with itself can be written as the squared distance from the mean. This is exactly the variance. In other terms, the diagonal of a variance-covariance matrix contains the variances of the <span class="math inline">\(p\)</span> variables.</p>
+<p>And the correlations? Remember that correlations are just standardized covariances. When we standardize a variable the variance becames 1 and the mean is 0. Thus the covariance of a standardized variable with itself is 1 (try using the formula on a standardized variable). This is why the diagonal of a correlation matrix is always 1 by definition.</p>
+<p>Let’s try to create a covariance matrix using the equations we introduced and a little bit of matrix algebra:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a>(s2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">5</span>, <span class="dv">3</span>)) <span class="co"># variances of three variables</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 10  5  3</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a>(R <span class="ot">&lt;-</span> <span class="fl">0.5</span> <span class="sc">+</span> <span class="fu">diag</span>(<span class="dv">1</span> <span class="sc">-</span> <span class="fl">0.5</span>, <span class="dv">3</span>)) <span class="co"># correlation matrix</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1] [,2] [,3]
+[1,]  1.0  0.5  0.5
+[2,]  0.5  1.0  0.5
+[3,]  0.5  0.5  1.0</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb85"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="co"># s * s * r is the way to calculate covariance from standard deviations and correlation</span></span>
+<span id="cb85-2"><a href="#cb85-2" aria-hidden="true" tabindex="-1"></a><span class="co"># we can apply the same idea to matrices</span></span>
+<span id="cb85-3"><a href="#cb85-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb85-4"><a href="#cb85-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(s2) <span class="co"># standard deviations</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.162278 2.236068 1.732051</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb87"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a>(<span class="fu">diag</span>(<span class="dv">3</span>) <span class="sc">*</span> <span class="fu">sqrt</span>(s2)) <span class="sc">%*%</span> R <span class="sc">%*%</span>(<span class="fu">diag</span>(<span class="dv">3</span>) <span class="sc">*</span> <span class="fu">sqrt</span>(s2))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          [,1]     [,2]     [,3]
+[1,] 10.000000 3.535534 2.738613
+[2,]  3.535534 5.000000 1.936492
+[3,]  2.738613 1.936492 3.000000</code></pre>
+</div>
+</div>
+<p>Let’s do the example with two variables, <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, with:</p>
+<ul>
+<li>standard deviations <span class="math inline">\(\sigma_X\)</span> and <span class="math inline">\(\sigma_Y\)</span>,</li>
+<li>correlation <span class="math inline">\(\rho_{XY}\)</span>.</li>
+</ul>
+<p>We define:</p>
+<p><span class="math display">\[
+\boldsymbol{D} =
+\begin{bmatrix}
+\sigma_X &amp; 0 \\
+0        &amp; \sigma_Y
+\end{bmatrix},
+\qquad
+\boldsymbol{R} =
+\begin{bmatrix}
+1        &amp; \rho_{XY} \\
+\rho_{XY} &amp; 1
+\end{bmatrix}.
+\]</span></p>
+<p>We want to show, step by step, that the variance–covariance matrix is</p>
+<p><span class="math display">\[
+\boldsymbol{\Sigma} = \boldsymbol{D}\,\boldsymbol{R}\,\boldsymbol{D}.
+\]</span></p>
+<p>Step 1: Compute <span class="math inline">\(DR\)</span></p>
+<p><span class="math display">\[
+\boldsymbol{A} = \boldsymbol{D}\boldsymbol{R}
+=
+\begin{bmatrix}
+\sigma_X &amp; 0 \\
+0        &amp; \sigma_Y
+\end{bmatrix}
+\begin{bmatrix}
+1        &amp; \rho_{XY} \\
+\rho_{XY} &amp; 1
+\end{bmatrix}.
+\]</span></p>
+<p>Element by element:</p>
+<p><span class="math display">\[
+\begin{aligned}
+A_{11} &amp;= \sigma_X \cdot 1 + 0 \cdot \rho_{XY} = \sigma_X, \\
+A_{12} &amp;= \sigma_X \cdot \rho_{XY} + 0 \cdot 1 = \sigma_X \rho_{XY}, \\
+A_{21} &amp;= 0 \cdot 1 + \sigma_Y \cdot \rho_{XY} = \sigma_Y \rho_{XY}, \\
+A_{22} &amp;= 0 \cdot \rho_{XY} + \sigma_Y \cdot 1 = \sigma_Y.
+\end{aligned}
+\]</span></p>
+<p>So</p>
+<p><span class="math display">\[
+\boldsymbol{A} =
+\begin{bmatrix}
+\sigma_X &amp; \sigma_X \rho_{XY} \\
+\sigma_Y \rho_{XY} &amp; \sigma_Y
+\end{bmatrix}.
+\]</span></p>
+<p>Step 2: Compute <span class="math inline">\(AD\)</span> to get <span class="math inline">\(\Sigma\)</span>. Now multiply by <span class="math inline">\(\boldsymbol{D}\)</span> on the right:</p>
+<p><span class="math display">\[
+\boldsymbol{\Sigma}
+= \boldsymbol{A}\boldsymbol{D}
+=
+\begin{bmatrix}
+\sigma_X &amp; \sigma_X \rho_{XY} \\
+\sigma_Y \rho_{XY} &amp; \sigma_Y
+\end{bmatrix}
+\begin{bmatrix}
+\sigma_X &amp; 0 \\
+0        &amp; \sigma_Y
+\end{bmatrix}.
+\]</span></p>
+<p>Element by element:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\Sigma_{11}
+&amp;= \sigma_X \cdot \sigma_X + \sigma_X \rho_{XY} \cdot 0
+= \sigma_X^2, \\[4pt]
+\Sigma_{12}
+&amp;= \sigma_X \cdot 0 + \sigma_X \rho_{XY} \cdot \sigma_Y
+= \sigma_X \sigma_Y \rho_{XY}, \\[4pt]
+\Sigma_{21}
+&amp;= \sigma_Y \rho_{XY} \cdot \sigma_X + \sigma_Y \cdot 0
+= \sigma_X \sigma_Y \rho_{XY}, \\[4pt]
+\Sigma_{22}
+&amp;= \sigma_Y \rho_{XY} \cdot 0 + \sigma_Y \cdot \sigma_Y
+= \sigma_Y^2.
+\end{aligned}
+\]</span></p>
+<p>Therefore the resulting variance–covariance matrix is</p>
+<p><span class="math display">\[
+\boldsymbol{\Sigma} =
+\begin{bmatrix}
+\sigma_X^2 &amp; \sigma_X \sigma_Y \rho_{XY} \\
+\sigma_X \sigma_Y \rho_{XY} &amp; \sigma_Y^2
+\end{bmatrix},
+\]</span></p>
+<p>where</p>
+<ul>
+<li><span class="math inline">\(\Sigma_{11} = \sigma^2_X\)</span>,</li>
+<li><span class="math inline">\(\Sigma_{22} = \sigma^2_Y\)</span>,</li>
+<li><span class="math inline">\(\Sigma_{12} = \Sigma_{21} = \sigma_{XY} = \sigma_X \sigma_Y \rho_{XY}\)</span>.</li>
+</ul>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

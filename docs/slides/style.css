@@ -1,0 +1,12 @@
+/* Remove inner scrolling from code-output blocks */
+.reveal pre.sourceCode, 
+.reveal pre code, 
+.reveal .cell-output pre {
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+/* Optional: make chunk-output fit the slide width */
+.reveal .cell-output {
+  overflow: visible !important;
+}

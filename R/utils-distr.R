@@ -193,17 +193,21 @@ nb.theta2var <- function(mu, theta) {
 #'
 #' @export
 
-gamma_params <- function(mean = NULL,
-                         sd = NULL,
-                         shape = NULL,
-                         scale = NULL,
-                         rate = NULL,
-                         skew = NULL,
-                         cv = NULL){
+gamma_params <- function(
+  mean = NULL,
+  sd = NULL,
+  shape = NULL,
+  scale = NULL,
+  rate = NULL,
+  skew = NULL,
+  cv = NULL
+) {
   pars <- as.list(environment())
   spars <- pars[!sapply(pars, is.null)]
 
-  if(length(spars) != 2) stop("Please provide exactly two parameters from a supported pair.")
+  if (length(spars) != 2) {
+    stop("Please provide exactly two parameters from a supported pair.")
+  }
 
   is_pair <- function(x, pair) identical(sort(x), sort(pair))
 
@@ -213,202 +217,267 @@ gamma_params <- function(mean = NULL,
     sd <- sqrt(shape * scale^2)
     cv <- 1 / sqrt(shape)
     skew <- 2 / sqrt(shape)
-    list(shape = shape, rate = rate, scale = scale, cv = cv, skew = skew, mean = mean, sd = sd)
+    list(
+      shape = shape,
+      rate = rate,
+      scale = scale,
+      cv = cv,
+      skew = skew,
+      mean = mean,
+      sd = sd
+    )
   }
 
-  if(is_pair(names(spars), c("mean", "sd"))){
+  if (is_pair(names(spars), c("mean", "sd"))) {
     mean <- spars$mean
     sd <- spars$sd
-    cv <- sd/mean
+    cv <- sd / mean
     shape <- 1 / cv^2
     scale <- mean / shape
-  } else if(is_pair(names(spars), c("mean", "shape"))){
+  } else if (is_pair(names(spars), c("mean", "shape"))) {
     mean <- spars$mean
     shape <- spars$shape
     scale <- mean / shape
-  } else if(is_pair(names(spars), c("mean", "cv"))){
+  } else if (is_pair(names(spars), c("mean", "cv"))) {
     mean <- spars$mean
     cv <- spars$cv
     shape <- 1 / cv^2
     scale <- mean * cv^2
-  } else if(is_pair(names(spars), c("shape", "rate"))){
+  } else if (is_pair(names(spars), c("shape", "rate"))) {
     shape <- spars$shape
-    scale <- 1/spars$rate
-  }else if(is_pair(names(spars), c("shape", "scale"))){
+    scale <- 1 / spars$rate
+  } else if (is_pair(names(spars), c("shape", "scale"))) {
     shape <- spars$shape
     scale <- spars$scale
-  }else if(is_pair(names(spars), c("mean", "skew"))){
+  } else if (is_pair(names(spars), c("mean", "skew"))) {
     mean <- spars$mean
     skew <- spars$skew
     shape <- 4 / skew^2
     scale <- mean / shape
-  } else{
+  } else {
     stop("combination not implemented!")
   }
   compute(shape, scale)
 }
 
-#' Plot Probability Distributions for Multiple Parameter Sets
-#'
-#' `distplot()` generates and plots probability distributions (Normal, Gamma, Poisson)
-#' for one or more sets of distribution parameters. Each parameter set is visualized
-#' as a separate curve with an automatically generated legend.
-#'
-#' @param dist Character. Distribution name. Supported: `"normal"`, `"gamma"`, `"poisson"`.
-#' @param dist.args Named list or data.frame. Distribution parameters. Each row (if `data.frame`)
-#'   corresponds to one curve. Examples:
-#'   \itemize{
-#'     \item Normal: `list(mean = c(0, 2), sd = c(1, 0.5))`
-#'     \item Gamma: `list(shape = c(2, 5), scale = 1)`
-#'     \item Poisson: `list(lambda = c(1, 5, 10))`
-#'   }
-#' @param n Integer. Number of random samples drawn per parameter set (default: `1000`).
-#' @param ... Additional arguments passed to `tinyplot::tinyplot()`.
-#'
-#' @details
-#' For each parameter set, `n` random samples are generated and their density
-#' (or probability for discrete distributions) is computed.
-#' Curves are drawn using `tinyplot::tinyplot()`, with conditioning on the
-#' parameter combination (shown in the legend).
-#'
-#' Internally:
-#' \itemize{
-#'   \item `dnorm`, `dgamma`, `dpois` are used for densities.
-#'   \item `rnorm`, `rgamma`, `rpois` are used for random draws.
-#'   \item Parameter values are automatically expanded across multiple sets.
-#' }
-#'
-#' @return A plot of the distribution curves, faceted/colored by parameter sets.
-#' Also invisibly returns the data frame used for plotting.
-#'
-#' @examples
-#' # Normal distributions
-#' distplot("normal", dist.args = list(mean = c(0, 2), sd = c(1, 0.5)), n = 2000)
-#'
-#' # Gamma distributions
-#' distplot("gamma", dist.args = list(shape = c(2, 5), scale = 1))
-#'
-#' # Poisson distributions
-#' distplot("poisson", dist.args = list(lambda = c(2, 5, 10)), n = 500)
-#'
-#' @importFrom tinyplot tinyplot
-#' @export
-distplot <- function(dist, dist.args = NULL, n = 1e3, ...){
-
-  if(dist == "normal"){
-    dens <- dnorm
-    rng <- rnorm
-    name <- "dnorm"
-  } else if(dist == "gamma"){
-    dens <- dgamma
-    rng <- rgamma
-    name = "dgamma"
-  } else if(dist == "poisson"){
-    dens <- dpois
-    rng <- rpois
-    name = "dpois"
-  } else{
-    stop("distribution not implemented yet!")
+ggnorm <- function(
+  mean = 0,
+  sd = 1,
+  lf = 4,
+  ns = 1e4,
+  annotate = FALSE,
+  theme = NULL,
+  size = 15
+) {
+  require(ggplot2)
+  if (length(mean) != length(sd)) {
+    stop("mean and sd need to be of the same length!")
   }
-
-  dist.args.dens <- formals(dens)
-  dist.args.rng <- formals(rng)
-  dist.args.dens <- dist.args.dens[!names(dist.args.dens) %in% c("x", "n")]
-  dist.args.rng <- dist.args.rng[!names(dist.args.rng) %in% c("x", "n")]
-
-  if(!is.null(dist.args)){
-    dist.args.dens[names(dist.args.dens) %in% names(dist.args)] <- dist.args
-    dist.args.rng[names(dist.args.rng) %in% names(dist.args)] <- dist.args
-  }
-
-  dist.args.densd <- data.frame(dist.args.dens)
-  dist.args.rngd <- data.frame(dist.args.rng)
-
-  x <- do.call(mapply, c(rng, cbind(dist.args.rngd, n = n), SIMPLIFY = FALSE))
-  y <- do.call(mapply, c(dens, c(dist.args.rngd, x = list(x)), SIMPLIFY = FALSE))
-
-  dist.args.rngd$cond <- .paste_arg_value(dist.args.rngd)
-  dd <- dist.args.rngd[rep(1:nrow(dist.args.rngd), each = n), ]
-
-  dd <- cbind(
-    dd,
-    x = unlist(x),
-    y = unlist(y)
+  n <- length(mean)
+  range <- c(min(mean) - lf * max(sd), max(mean) + lf * max(sd))
+  x <- seq(range[1], range[2], length.out = ns)
+  d <- mapply(function(m, s) dnorm(x, m, s), mean, sd, SIMPLIFY = FALSE)
+  D <- data.frame(
+    x = rep(x, n),
+    d = unlist(d),
+    mean = rep(mean, each = length(x)),
+    sd = rep(sd, each = length(x))
   )
+  D$msd <- sprintf("m = %s, s = %s", D$mean, D$sd)
+  labs <- sprintf("$\\mu = %s$, $\\sigma = %s$", mean, sd)
 
-  dd <- dd[order(dd$cond, dd$x), ]
-  tinyplot::tinyplot(y ~ x | cond,
-                     data = dd,
-                     type = "l",
-                     legend = list("topright", title = ""),
-                     xlab = "x",
-                     ylab = name,
-                     lwd = 2,
-                     ...)
-  invisible(dd)
+  p <- ggplot(D, aes(x = x, y = d, color = msd)) +
+    geom_line(lwd = 1) +
+    scale_color_discrete(labels = lapply(labs, latex2exp::TeX)) +
+    ylab(latex2exp::TeX("$dnorm(x, \\mu, \\sigma)$")) +
+    xlim(range) +
+    theme_minimal(size) +
+    theme(legend.position = "bottom", legend.title = element_blank())
+  if (annotate) {
+    title <- sprintf("$\\mu = %.3f$, $\\sigma = %.3f$", mean, sd)
+    title <- paste(title, collapse = " ")
+    p <- p + ggtitle(latex2exp::TeX(title))
+  }
+  if (!is.null(theme)) {
+    p + theme(size)
+  }
+  return(p)
 }
 
-distplot <- function(dist, dist.args = NULL, n = 1e3, ...){
-
-  if(dist == "normal"){
-    dens <- dnorm
-    rng <- rnorm
-    name <- "dnorm"
-  } else if(dist == "gamma"){
-    dens <- dgamma
-    rng <- rgamma
-    name = "dgamma"
-  } else if(dist == "poisson"){
-    dens <- dpois
-    rng <- rpois
-    name = "dpois"
-  } else{
-    stop("distribution not implemented yet!")
+ggpois <- function(
+  lambda,
+  lf = 3,
+  type = c("h", "pl"),
+  annotate = FALSE,
+  theme = NULL,
+  size = 15
+) {
+  require(ggplot2)
+  type <- match.arg(type)
+  range <- c(0, max(lambda) * lf)
+  if (-min(lambda) * lf < 0) {
+    range[1] <- 0
+  } else {
+    range[1] <- -min(lambda) * lf
   }
-
-  dist.args.dens <- formals(dens)
-  dist.args.rng <- formals(rng)
-  dist.args.dens <- dist.args.dens[!names(dist.args.dens) %in% c("x", "n")]
-  dist.args.rng <- dist.args.rng[!names(dist.args.rng) %in% c("x", "n")]
-
-  if(!is.null(dist.args)){
-    dist.args.dens[names(dist.args.dens) %in% names(dist.args)] <- dist.args
-    dist.args.rng[names(dist.args.rng) %in% names(dist.args)] <- dist.args
+  x <- seq(range[1], range[2], 1)
+  D <- expand.grid(x = x, lambda = lambda)
+  D$d <- dpois(D$x, D$lambda)
+  p <- ggplot(D, aes(x = x, y = d))
+  if (type == "h") {
+    p <- p + geom_col(aes(fill = factor(lambda)), width = 0.3)
+  } else {
+    p <- p +
+      geom_point(aes(color = factor(lambda)), size = 3) +
+      geom_line(aes(group = factor(lambda), color = factor(lambda)))
   }
+  p <- p +
+    xlab("x") +
+    ylab(latex2exp::TeX("$dpois(x, \\lambda)$")) +
+    labs(
+      fill = latex2exp::TeX("$\\lambda$"),
+      color = latex2exp::TeX("$\\lambda$")
+    ) +
+    theme_minimal(size) +
+    theme(legend.position = "bottom") +
+    if (!is.null(theme)) p <- p + theme(size)
+  if (annotate) {
+    title <- sprintf("$\\lambda_{%s} = %s$", 1:length(lambda), lambda)
+    title <- paste(title, collapse = ", ")
+    p <- p + ggtitle(latex2exp::TeX(title))
+  }
+  return(p)
+}
 
-  dist.args.densd <- data.frame(dist.args.dens)
-  dist.args.rngd <- data.frame(dist.args.rng)
-
-  x <- do.call(mapply, c(rng, cbind(dist.args.rngd, n = n), SIMPLIFY = FALSE))
-  y <- do.call(mapply, c(dens, c(dist.args.rngd, x = list(x)), SIMPLIFY = FALSE))
-
-  dist.args.rngd$cond <- .paste_arg_value(dist.args.rngd)
-  dd <- dist.args.rngd[rep(1:nrow(dist.args.rngd), each = n), ]
-
-  dd <- cbind(
-    dd,
-    x = unlist(x),
-    y = unlist(y)
+eqs <- function() {
+  list(
+    gamma = "mean  = shape * scale   mean  = shape/rate \nvar   = shape * rate^2  var   = shape/rate^2"
   )
-
-  dd <- dd[order(dd$cond, dd$x), ]
-  tinyplot::tinyplot(y ~ x | cond,
-           data = dd,
-           type = "l",
-           legend = list("topright", title = ""),
-           xlab = "x",
-           ylab = name,
-           lwd = 2,
-           ...)
-  invisible(dd)
 }
 
 
+gamma_params <- function(
+  shape = NULL,
+  scale = 1 / rate,
+  rate = 1,
+  mean = NULL,
+  sd = NULL,
+  eqs = FALSE
+) {
+  if (eqs) {
+    cat(rep("=", 25), "\n")
+    cat(eqs()$gamma, "\n")
+    cat(rep("=", 25), "\n")
+  } else {
+    if (is.null(shape)) {
+      var <- sd^2
+      shape <- mean^2 / var
+      scale <- mean / shape
+      rate <- 1 / scale
+    } else if (is.null(mean) & is.null(sd)) {
+      if (is.null(rate)) {
+        scale <- 1 / rate
+      } else {
+        rate <- 1 / scale
+      }
+      mean <- shape * scale
+      var <- shape * scale^2
+      sd <- sqrt(var)
+    } else {
+      stop(
+        "when shape and scale are provided, mean and sd need to be NULL (and viceversa)"
+      )
+    }
+    out <- list(
+      shape = shape,
+      scale = scale,
+      rate = rate,
+      mean = mean,
+      var = var,
+      sd = sd
+    )
+    # coefficient of variation
+    out$cv <- 1 / sqrt(shape)
+    return(out)
+  }
+}
 
+ggamma <- function(
+  shape = NULL,
+  scale = 1 / rate,
+  rate = 1,
+  mean = NULL,
+  sd = NULL,
+  show = c("msd", "sr", "ss"),
+  lf = 5,
+  size = 15,
+  ns = 1e4
+) {
+  show <- match.arg(show)
+  argg <- as.list(environment())[1:5]
+  gm <- do.call(gamma_params, argg)
+  if (length(unique(sapply(gm, length))) != 1) {
+    stop("All vectors need to be of the same length!")
+  }
 
+  n <- length(gm$mean)
+  range <- c(0, max(gm$mean) + lf * max(gm$sd))
+  x <- seq(range[1], range[2], length.out = ns)
+  d <- mapply(
+    function(sh, sc) dgamma(x, shape = sh, scale = sc),
+    gm$shape,
+    gm$scale,
+    SIMPLIFY = FALSE
+  )
+  D <- data.frame(
+    x = rep(x, n),
+    d = unlist(d),
+    shape = rep(gm$shape, each = length(x)),
+    scale = rep(gm$scale, each = length(x)),
+    rate = rep(gm$rate, each = length(x)),
+    mean = rep(gm$mean, each = length(x)),
+    sd = rep(gm$sd, each = length(x))
+  )
 
+  if (show == "msd") {
+    D$cond <- factor(sprintf("$\\mu = %.3f$, $\\sigma = %.3f$", D$mean, D$sd))
+  } else if (show == "ss") {
+    D$cond <- factor(sprintf(
+      "$k (shape) = %.3f$, $\\theta (scale) = %.3f$",
+      D$shape,
+      D$scale
+    ))
+  } else {
+    D$cond <- factor(sprintf(
+      "$\\alpha (shape) = %.3f$, $\\beta (rate) = %.3f$",
+      D$shape,
+      D$rate
+    ))
+  }
 
+  ggplot(D, aes(x = x, y = d, color = cond)) +
+    geom_line(lwd = 1) +
+    scale_color_discrete(labels = lapply(levels(D$cond), latex2exp::TeX)) +
+    theme_minimal(15) +
+    theme(
+      legend.title = element_blank(),
+      legend.position = c(.95, .95),
+      legend.justification = c("right", "top"),
+      legend.box.just = "right",
+      legend.margin = margin(6, 6, 6, 6)
+    ) +
+    ylab(latex2exp::TeX("dgamma($x$, $\\alpha$/$k$, $\\theta$, $\\beta$)"))
+}
 
-
-
-
+gamma_shape <- function(x, method = c("glm", "invskew")) {
+  method = match.arg(method)
+  if (method == "glm") {
+    formula <- paste(deparse(substitute(x)), "~ 1")
+    fit <- glm(as.formula(formula), family = Gamma(link = "log"))
+    shape <- MASS::gamma.shape(fit)$alpha
+  } else {
+    skew <- psych::skew(x)
+    shape <- 4 / skew^2
+  }
+  return(shape)
+}

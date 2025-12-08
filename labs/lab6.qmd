@@ -11,6 +11,7 @@ format: html
 devtools::load_all()
 library(tidyverse)
 library(ggeffects)
+library(here)
 ```
 
 # Overview
@@ -20,7 +21,7 @@ library(ggeffects)
 ## Loading data
 
 ```{r}
-data("psych")
+load(here("data", "psych.rda"))
 dat <- psych
 ```
 

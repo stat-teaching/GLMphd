@@ -63,12 +63,34 @@ dcode <- function(expr, between = NULL, digits = NULL) {
 }
 
 #' @keywords internal
-.paste_arg_value <- function(x){
+.paste_arg_value <- function(x) {
   x <- data.frame(x)
   rr <- vector(mode = "list", length = ncol(x))
-  for(i in 1:ncol(x)){
+  for (i in 1:ncol(x)) {
     rr[[i]] <- sprintf("%s = %s", names(x)[i], x[[i]])
   }
   rr <- data.frame(rr)
   apply(rr, 1, function(x) paste(x, collapse = ", "))
+}
+
+qplot <- function(x, y, type = c("none", "p", "l"), data = NULL, ...) {
+  require(ggplot2)
+
+  type <- match.arg(type, type, several.ok = FALSE)
+
+  if (is.null(data)) {
+    data <- data.frame(x, y)
+  }
+
+  pp <- ggplot2::ggplot(data = data, aes(x = x, y = y))
+
+  if (type == "p") {
+    pp + ggplot2::geom_point(...)
+  } else if (type == "l") {
+    pp + ggplot2::geom_line(...)
+  } else if (type == "none") {
+    pp
+  } else {
+    stop("method not implemented yet")
+  }
 }

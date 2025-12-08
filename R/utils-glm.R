@@ -48,9 +48,6 @@ add_predict <- function(data, fit, ...) {
 #' @export
 
 odds <- function(p) {
-  if(p < 0 | p > 1){
-    stop("p need to be bounded between 0 and 1!")
-  }
   p / (1 - p)
 }
 
@@ -67,7 +64,7 @@ odds <- function(p) {
 #'
 #' @examples
 #' # OR comparing 0.8 vs 0.5
-#' odds_ratio(0.8, 0.5)
+#' or(0.8, 0.5)
 #'
 #' # Vectorized input
 #' or(c(0.8, 0.6), 0.5)
@@ -179,9 +176,11 @@ bin2binary <- function(data, nc, nt) {
 #'
 #' @export
 
-binary2bin <- function(data, formula){
+binary2bin <- function(data, formula) {
   formula_s <- as.character(formula)
-  res <- aggregate(formula, data = data, function(x) c(nc = sum(x), nt = length(x)))
+  res <- aggregate(formula, data = data, function(x) {
+    c(nc = sum(x), nt = length(x))
+  })
   res <- do.call(data.frame, res)
   names(res) <- gsub(paste0(formula_s[2], "\\."), "", names(res))
   res$nf <- res$nt - res$nc
@@ -227,7 +226,7 @@ infl_measure <- function(fit) {
 #' @export
 
 error_rate <- function(fit) {
-  if(fit$family$family != "binomial"){
+  if (fit$family$family != "binomial") {
     stop("the error_rate function is made for family = 'binomial') models!")
   }
   pi <- predict(fit, type = "response")
@@ -276,27 +275,28 @@ error_rate <- function(fit) {
 #'
 #' @export
 
-plot_dfbeta <- function(x, b = NULL, threshold = NULL, intercept = FALSE){
-
+plot_dfbeta <- function(x, b = NULL, threshold = NULL, intercept = FALSE) {
   n <- nrow(x$model)
 
-  if(is.null(threshold)) threshold <- 2/sqrt(n)
+  if (is.null(threshold)) {
+    threshold <- 2 / sqrt(n)
+  }
 
   dfb <- data.frame(stats::dfbeta(x))
   names(dfb) <- names(coef(x))
 
-  if(!is.null(b)){
+  if (!is.null(b)) {
     dfb <- dfb[, b, drop = FALSE]
   }
 
-  if(!intercept){
+  if (!intercept) {
     dfb <- dfb[, !grepl("(Intercept)", names(dfb))]
   }
 
   dfbl <- reshape(
     dfb,
     direction = "long",
-    varying = list(names(dfb)),  # all columns to melt
+    varying = list(names(dfb)), # all columns to melt
     v.names = "value",
     timevar = "param",
     times = names(dfb),
@@ -307,7 +307,8 @@ plot_dfbeta <- function(x, b = NULL, threshold = NULL, intercept = FALSE){
   rownames(dfbl) <- NULL
 
   xlim <- c(
-    -threshold * 1.5, threshold*1.5
+    -threshold * 1.5,
+    threshold * 1.5
   )
 
   out <- abs(dfbl$value) > threshold
@@ -316,7 +317,7 @@ plot_dfbeta <- function(x, b = NULL, threshold = NULL, intercept = FALSE){
   tinyplot::tinyplot(
     obs ~ value,
     data = dfbl,
-    facet = ~ param,
+    facet = ~param,
     xlim = xlim,
     pch = 19,
     xlab = "DFBeta",
@@ -325,7 +326,6 @@ plot_dfbeta <- function(x, b = NULL, threshold = NULL, intercept = FALSE){
 
   dfbl$is_out <- out
   return(dfbl)
-
 }
 
 #' Set contrasts for all categorical variables in a data frame
@@ -374,24 +374,21 @@ plot_dfbeta <- function(x, b = NULL, threshold = NULL, intercept = FALSE){
 #'
 #' @export
 
-set_contrasts <- function(data,
-                          contrasts = contr.treatment){
-
-  if(!is.list(contrasts)){
+set_contrasts <- function(data, contrasts = contr.treatment) {
+  if (!is.list(contrasts)) {
     contrasts <- lapply(1:ncol(data), function(x) contrasts)
     names(contrasts) <- names(data)
   }
 
-  for(i in 1:length(contrasts)){
+  for (i in 1:length(contrasts)) {
     cvar <- data[[names(contrasts)[i]]]
-    if(is.character(cvar) | is.factor(cvar)){
+    if (is.character(cvar) | is.factor(cvar)) {
       contrasts(cvar) <- contrasts[[i]]
       data[[names(contrasts)[i]]] <- cvar
     }
   }
 
   return(data)
-
 }
 
 #' Simulate experimental design data
@@ -440,29 +437,25 @@ set_contrasts <- function(data,
 #'
 #' @export
 
-sim_design <- function(n,
-                       within = NULL,
-                       between = NULL,
-                       covariates = NULL){
-
+sim_design <- function(n, within = NULL, between = NULL, covariates = NULL) {
   id <- 1:n
 
-  if(is.null(within) & is.null(between) & is.null(covariates)){
+  if (is.null(within) & is.null(between) & is.null(covariates)) {
     data <- data.frame(1:n)
   }
 
   # within
 
-  if(!is.null(within)){
+  if (!is.null(within)) {
     within$id <- id
     data <- expand.grid(within, stringsAsFactors = FALSE)
-  } else{
+  } else {
     data <- data.frame(id = id)
   }
 
   # between
 
-  if(!is.null(between)){
+  if (!is.null(between)) {
     data_between <- expand.grid(between)
     data <- merge(data, data_between, by = NULL)
     nid <- tapply(data, c(list(data$id), list(data[, names(between)])))
@@ -471,13 +464,12 @@ sim_design <- function(n,
 
   # covariates
 
-  if(!is.null(covariates)){
+  if (!is.null(covariates)) {
     covs <- lapply(covariates, function(x) sim_n_x(data, x))
     data <- cbind(data, covs)
   }
 
   data
-
 }
 
 #' Simulate a covariate
@@ -510,11 +502,11 @@ sim_design <- function(n,
 #'
 #' @export
 
-sim_n_x <- function(data, covariate){
-  if(covariate$level == "obs"){
+sim_n_x <- function(data, covariate) {
+  if (covariate$level == "obs") {
     n <- nrow(data)
     x <- covariate$f(n)
-  } else{
+  } else {
     n <- length(unique(data$id))
     x <- covariate$f(n)
     x <- x[data$id]
@@ -548,7 +540,7 @@ sim_n_x <- function(data, covariate){
 #'
 #' @export
 
-new_cov <- function(fun, level = "obs"){
+new_cov <- function(fun, level = "obs") {
   list(
     f = function(n) fun(n),
     level = level
@@ -591,13 +583,16 @@ add_rng <- function(x, rng = NULL) {
     fam,
     gaussian = stats::rnorm,
     binomial = stats::rbinom,
-    poisson  = stats::rpois,
-    gamma    = stats::rgamma,
+    poisson = stats::rpois,
+    gamma = stats::rgamma,
     NULL
   )
 
   if (is.null(rng) & is.null(rng.default) & is.null(x$rng)) {
-    stop(sprintf("rng function for family '%s' not included yet!\nYou can provide a custom rng() function within the family object!", fam))
+    stop(sprintf(
+      "rng function for family '%s' not included yet!\nYou can provide a custom rng() function within the family object!",
+      fam
+    ))
   }
 
   if (!is.null(rng)) {
@@ -669,18 +664,19 @@ add_rng <- function(x, rng = NULL) {
 #'
 #' @export
 
-
-sim_data <- function(data,
-                     formula,
-                     beta,
-                     family = gaussian(),
-                     which.mu = "mean",
-                     rng = NULL,
-                     rng.arg = NULL,
-                     simulate = TRUE,
-                     get.lp = TRUE){
-  X  <- model.matrix(formula, data = data)
-  n  <- nrow(X)
+sim_data <- function(
+  data,
+  formula,
+  beta,
+  family = gaussian(),
+  which.mu = "mean",
+  rng = NULL,
+  rng.arg = NULL,
+  simulate = TRUE,
+  get.lp = TRUE
+) {
+  X <- model.matrix(formula, data = data)
+  n <- nrow(X)
   # put column vector
   beta <- matrix(beta, ncol = 1)
   lp <- c(X %*% beta)
@@ -691,13 +687,13 @@ sim_data <- function(data,
   rng.default$n <- n
   rng.default[[which.mu]] <- mu
 
-  if(simulate){
+  if (simulate) {
     data$y <- do.call(family$rng, rng.default)
-  } else{
+  } else {
     get.lp <- TRUE
   }
 
-  if(get.lp){
+  if (get.lp) {
     data$lp <- lp
     data$mu <- mu
   }
@@ -761,17 +757,16 @@ sim_data <- function(data,
 #' sim_sdt(n = 100, d = 1, c = -0.5, p.signal = 0.5, vr = 1)
 #'
 #' @export
-sim_sdt <- function(n,
-                    d = 0,
-                    c = 0,
-                    p.signal = 0.5,
-                    vr = 1) {
+sim_sdt <- function(n, d = 0, c = 0, p.signal = 0.5, vr = 1) {
   # trial types
   is_signal <- rbinom(n = n, size = 1, prob = p.signal)
 
   # internal decision variable sampled per trial
-  x <- rnorm(n, mean = ifelse(is_signal == 1, d / 2, -d / 2),
-             sd = ifelse(is_signal == 1, vr, 1))
+  x <- rnorm(
+    n,
+    mean = ifelse(is_signal == 1, d / 2, -d / 2),
+    sd = ifelse(is_signal == 1, vr, 1)
+  )
 
   # responses based on criterion
   say_signal <- as.integer(x > c)
@@ -818,11 +813,11 @@ sim_sdt <- function(n,
 #' sdt_classify(dat$say_signal, dat$is_signal)
 #' @keywords internal
 
-sdt_classify <- function(say_signal, is_signal){
-  hit  <- sum(is_signal == 1 & say_signal == 1)
+sdt_classify <- function(say_signal, is_signal) {
+  hit <- sum(is_signal == 1 & say_signal == 1)
   miss <- sum(is_signal == 1 & say_signal == 0)
-  fa   <- sum(is_signal == 0 & say_signal == 1)
-  cr   <- sum(is_signal == 0 & say_signal == 0)
+  fa <- sum(is_signal == 0 & say_signal == 1)
+  cr <- sum(is_signal == 0 & say_signal == 0)
 
   list(
     hit = hit,
@@ -898,22 +893,24 @@ sdt_classify <- function(say_signal, is_signal){
 #' @export
 #'
 
-sdt <- function(data, formula, c = NULL){
+sdt <- function(data, formula, c = NULL) {
   is_signal <- formula.tools::rhs.vars(formula)
   left <- formula.tools::lhs.vars(formula)
 
   complete <- complete.cases(data[, c(is_signal, left)])
   data <- data[complete, ]
 
-  if(is.null(c)){
+  if (is.null(c)) {
     say_signal <- list(data[[left]])
-  } else{
+  } else {
     x <- left
     say_signal <- lapply(c, function(ci) as.integer(data[[x]] > ci))
   }
 
   is_signal <- data[[is_signal]]
-  res <- lapply(say_signal, function(ss) data.frame(sdt_classify(is_signal, ss)))
+  res <- lapply(say_signal, function(ss) {
+    data.frame(sdt_classify(is_signal, ss))
+  })
   res <- do.call(rbind, res)
   res$c <- c
   res
@@ -961,9 +958,12 @@ sdt <- function(data, formula, c = NULL){
 #'
 #' @export
 
-contr2num <- function(data, append = TRUE){
-  fcts <- data[, sapply(data, function(x) is.factor(x) | is.character(x)), drop = FALSE]
-  XF <- model.matrix(~ ., data = fcts)[, -1, drop = FALSE]
+contr2num <- function(data, append = TRUE) {
+  fcts <- data[,
+    sapply(data, function(x) is.factor(x) | is.character(x)),
+    drop = FALSE
+  ]
+  XF <- model.matrix(~., data = fcts)[, -1, drop = FALSE]
   XF <- data.frame(XF)
   if (append) {
     cbind(data, XF)
@@ -1009,12 +1009,12 @@ contr2num <- function(data, append = TRUE){
 #'
 #' @export
 
-mcoefs <- function(x, level = 0.95, ci.type = "profile"){
+mcoefs <- function(x, level = 0.95, ci.type = "profile") {
   ci.type <- match.arg(ci.type, choices = c("profile", "wald"))
   xs <- data.frame(summary(x)$coefficients)
-  if(ci.type == "profile"){
+  if (ci.type == "profile") {
     ci <- confint(x, level = level)
-  } else{
+  } else {
     ci <- confint.default(x, level = level)
   }
   ci <- data.frame(ci)

@@ -8,7 +8,25 @@ knitr::opts_chunk$set(echo = TRUE,
                       fig.asp = 0.618,
                       fig.align = "center",
                       comment = "#>")
+```
+
+```{r}
+#| label: packages
+#| include: false
+
 devtools::load_all()
+library(tidyverse)
+library(kableExtra)
+library(patchwork)
+library(here)
+library(ggeffects)
+library(gt)
+library(effects)
+library(cowplot)
+library(emmeans)
+library(distributional)
+library(ggdist)
+select <- dplyr::select
 ```
 
 ```{r}
@@ -32,4 +50,25 @@ options(ggplot2.continuous.colour="viridis")
 options(ggplot2.continuous.fill = "viridis")
 scale_colour_discrete <- scale_colour_viridis_d
 scale_fill_discrete <- scale_fill_viridis_d
+```
+
+```{r}
+#| echo: false
+funs <- filor::get_funs(here("R", "utils-glm.R"))
+```
+
+```{r}
+#| label: gt
+#| include: false
+qtab <- function(data, digits = 3){
+  require(gt)
+  data |> 
+    gt::gt() |> 
+    gt::cols_align(align = "center") |> 
+    gt::tab_style(
+      style = cell_text(weight = "bold"),
+      locations = cells_column_labels()
+    ) |> 
+    gt::fmt_number(decimals = digits)
+}
 ```

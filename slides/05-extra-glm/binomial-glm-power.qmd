@@ -5,61 +5,7 @@ bibliography: "`r filor::fil()$bib`"
 csl: "`r filor::fil()$csl`"
 ---
 
-```{r}
-#| label: setup
-#| include: false
-knitr::opts_chunk$set(echo = TRUE,
-                      dev = "svg",
-                      fig.width = 7,
-                      fig.asp = 0.618,
-                      fig.align = "center",
-                      comment = "#>")
-```
-
-```{r}
-#| label: packages
-#| include: false
-library(gt)
-library(ggplot2)
-library(viridis)
-devtools::load_all()
-```
-
-```{r}
-#| label: ggplot2
-#| include: false
-mtheme <- function(size = 15){
-  theme_minimal(base_size = size, 
-                base_family = "sans") +
-  theme(legend.position = "bottom",
-        plot.title = element_text(hjust = 0.5),
-        strip.text = element_text(face = "bold"),
-        panel.grid.minor = element_blank())
-}
-
-theme_set(mtheme())
-
-# palettes
-options(ggplot2.continuous.colour="viridis")
-options(ggplot2.continuous.fill = "viridis")
-scale_colour_discrete <- scale_colour_viridis_d
-scale_fill_discrete <- scale_fill_viridis_d
-```
-
-```{r}
-#| label: gt
-#| include: false
-qtab <- function(data, digits = 3){
-  data |> 
-    gt() |> 
-    gt::cols_align(align = "center") |> 
-    tab_style(
-      style = cell_text(weight = "bold"),
-      locations = cells_column_labels()
-    ) |> 
-    fmt_number(decimals = digits)
-}
-```
+{{< include ../_setup.qmd >}}
 
 ## Monte Carlo Simulations
 
@@ -423,38 +369,6 @@ fit <- glm(y ~ x, data = dat, family = fam)
 summary(fit)
 ```
 
-# Power analysis {.section}
-
-## Power analysis
-
-Once the data generation process and the model has been defined, the power analysis is straightforward.
-
-The hardest part is fixing plausible values according to your knowledge and/or previous literature.
-
-For example, there are methods to convert from odds ratio to Cohen's $d$ or other metrics.
-
-The `effectsize` package is a great resource to understand and compute effect sizes.
-
-```{r}
-or <- 1.5 # odds ratio
-effectsize::oddsratio_to_d(or)
-```
-
-## Power analysis
-
-We can see the relationship between $d$ and (log) Odds Ratio:
-
-```{r}
-#| echo: false
-d <- seq(-5, 5, 0.01)
-or <- effectsize::d_to_oddsratio(d)
-lor <- log(or)
-
-par(mfrow = c(1,2))
-plot(lor, d, type = "l", xlab = latex("\\log(OR)"), ylab = latex("d"))
-plot(or, d, type = "l", xlab = latex("OR"), ylab = latex("d"))
-```
-
 ## Power analysis
 
 For example we can a logistic regression with a binary predictor, fixing the effect size:
@@ -498,7 +412,6 @@ mean(p <= 0.05)
 With just one condition the power analysis is not really meaningful. We can compute the same for different sample sizes. Here my code is using a series of `for` loops but there could be a nicer implementation.
 
 ```{r}
-#| cache: true
 ns <- c(30, 50, 100, 150)
 
 power <- rep(0, length(ns))
