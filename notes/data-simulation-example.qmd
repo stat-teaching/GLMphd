@@ -1,0 +1,111 @@
+---
+title: Introduction to data simulation
+date: last-modified
+---
+
+Estimating standard errors using Monte Carlo Simulations:
+
+```{r}
+n <- 30
+y <- rnorm(n, 50, 10)
+
+mean(y)
+
+# sd(y) / sqrt(n)
+
+B <- 1000
+
+mm <- replicate(B, {
+  y <- rnorm(n, 50, 10)
+  mean(y)
+})
+
+hist(mm)
+sd(mm)
+```
+
+Simulating and estimating power for a t-test
+
+```{r}
+library(ggplot2)
+
+n <- 30
+m1 <- 0
+m2 <- 0.3
+# m2 - m1 = 0.3
+s2 <- 1
+
+g1 <- rnorm(n, m1, sqrt(s2))
+g2 <- rnorm(n, m2, sqrt(s2))
+
+dat <- data.frame(
+  y = c(g1, g2),
+  x = rep(0:1, each = n)
+)
+
+ggplot(dat, aes(x = y)) +
+  geom_density(aes(fill = factor(x)),
+               alpha = 0.5) 
+
+B <- 1000
+
+p <- replicate(B, {
+  g1 <- rnorm(n, m1, sqrt(s2))
+  g2 <- rnorm(n, m2, sqrt(s2))
+  t.test(g2, g1)$p.value
+})
+
+mean(p <= 0.05)
+
+pwr::pwr.t.test(n = n, d = 0.3)
+```
+
+A more structured simulation:
+
+```{r}
+sim_data <- function(n, d, s){
+  g1 <- rnorm(n, 0, s)
+  g2 <- rnorm(n, d, s)
+  dat <- data.frame(
+    y = c(g1, g2),
+    x = rep(0:1, each = n)
+  )
+  return(dat)
+}
+
+fit_model <- function(data){
+  t.test(y ~ x, data = data)$p.value
+}
+
+n <- c(10, 30, 50, 100)
+res <- vector(mode = "list", length = length(n))
+
+for(i in 1:length(n)){
+  res[[i]] <- replicate(B, {
+    dat <- sim_data(n[i], 0.5, 1)
+    fit_model(dat)
+  })
+}
+
+plot(n, sapply(res, function(x) mean(x <= 0.05)), type = "b")
+```
+
+Simulating a GLM
+
+```{r}
+n <- 100
+x <- rep(0:1, each = n)
+age <- round(runif(n*2, 18, 50))
+age0 <- age - mean(age)
+
+b0 <- log(10)
+b1 <- log(1)
+b2 <- log(1.1)
+
+mu <- b0 + b1 * x + b2 * age0
+y <- rpois(n = n*2, exp(mu))
+
+fit <- glm(y ~ x + age0, family = poisson())
+
+summary(fit)$coefficients
+```

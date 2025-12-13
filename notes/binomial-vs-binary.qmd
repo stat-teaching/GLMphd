@@ -1,0 +1,39 @@
+---
+title: Binomial vs Binary data structure
+date: last-modified
+---
+
+```{r}
+devtools::load_all()
+library(dplyr)
+
+data("teddy")
+
+# binary format
+
+teddybin <- teddy |>
+  filter(Alcool_status != "Ex-drinker") |>
+  select(Alcool_status, Depression_pp01)
+
+fit_binary <- glm(Depression_pp01 ~ Alcool_status,
+                    data = teddybin,
+                    family = binomial(link = "logit"))
+
+# binomial format
+
+teddyb <- teddybin |>
+  filter(Alcool_status != "Ex-drinker") |>
+  group_by(Alcool_status) |>
+  summarise(n_yes = sum(Depression_pp01),
+            tot = n(),
+            n_no = tot - n_yes)
+
+fit_binomial <- glm(cbind(n_yes, n_no) ~ Alcool_status,
+    data = teddyb,
+    family = binomial(link = "logit"))
+
+car::compareCoefs(fit_binary, fit_binomial)
+
+summary(fit_binomial)
+summary(fit_binary)
+```

@@ -1,0 +1,17 @@
+{
+  "hash": "7dd8bfc3ae2eb501094710ebc1571e55",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: Introduction to data simulation\ndate: last-modified\n---\n\nEstimating standard errors using Monte Carlo Simulations:\n\n\n::: {.cell}\n\n```{.r .cell-code}\nn <- 30\ny <- rnorm(n, 50, 10)\n\nmean(y)\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n[1] 49.16878\n```\n\n\n:::\n\n```{.r .cell-code}\n# sd(y) / sqrt(n)\n\nB <- 1000\n\nmm <- replicate(B, {\n  y <- rnorm(n, 50, 10)\n  mean(y)\n})\n\nhist(mm)\n```\n\n::: {.cell-output-display}\n![](data-simulation-example_files/figure-html/unnamed-chunk-1-1.png){width=672}\n:::\n\n```{.r .cell-code}\nsd(mm)\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n[1] 1.841226\n```\n\n\n:::\n:::\n\n\nSimulating and estimating power for a t-test\n\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(ggplot2)\n\nn <- 30\nm1 <- 0\nm2 <- 0.3\n# m2 - m1 = 0.3\ns2 <- 1\n\ng1 <- rnorm(n, m1, sqrt(s2))\ng2 <- rnorm(n, m2, sqrt(s2))\n\ndat <- data.frame(\n  y = c(g1, g2),\n  x = rep(0:1, each = n)\n)\n\nggplot(dat, aes(x = y)) +\n  geom_density(aes(fill = factor(x)),\n               alpha = 0.5) \n```\n\n::: {.cell-output-display}\n![](data-simulation-example_files/figure-html/unnamed-chunk-2-1.png){width=672}\n:::\n\n```{.r .cell-code}\nB <- 1000\n\np <- replicate(B, {\n  g1 <- rnorm(n, m1, sqrt(s2))\n  g2 <- rnorm(n, m2, sqrt(s2))\n  t.test(g2, g1)$p.value\n})\n\nmean(p <= 0.05)\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n[1] 0.222\n```\n\n\n:::\n\n```{.r .cell-code}\npwr::pwr.t.test(n = n, d = 0.3)\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n\n     Two-sample t test power calculation \n\n              n = 30\n              d = 0.3\n      sig.level = 0.05\n          power = 0.2078518\n    alternative = two.sided\n\nNOTE: n is number in *each* group\n```\n\n\n:::\n:::\n\n\nA more structured simulation:\n\n\n::: {.cell}\n\n```{.r .cell-code}\nsim_data <- function(n, d, s){\n  g1 <- rnorm(n, 0, s)\n  g2 <- rnorm(n, d, s)\n  dat <- data.frame(\n    y = c(g1, g2),\n    x = rep(0:1, each = n)\n  )\n  return(dat)\n}\n\nfit_model <- function(data){\n  t.test(y ~ x, data = data)$p.value\n}\n\nn <- c(10, 30, 50, 100)\nres <- vector(mode = \"list\", length = length(n))\n\nfor(i in 1:length(n)){\n  res[[i]] <- replicate(B, {\n    dat <- sim_data(n[i], 0.5, 1)\n    fit_model(dat)\n  })\n}\n\nplot(n, sapply(res, function(x) mean(x <= 0.05)), type = \"b\")\n```\n\n::: {.cell-output-display}\n![](data-simulation-example_files/figure-html/unnamed-chunk-3-1.png){width=672}\n:::\n:::\n\n\nSimulating a GLM\n\n\n::: {.cell}\n\n```{.r .cell-code}\nn <- 100\nx <- rep(0:1, each = n)\nage <- round(runif(n*2, 18, 50))\nage0 <- age - mean(age)\n\nb0 <- log(10)\nb1 <- log(1)\nb2 <- log(1.1)\n\nmu <- b0 + b1 * x + b2 * age0\ny <- rpois(n = n*2, exp(mu))\n\nfit <- glm(y ~ x + age0, family = poisson())\n\nsummary(fit)$coefficients\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n              Estimate  Std. Error   z value      Pr(>|z|)\n(Intercept) 2.26882170 0.031950948 71.009527  0.000000e+00\nx           0.07013599 0.037234041  1.883652  5.961203e-02\nage0        0.09516193 0.002476472 38.426412 4.940656e-323\n```\n\n\n:::\n:::\n",
+    "supporting": [
+      "data-simulation-example_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
