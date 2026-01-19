@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.24">
+<meta name="generator" content="quarto-1.8.21">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -41,10 +41,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dc55a5b9e770e841cd82e46aadbfb9b0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ea1d7ac60288e0f1efdbc993fd8432ae.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-0fd445826db4cc1007072b2af7a3b60c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-59197fdd00cae94ec3a21e9916b526e4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -265,27 +265,27 @@ window.Quarto = {
 </thead>
 <tbody class="list">
 
-<tr data-index="0" data-listing-date-sort="1765626540000" data-listing-file-modified-sort="1765626540334" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="129" data-listing-title-sort="Binomial vs Binary data structure" data-listing-filename-sort="binomial-vs-binary.qmd">
+<tr data-index="0" data-listing-date-sort="1768847298000" data-listing-file-modified-sort="1768847298040" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="129" data-listing-title-sort="Binomial vs Binary data structure" data-listing-filename-sort="binomial-vs-binary.qmd">
 <td>
 <a href="./notes/binomial-vs-binary.html" class="title listing-title">Binomial vs Binary data structure</a>
 </td>
 <td>
-<span class="listing-date">Dec 13, 2025</span>
+<span class="listing-date">Jan 19, 2026</span>
 </td>
 
 </tr>
 
-<tr data-index="1" data-listing-date-sort="1765626425000" data-listing-file-modified-sort="1765626425475" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="260" data-listing-title-sort="Introduction to data simulation" data-listing-filename-sort="data-simulation-example.qmd">
+<tr data-index="1" data-listing-date-sort="1768847298000" data-listing-file-modified-sort="1768847298040" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="260" data-listing-title-sort="Introduction to data simulation" data-listing-filename-sort="data-simulation-example.qmd">
 <td>
 <a href="./notes/data-simulation-example.html" class="title listing-title">Introduction to data simulation</a>
 </td>
 <td>
-<span class="listing-date">Dec 13, 2025</span>
+<span class="listing-date">Jan 19, 2026</span>
 </td>
 
 </tr>
 
-<tr data-index="2" data-listing-date-sort="1765217818000" data-listing-file-modified-sort="1765217818782" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="578" data-listing-title-sort="Linear and non-Linear effects" data-listing-filename-sort="linear-non-linear.qmd">
+<tr data-index="2" data-listing-date-sort="1765215665000" data-listing-file-modified-sort="1765215665763" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="578" data-listing-title-sort="Linear and non-Linear effects" data-listing-filename-sort="linear-non-linear.qmd">
 <td>
 <a href="./notes/linear-non-linear.html" class="title listing-title">Linear and non-Linear effects</a>
 </td>
@@ -295,7 +295,7 @@ window.Quarto = {
 
 </tr>
 
-<tr data-index="3" data-listing-date-sort="1765217818000" data-listing-file-modified-sort="1765217818782" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="24" data-listing-word-count-sort="4730" data-listing-title-sort="Notes on (Generalized) Linear Models" data-listing-filename-sort="misc-lm-glm.qmd">
+<tr data-index="3" data-listing-date-sort="1765215685000" data-listing-file-modified-sort="1765215685158" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="24" data-listing-word-count-sort="4730" data-listing-title-sort="Notes on (Generalized) Linear Models" data-listing-filename-sort="misc-lm-glm.qmd">
 <td>
 <a href="./notes/misc-lm-glm.html" class="title listing-title">Notes on (Generalized) Linear Models</a>
 </td>
@@ -360,14 +360,13 @@ window.Quarto = {
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-      const outerScaffold = trigger.parentElement.cloneNode(true);
-      const codeEl = outerScaffold.querySelector('code');
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
         }
-      }
-      return codeEl.innerText;
+        return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

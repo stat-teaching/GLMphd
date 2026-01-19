@@ -7,12 +7,12 @@
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dc55a5b9e770e841cd82e46aadbfb9b0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-ea1d7ac60288e0f1efdbc993fd8432ae.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/quarto-contrib/nutshell-1.0.0/nutshell.min.js"></script><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <meta charset="utf-8">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" rel="stylesheet">
-<meta name="generator" content="quarto-1.8.24">
+<meta name="generator" content="quarto-1.8.21">
 <meta name="author" content="Filippo Gambarota">
 <title>Generalized Linear Models – Binomial GLM</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -221,7 +221,7 @@
   <p class="subtitle">Psychological Sciences</p>
   <p class="author">Filippo Gambarota</p>
   <p class="institute">University of Padova</p>
-  <p class="date"><em>Last modified: 08-12-2025</em></p>
+  <p class="date"><em>Last modified: 19-01-2026</em></p>
 </section><section id="example-passing-the-exam" class="slide level2"><h2>Example: Passing the exam</h2>
 <p>We want to measure the impact of <strong>watching tv-shows</strong> on the probability of <strong>passing the statistics exam</strong>.</p>
 <ul>
@@ -2011,9 +2011,9 @@ p = \frac{e^{\beta_0}}{1 + e^{\beta_0}}
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt; [1] 0.8472979</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb62"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">pnorm</a></span><span class="op">(</span><span class="va">p1</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">pnorm</a></span><span class="op">(</span><span class="va">p2</span><span class="op">)</span> <span class="co"># ~beta1, probit link</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb62"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">qnorm</a></span><span class="op">(</span><span class="va">p1</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">qnorm</a></span><span class="op">(</span><span class="va">p2</span><span class="op">)</span> <span class="co"># ~beta1, probit link</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>#&gt; [1] 0.06657389</code></pre>
+<pre><code>#&gt; [1] 0.5244005</code></pre>
 </div>
 </div>
 </section><section id="probit-link-4" class="slide level2"><h2>Probit link</h2>
@@ -2885,14 +2885,13 @@ Sánchez-Meca, J., Marín-Martínez, F., &amp; Chacón-Moscoso, S. (2003). <span
           e.clearSelection();
         }
         const getTextToCopy = function(trigger) {
-          const outerScaffold = trigger.parentElement.cloneNode(true);
-          const codeEl = outerScaffold.querySelector('code');
-          for (const childEl of codeEl.children) {
-            if (isCodeAnnotation(childEl)) {
-              childEl.remove();
+            const codeEl = trigger.previousElementSibling.cloneNode(true);
+            for (const childEl of codeEl.children) {
+              if (isCodeAnnotation(childEl)) {
+                childEl.remove();
+              }
             }
-          }
-          return codeEl.innerText;
+            return codeEl.innerText;
         }
         const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
           text: getTextToCopy

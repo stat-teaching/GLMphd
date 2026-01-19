@@ -750,7 +750,7 @@ qlogis(c(p1, p2)) # log(odds(p1)), logit link
 qnorm(c(p1, p2)) # probit link
 
 log(or(p1, p2)) # ~ beta1, logit link
-pnorm(p1) - pnorm(p2) # ~beta1, probit link
+qnorm(p1) - qnorm(p2) # ~beta1, probit link
 ```
 
 ## Probit link

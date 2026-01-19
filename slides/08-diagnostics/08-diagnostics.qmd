@@ -558,6 +558,47 @@ with(dat_inf, abline(lm(y ~ x), col = "dodgerblue", lwd = 2))
 with(dat_inf[dat_inf$problem == "none", ], abline(lm(y ~ x), col = "red", lwd = 2))
 ```
 
+## Identification of influential observation
+
+Identification of influential observation and outliers of GLMs is very similar to standard regression models. We will briefly see:
+
+- Cook Distances
+- DFBETAs
+
+## Cook Distances
+
+The Cook Distance of an observation $i$ measured the impact of that observation on the overall model fit. If removing the observation $i$ has an high impact, the observation $i$ is likely an influential observation. For GLMs they are defined as:
+
+$$
+\begin{align*}
+D_i = \frac{r_i^2}{\phi p} \frac{h_{ii}}{1 - h_{ii}}
+\end{align*}
+$$
+
+Where $p$ is the number of model parameters, $r_i$ are the standardized pearson residuals (`rstandard(fit, type = "pearson")`) and $h_{ii}$ are the hatvalues (leverages). $\phi$ is the dispersion parameter of the GLM that for binomial and poisson models is fixed to 1 (see Dunn (2018, Table 5.1)) Usually an observation is considered influential if $D_i > \frac{4}{n}$ where $n$ is the sample size.
+
+## DFBETAs
+
+DFBETAs measure the impact of the observation $i$ on the estimated parameter $\beta_j$:
+
+$$
+\begin{align*}
+DFBETAS_i = \frac{\beta_j - \beta_{j(i))}}{\sigma_{\beta_{j(i)}}}
+\end{align*}
+$$
+
+Where $i$ denote the parameters and standard error on a model fitted without the $i$ observation^[Note that you are not required to re-fit the model to estimate the DFBETAs, you can use the $H$ matrix, see https://en.wikipedia.org/wiki/Influential_observation]. Usually an observation is considered influential if $|DFBETAs_{i}| > \frac{2}{\sqrt{n}}$ where $n$ is the sample size.
+
+## In R
+
+Both (and other) measures can be extracted using specific functions e.g. `cooks.distance()` or `dfbetas()`. For a complete overview of influence measures you can use the `influence.measures()` function in R.
+
+```{r}
+data("teddy")
+fit_teddy <- glm(Depression_pp01 ~ Parental_stress, data = teddy, family = binomial(link = "logit"))
+head(influence.measures(fit_teddy))
+```
+
 # Example
 
 ## Example with the `teddy` dataset
